@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		74774C8D190FD46500CE4DE3 /* UITouchTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74774C8C190FD46500CE4DE3 /* UITouchTableView.m */; };
 		74E4B080190FB65A005E8DA1 /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74E4B07F190FB65A005E8DA1 /* Firebase.framework */; };
 		74E4B082190FBA99005E8DA1 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74E4B081190FBA99005E8DA1 /* libicucore.dylib */; };
 		74E4B084190FBAA3005E8DA1 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74E4B083190FBAA3005E8DA1 /* libc++.dylib */; };
@@ -41,6 +42,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		74774C8B190FD45200CE4DE3 /* UITouchTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UITouchTableView.h; path = "../../firechat-ios/Firechat/UITouchTableView.h"; sourceTree = "<group>"; };
+		74774C8C190FD46500CE4DE3 /* UITouchTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UITouchTableView.m; path = "../../firechat-ios/Firechat/UITouchTableView.m"; sourceTree = "<group>"; };
+		74774C8F190FD91C00CE4DE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		74E4B07F190FB65A005E8DA1 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = ../../../Downloads/Firebase.framework; sourceTree = "<group>"; };
 		74E4B081190FBA99005E8DA1 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		74E4B083190FBAA3005E8DA1 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
@@ -195,6 +199,8 @@
 				FA67C01E190F3C3400C22804 /* GTEventMenuTableViewCell.m */,
 				FA67C01F190F3C3400C22804 /* GTViewController.h */,
 				FA67C020190F3C3400C22804 /* GTViewController.m */,
+				74774C8C190FD46500CE4DE3 /* UITouchTableView.m */,
+				74774C8B190FD45200CE4DE3 /* UITouchTableView.h */,
 			);
 			name = EventsMenu;
 			sourceTree = "<group>";
@@ -338,6 +344,7 @@
 				8614D84B190DD06C007DF163 /* main.m in Sources */,
 				FA67C021190F3C3400C22804 /* GTEventMenuTableViewCell.m in Sources */,
 				8614D84F190DD06C007DF163 /* GTAppDelegate.m in Sources */,
+				74774C8D190FD46500CE4DE3 /* UITouchTableView.m in Sources */,
 				FA67C022190F3C3400C22804 /* GTViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -373,6 +380,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				8614D851190DD06C007DF163 /* Base */,
+				74774C8F190FD91C00CE4DE3 /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";

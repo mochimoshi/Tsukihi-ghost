@@ -9,13 +9,13 @@
 #import "GTViewController.h"
 #import "GTEventMenuTableViewCell.h"
 
-#define kFirechatNS @"https://getthere.firebase-io.com/"
+#define kFirechatNS @"https://getthere.firebaseio.com/"
 
-@interface GTViewController ()<UITableViewDataSource, UITableViewDelegate>
+//@interface GTViewController ()<UITableViewDataSource, UITableViewDelegate>
 
 //@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-@end
+//@end
 
 @implementation GTViewController
 
@@ -96,10 +96,10 @@
     }
     
     NSDictionary* chatMessage = [self.chat objectAtIndex:index.row];
-    
-    cell.textLabel.text = chatMessage[@"text"];
-    cell.detailTextLabel.text = chatMessage[@"name"];
-    
+    if (chatMessage != nil) {
+        cell.textLabel.text = chatMessage[@"text"];
+        cell.detailTextLabel.text = chatMessage[@"name"];
+    }
     //static NSString *CellIdentifier = @"mentionsTweetCell";
     //GTEventMenuTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:index];
     

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Zsm-pS-laD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Waw-hf-xB9">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
-        <!--View Controller - Get There!-->
+        <!--View Controller - Title-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
                 <viewController id="vXZ-lx-hvc" customClass="GTViewController" sceneMemberID="viewController">
@@ -17,15 +17,15 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="23" translatesAutoresizingMaskIntoConstraints="NO" id="cqc-Oz-MNc">
-                                <rect key="frame" x="12" y="10" width="294" height="504"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="ROx-0S-VjW">
-                                        <rect key="frame" x="0.0" y="86" width="294" height="44"/>
+                                        <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ROx-0S-VjW" id="R3N-ga-Rit">
-                                            <rect key="frame" x="0.0" y="0.0" width="261" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                         <connections>
@@ -38,29 +38,69 @@
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="PLE-HP-sX0"/>
                                 </connections>
                             </tableView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mDh-gT-yUA">
-                                <rect key="frame" x="12" y="522" width="294" height="30"/>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Title" id="jJc-nB-vfA">
+                        <barButtonItem key="rightBarButtonItem" title="Add" id="e5e-C0-WId"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="tableView" destination="cqc-Oz-MNc" id="yuU-he-Kbo"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="672" y="-2"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="gtH-oj-xWw">
+            <objects>
+                <viewController id="Waw-hf-xB9" customClass="GTViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="dPD-xW-DjZ"/>
+                        <viewControllerLayoutGuide type="bottom" id="Kgt-94-wNf"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="YP7-2s-Hkm">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="SQH-bU-1Zd" customClass="UITouchTableView">
+                                <rect key="frame" x="20" y="64" width="280" height="184"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Waw-hf-xB9" id="yuA-UI-Rfg"/>
+                                    <outlet property="delegate" destination="Waw-hf-xB9" id="tns-A1-eyD"/>
+                                </connections>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HEo-Bs-yf4">
+                                <rect key="frame" x="34" y="0.0" width="266" height="30"/>
+                                <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="15"/>
+                                <state key="normal" title="Guest">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hri-GC-saB">
+                                <rect key="frame" x="20" y="269" width="280" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
-                                    <outlet property="delegate" destination="vXZ-lx-hvc" id="yks-JG-Iif"/>
+                                    <outlet property="delegate" destination="Waw-hf-xB9" id="pek-Oz-c0w"/>
                                 </connections>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Get There!" id="jJc-nB-vfA">
-                        <barButtonItem key="rightBarButtonItem" title="Add" id="e5e-C0-WId"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="cL2-El-zQP"/>
                     <connections>
-                        <outlet property="tableView" destination="cqc-Oz-MNc" id="yuU-he-Kbo"/>
-                        <outlet property="textField" destination="mDh-gT-yUA" id="p00-VT-jnP"/>
+                        <outlet property="nameField" destination="HEo-Bs-yf4" id="WWI-dP-YVe"/>
+                        <outlet property="tableView" destination="SQH-bU-1Zd" id="7tO-fx-FpO"/>
+                        <outlet property="textField" destination="hri-GC-saB" id="ZQY-Jk-dcY"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pR6-5N-j5Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="593" y="32"/>
+            <point key="canvasLocation" x="1700" y="10"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="sJP-Dt-uAH">
@@ -100,10 +140,13 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="kxY-e3-bl6"/>
+                    <connections>
+                        <segue destination="Waw-hf-xB9" kind="push" id="XGv-Tf-h7a"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eum-bG-Dc4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1211" y="10"/>
+            <point key="canvasLocation" x="1159" y="-2"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="2x4-qe-svp">
@@ -121,7 +164,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zYQ-Mp-b5h" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-26" y="26"/>
+            <point key="canvasLocation" x="-18" y="10"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
