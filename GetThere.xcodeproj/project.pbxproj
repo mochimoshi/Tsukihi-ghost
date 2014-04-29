@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		74E4B080190FB65A005E8DA1 /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74E4B07F190FB65A005E8DA1 /* Firebase.framework */; };
+		74E4B082190FBA99005E8DA1 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74E4B081190FBA99005E8DA1 /* libicucore.dylib */; };
+		74E4B084190FBAA3005E8DA1 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74E4B083190FBAA3005E8DA1 /* libc++.dylib */; };
+		74E4B086190FBAC0005E8DA1 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74E4B085190FBAC0005E8DA1 /* CFNetwork.framework */; };
 		77DD44BAAC864E3CA44A34F6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C04828C87384461787539716 /* libPods.a */; };
 		8614D83F190DD06C007DF163 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8614D83E190DD06C007DF163 /* Foundation.framework */; };
 		8614D841190DD06C007DF163 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8614D840190DD06C007DF163 /* CoreGraphics.framework */; };
@@ -37,6 +41,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		74E4B07F190FB65A005E8DA1 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = ../../../Downloads/Firebase.framework; sourceTree = "<group>"; };
+		74E4B081190FBA99005E8DA1 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		74E4B083190FBAA3005E8DA1 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		74E4B085190FBAC0005E8DA1 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		8614D83B190DD06C007DF163 /* GetThere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GetThere.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8614D83E190DD06C007DF163 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8614D840190DD06C007DF163 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -68,7 +76,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74E4B086190FBAC0005E8DA1 /* CFNetwork.framework in Frameworks */,
+				74E4B084190FBAA3005E8DA1 /* libc++.dylib in Frameworks */,
+				74E4B082190FBA99005E8DA1 /* libicucore.dylib in Frameworks */,
 				FA67C017190F3B3200C22804 /* MapKit.framework in Frameworks */,
+				74E4B080190FB65A005E8DA1 /* Firebase.framework in Frameworks */,
 				8614D841190DD06C007DF163 /* CoreGraphics.framework in Frameworks */,
 				8614D843190DD06C007DF163 /* UIKit.framework in Frameworks */,
 				8614D83F190DD06C007DF163 /* Foundation.framework in Frameworks */,
@@ -112,6 +124,10 @@
 		8614D83D190DD06C007DF163 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				74E4B085190FBAC0005E8DA1 /* CFNetwork.framework */,
+				74E4B083190FBAA3005E8DA1 /* libc++.dylib */,
+				74E4B081190FBA99005E8DA1 /* libicucore.dylib */,
+				74E4B07F190FB65A005E8DA1 /* Firebase.framework */,
 				FA67C016190F3B3200C22804 /* MapKit.framework */,
 				8614D83E190DD06C007DF163 /* Foundation.framework */,
 				8614D840190DD06C007DF163 /* CoreGraphics.framework */,
@@ -450,6 +466,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/ayyyeung/Downloads,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GetThere/GetThere-Prefix.pch";
 				INFOPLIST_FILE = "GetThere/GetThere-Info.plist";
@@ -467,6 +487,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/ayyyeung/Downloads,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GetThere/GetThere-Prefix.pch";
 				INFOPLIST_FILE = "GetThere/GetThere-Info.plist";
