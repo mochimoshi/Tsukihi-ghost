@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		427746C21910CB700043BBFA /* GTMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 427746C11910CB700043BBFA /* GTMapAnnotation.m */; };
 		74774C9319108A3400CE4DE3 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74774C9219108A3400CE4DE3 /* libicucore.dylib */; };
 		74774C9519108A4200CE4DE3 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74774C9419108A4200CE4DE3 /* libc++.dylib */; };
 		74774C9719108AFB00CE4DE3 /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74774C9619108AFB00CE4DE3 /* Firebase.framework */; };
@@ -41,6 +42,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		427746C01910CB700043BBFA /* GTMapAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMapAnnotation.h; sourceTree = "<group>"; };
+		427746C11910CB700043BBFA /* GTMapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMapAnnotation.m; sourceTree = "<group>"; };
 		74774C8F190FD91C00CE4DE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		74774C9219108A3400CE4DE3 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		74774C9419108A4200CE4DE3 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
@@ -107,6 +110,8 @@
 			children = (
 				74774C9D1910918F00CE4DE3 /* GTChatViewController.h */,
 				74774C9E1910918F00CE4DE3 /* GTChatViewController.m */,
+				427746C01910CB700043BBFA /* GTMapAnnotation.h */,
+				427746C11910CB700043BBFA /* GTMapAnnotation.m */,
 			);
 			name = Chat;
 			sourceTree = "<group>";
@@ -347,6 +352,7 @@
 			files = (
 				8614D84B190DD06C007DF163 /* main.m in Sources */,
 				FA67C021190F3C3400C22804 /* GTEventMenuTableViewCell.m in Sources */,
+				427746C21910CB700043BBFA /* GTMapAnnotation.m in Sources */,
 				74774C9919108F6200CE4DE3 /* GTViewController.m in Sources */,
 				8614D84F190DD06C007DF163 /* GTAppDelegate.m in Sources */,
 				74774C9F1910918F00CE4DE3 /* GTChatViewController.m in Sources */,

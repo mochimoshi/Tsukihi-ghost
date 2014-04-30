@@ -7,6 +7,7 @@
 //
 
 #import "GTChatViewController.h"
+#import "GTMapAnnotation.h"
 
 #import <MapKit/MapKit.h>
 #import <Firebase/Firebase.h>
@@ -20,7 +21,7 @@
 @property (strong, nonatomic) NSMutableArray *chat;
 @property (strong, nonatomic) Firebase *firebase;
 @property (strong, nonatomic) NSString *name;
-
+@property (strong, nonatomic) NSMutableArray *mapPinData;
 
 @end
 
@@ -59,6 +60,43 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self setDummyMapPins];
+}
+
+
+#pragma mark - Set dummy map pins
+- (void)setDummyMapPins
+{
+    // Sorry..super disgusting dummy array
+    self.mapPinData = [[NSMutableArray alloc] initWithArray:@[@{@"title":@"Jason Jong", @"subtitle": @"Gelato Classico: 0.5 mi away", @"longitude":[NSNumber numberWithDouble:     -122.163283], @"latitude":[NSNumber numberWithDouble:37.446097]},
+        @{@"title":@"Angela Yeung", @"subtitle":@"Meyer Library: 0.3 mi away" , @"longitude":[NSNumber numberWithDouble:-122.167474], @"latitude":[NSNumber numberWithDouble:37.425956]},
+        @{@"title":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"longitude":[NSNumber numberWithDouble:-122.165388], @"latitude":[NSNumber numberWithDouble:37.427577]}]];
+    
+    [self setMapPins];
+}
+
+#pragma mark - Set map pins from mapPinData
+-(void) setMapPins
+{
+    for (NSDictionary *dict in self.mapPinData) {
+        [self addOnePin:dict];
+    }
+}
+
+#pragma mark - Adds a single map pin
+-(void) addOnePin:(NSDictionary *)pinData
+{
+    CLLocationCoordinate2D coords;
+    coords.latitude = [pinData[@"latitude"] doubleValue];
+    coords.longitude = [pinData[@"longitude"] doubleValue];
+    
+    GTMapAnnotation *mapPin = [[GTMapAnnotation alloc]init];
+    [mapPin setTitle:pinData[@"title"]];
+    [mapPin setSubtitle:pinData[@"subtitle"]];
+    [mapPin setCoordinate:coords];
+    
+    [self.mapView addAnnotation:mapPin];
+    
 }
 
 #pragma mark - Keyboard handling
