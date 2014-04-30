@@ -11,7 +11,7 @@
 		74774C9519108A4200CE4DE3 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74774C9419108A4200CE4DE3 /* libc++.dylib */; };
 		74774C9719108AFB00CE4DE3 /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74774C9619108AFB00CE4DE3 /* Firebase.framework */; };
 		74774C9919108F6200CE4DE3 /* GTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74774C9819108F6200CE4DE3 /* GTViewController.m */; };
-		74774C9B19108F8100CE4DE3 /* UITouchTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74774C9A19108F8100CE4DE3 /* UITouchTableView.m */; };
+		74774C9F1910918F00CE4DE3 /* GTChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74774C9E1910918F00CE4DE3 /* GTChatViewController.m */; };
 		74E4B086190FBAC0005E8DA1 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74E4B085190FBAC0005E8DA1 /* CFNetwork.framework */; };
 		8614D83F190DD06C007DF163 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8614D83E190DD06C007DF163 /* Foundation.framework */; };
 		8614D841190DD06C007DF163 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8614D840190DD06C007DF163 /* CoreGraphics.framework */; };
@@ -46,8 +46,8 @@
 		74774C9419108A4200CE4DE3 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		74774C9619108AFB00CE4DE3 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = GetThere/Firebase.framework; sourceTree = "<group>"; };
 		74774C9819108F6200CE4DE3 /* GTViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTViewController.m; path = Classes/GTViewController.m; sourceTree = "<group>"; };
-		74774C9A19108F8100CE4DE3 /* UITouchTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UITouchTableView.m; path = Classes/UITouchTableView.m; sourceTree = "<group>"; };
-		74774C9C19108F8A00CE4DE3 /* UITouchTableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UITouchTableView.h; path = Classes/UITouchTableView.h; sourceTree = "<group>"; };
+		74774C9D1910918F00CE4DE3 /* GTChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTChatViewController.h; path = Classes/GTChatViewController.h; sourceTree = "<group>"; };
+		74774C9E1910918F00CE4DE3 /* GTChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTChatViewController.m; path = Classes/GTChatViewController.m; sourceTree = "<group>"; };
 		74E4B085190FBAC0005E8DA1 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		8614D83B190DD06C007DF163 /* GetThere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GetThere.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8614D83E190DD06C007DF163 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -102,6 +102,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		74774CA01910919300CE4DE3 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				74774C9D1910918F00CE4DE3 /* GTChatViewController.h */,
+				74774C9E1910918F00CE4DE3 /* GTChatViewController.m */,
+			);
+			name = Chat;
+			sourceTree = "<group>";
+		};
 		8614D832190DD06B007DF163 = {
 			isa = PBXGroup;
 			children = (
@@ -184,6 +193,7 @@
 			isa = PBXGroup;
 			children = (
 				FA67C019190F3B8500C22804 /* EventsMenu */,
+				74774CA01910919300CE4DE3 /* Chat */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -191,12 +201,10 @@
 		FA67C019190F3B8500C22804 /* EventsMenu */ = {
 			isa = PBXGroup;
 			children = (
-				74774C9C19108F8A00CE4DE3 /* UITouchTableView.h */,
-				74774C9A19108F8100CE4DE3 /* UITouchTableView.m */,
+				FA67C01F190F3C3400C22804 /* GTViewController.h */,
 				74774C9819108F6200CE4DE3 /* GTViewController.m */,
 				FA67C01D190F3C3400C22804 /* GTEventMenuTableViewCell.h */,
 				FA67C01E190F3C3400C22804 /* GTEventMenuTableViewCell.m */,
-				FA67C01F190F3C3400C22804 /* GTViewController.h */,
 			);
 			name = EventsMenu;
 			sourceTree = "<group>";
@@ -340,8 +348,8 @@
 				8614D84B190DD06C007DF163 /* main.m in Sources */,
 				FA67C021190F3C3400C22804 /* GTEventMenuTableViewCell.m in Sources */,
 				74774C9919108F6200CE4DE3 /* GTViewController.m in Sources */,
-				74774C9B19108F8100CE4DE3 /* UITouchTableView.m in Sources */,
 				8614D84F190DD06C007DF163 /* GTAppDelegate.m in Sources */,
+				74774C9F1910918F00CE4DE3 /* GTChatViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
