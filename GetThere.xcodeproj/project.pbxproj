@@ -29,6 +29,8 @@
 		8614D86A190DD06C007DF163 /* GetThereTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8614D869190DD06C007DF163 /* GetThereTests.m */; };
 		FA67C017190F3B3200C22804 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA67C016190F3B3200C22804 /* MapKit.framework */; };
 		FA67C021190F3C3400C22804 /* GTEventMenuTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67C01E190F3C3400C22804 /* GTEventMenuTableViewCell.m */; };
+		FAC283FC1910B781006249C3 /* GTConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC283FB1910B781006249C3 /* GTConstants.m */; };
+		FAC283FF1910B877006249C3 /* GTLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC283FE1910B877006249C3 /* GTLoginViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +76,10 @@
 		FA67C01D190F3C3400C22804 /* GTEventMenuTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTEventMenuTableViewCell.h; path = Classes/GTEventMenuTableViewCell.h; sourceTree = "<group>"; };
 		FA67C01E190F3C3400C22804 /* GTEventMenuTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTEventMenuTableViewCell.m; path = Classes/GTEventMenuTableViewCell.m; sourceTree = "<group>"; };
 		FA67C01F190F3C3400C22804 /* GTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTViewController.h; path = Classes/GTViewController.h; sourceTree = "<group>"; };
+		FAC283FA1910B781006249C3 /* GTConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTConstants.h; path = Classes/Utils/GTConstants.h; sourceTree = "<group>"; };
+		FAC283FB1910B781006249C3 /* GTConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTConstants.m; path = Classes/Utils/GTConstants.m; sourceTree = "<group>"; };
+		FAC283FD1910B877006249C3 /* GTLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTLoginViewController.h; path = Classes/GTLoginViewController.h; sourceTree = "<group>"; };
+		FAC283FE1910B877006249C3 /* GTLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTLoginViewController.m; path = Classes/GTLoginViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +167,8 @@
 				FA67C018190F3B7400C22804 /* UI */,
 				8614D856190DD06C007DF163 /* Images.xcassets */,
 				8614D845190DD06C007DF163 /* Supporting Files */,
+				FAC283FA1910B781006249C3 /* GTConstants.h */,
+				FAC283FB1910B781006249C3 /* GTConstants.m */,
 			);
 			path = GetThere;
 			sourceTree = "<group>";
@@ -197,6 +205,7 @@
 		FA67C018190F3B7400C22804 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				FAC284001910B87F006249C3 /* Login */,
 				FA67C019190F3B8500C22804 /* EventsMenu */,
 				74774CA01910919300CE4DE3 /* Chat */,
 			);
@@ -212,6 +221,15 @@
 				FA67C01E190F3C3400C22804 /* GTEventMenuTableViewCell.m */,
 			);
 			name = EventsMenu;
+			sourceTree = "<group>";
+		};
+		FAC284001910B87F006249C3 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				FAC283FD1910B877006249C3 /* GTLoginViewController.h */,
+				FAC283FE1910B877006249C3 /* GTLoginViewController.m */,
+			);
+			name = Login;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -350,10 +368,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAC283FC1910B781006249C3 /* GTConstants.m in Sources */,
 				8614D84B190DD06C007DF163 /* main.m in Sources */,
 				FA67C021190F3C3400C22804 /* GTEventMenuTableViewCell.m in Sources */,
 				427746C21910CB700043BBFA /* GTMapAnnotation.m in Sources */,
 				74774C9919108F6200CE4DE3 /* GTViewController.m in Sources */,
+				FAC283FF1910B877006249C3 /* GTLoginViewController.m in Sources */,
 				8614D84F190DD06C007DF163 /* GTAppDelegate.m in Sources */,
 				74774C9F1910918F00CE4DE3 /* GTChatViewController.m in Sources */,
 			);

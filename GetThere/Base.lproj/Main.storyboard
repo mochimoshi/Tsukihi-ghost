@@ -140,7 +140,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zYQ-Mp-b5h" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-18" y="10"/>
+            <point key="canvasLocation" x="172" y="-2"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
