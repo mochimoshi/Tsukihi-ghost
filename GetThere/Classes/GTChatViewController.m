@@ -20,7 +20,7 @@
 @property (strong, nonatomic) NSMutableArray *chat;
 @property (strong, nonatomic) Firebase *firebase;
 @property (strong, nonatomic) NSString *name;
-@property (strong, nonatomic) UIImage *picture;
+
 
 @end
 
@@ -109,8 +109,14 @@
     
     NSDictionary* chatMessage = [self.chat objectAtIndex:indexPath.row];
     if (chatMessage != nil) {
-        cell.textLabel.text = chatMessage[@"text"];
-        cell.detailTextLabel.text = chatMessage[@"name"];
+        if ([chatMessage objectForKey:@"image"]){
+            UIImage *picture = [UIImage imageWithData:chatMessage[@"image"]];
+            // Do stuff here with the picture!
+            
+        } else {
+            cell.textLabel.text = chatMessage[@"text"];
+            cell.detailTextLabel.text = chatMessage[@"name"];
+        }
     }
     
     return cell;
@@ -123,16 +129,13 @@
     }
 }
 
-#pragma mark - 
+#pragma mark - pushPhotoToFirebase
+
 - (void)pushPhotoToFirebase:(UIImage *)picture
 {
-    if(self.picture) {
-        NSData *imageData = [UIImageJPEGRepresentation(self.picture, 0.8) base64EncodedDataWithOptions:0];
-        
+    if(picture) {
+        NSData *imageData = [UIImageJPEGRepresentation(picture, 0.8) base64EncodedDataWithOptions:0];
         [[self.firebase childByAutoId] setValue:@{@"name" : self.name, @"text": @"", @"image":imageData}];
-        
-        // Flush the image variable so a new one can be taken
-        self.picture = nil;
     }
 }
 
@@ -145,7 +148,7 @@
     
     // This will also add the message to our local array self.chat because
     // the FEventTypeChildAdded event will be immediately fired.
-    [[self.firebase childByAutoId] setValue:@{@"name" : self.name, @"text": aTextField.text, @"image":@""}];
+    [[self.firebase childByAutoId] setValue:@{@"name" : self.name, @"text": aTextField.text}];
     
     [aTextField setText:@""];
     return NO;
