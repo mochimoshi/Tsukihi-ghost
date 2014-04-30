@@ -67,7 +67,7 @@
 
 - (UITableViewCell*)tableView:(UITableView*)table cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier = @"eventCell";
     UITableViewCell *cell = [table dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {

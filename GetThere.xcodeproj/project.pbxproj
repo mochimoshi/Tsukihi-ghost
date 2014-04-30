@@ -480,7 +480,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/ayyyeung/Downloads,
 					"$(PROJECT_DIR)/GetThere",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -502,7 +501,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/ayyyeung/Downloads,
 					"$(PROJECT_DIR)/GetThere",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
