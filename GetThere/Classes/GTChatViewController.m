@@ -180,7 +180,7 @@
     return cell;
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     if([self.chatInputTextField isFirstResponder]) {
         [self.chatInputTextField resignFirstResponder];
