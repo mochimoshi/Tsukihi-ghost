@@ -15,9 +15,9 @@
 @interface GTViewController ()<UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) NSArray *event_details;
+@property (strong, nonatomic) NSArray *eventDetails;
 
-@property (strong, nonatomic) NSArray *event_names;
+@property (strong, nonatomic) NSArray *eventNames;
 
 @end
 
@@ -32,8 +32,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    self.event_names = @[@"TCS Night Market", @"Dinner with Mom", @"DMV Driving Test"];
-    self.event_details = @[@"6:00PM Today-White Plaza, Stanford", @"8:00PM Tomorrow-Crepevine", @"10:00AM Thursday-Los Altos DMV"];
+    self.eventNames = @[@"TCS Night Market", @"Dinner with Mom", @"DMV Driving Test"];
+    self.eventDetails = @[@"6:00PM Today-White Plaza, Stanford", @"8:00PM Tomorrow-Crepevine", @"10:00AM Thursday-Los Altos DMV"];
     self.title = @"Events";
     
 }
@@ -44,7 +44,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Text field handling
 #pragma mark - Text field handling
 
 // This method is called when the user enters text in the text field.
@@ -62,7 +61,7 @@
 - (NSInteger)tableView:(UITableView*)table numberOfRowsInSection:(NSInteger)section
 {
     // This is the number of chat messages.
-    return [self.event_names count];
+    return [self.eventNames count];
 }
 
 - (UITableViewCell*)tableView:(UITableView*)table cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -75,8 +74,8 @@
     }
     
 
-    cell.textLabel.text = [self.event_names objectAtIndex: indexPath.row];
-    cell.detailTextLabel.text = [self.event_details objectAtIndex: indexPath.row];
+    cell.textLabel.text = [self.eventNames objectAtIndex: indexPath.row];
+    cell.detailTextLabel.text = [self.eventDetails objectAtIndex: indexPath.row];
 
     //static NSString *CellIdentifier = @"mentionsTweetCell";
     //GTEventMenuTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:index];
