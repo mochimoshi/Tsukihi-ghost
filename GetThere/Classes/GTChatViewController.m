@@ -99,6 +99,19 @@
     
 }
 
+/* Changes colors of pins, but..changes *all* of them.
+ 
+-(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
+{
+    GTMapAnnotation *pinAnnotation = (GTMapAnnotation *)annotation;
+    MKPinAnnotationView *pinView = [[MKPinAnnotationView alloc] initWithAnnotation:pinAnnotation reuseIdentifier:@"pin"];
+
+    pinView.pinColor = MKPinAnnotationColorGreen;
+    
+    return pinView;
+}
+*/
+
 #pragma mark - Keyboard handling
 
 // Subscribe to keyboard show/hide notifications.
