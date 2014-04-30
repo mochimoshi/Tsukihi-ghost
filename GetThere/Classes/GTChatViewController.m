@@ -12,11 +12,13 @@
 #import <MapKit/MapKit.h>
 #import <Firebase/Firebase.h>
 
-@interface GTChatViewController ()<UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, MKMapViewDelegate>
+@interface GTChatViewController ()<UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UITextField *chatInputTextField;
+
+@property (strong, nonatomic) UIImagePickerController *imagePicker;
 
 @property (strong, nonatomic) NSMutableArray *chat;
 @property (strong, nonatomic) Firebase *firebase;
@@ -52,6 +54,9 @@
         // Reload the table view so the new message will show up.
         [self.tableView reloadData];
     }];
+    
+    self.imagePicker = [[UIImagePickerController alloc] init];
+    [self.imagePicker setDelegate:self];
     
     self.name = [[NSUserDefaults standardUserDefaults] objectForKey:@"userName"];
 }
@@ -159,9 +164,10 @@
     }
     
     NSDictionary* chatMessage = [self.chat objectAtIndex:indexPath.row];
-    if (chatMessage != nil) {
+    if (chatMessage) {
         if ([chatMessage objectForKey:@"image"]){
-            UIImage *picture = [UIImage imageWithData:chatMessage[@"image"]];
+            NSData *picData = [[NSData alloc] initWithBase64EncodedString:chatMessage[@"image"] options:0];
+            UIImage *picture = [UIImage imageWithData:picData];
             // Do stuff here with the picture!
             
         } else {
@@ -185,8 +191,8 @@
 - (void)pushPhotoToFirebase:(UIImage *)picture
 {
     if(picture) {
-        NSData *imageData = [UIImageJPEGRepresentation(picture, 0.8) base64EncodedDataWithOptions:0];
-        [[self.firebase childByAutoId] setValue:@{@"name" : self.name, @"text": @"", @"image":imageData}];
+        NSData *imageData = UIImageJPEGRepresentation(picture, 0.8);
+        [[self.firebase childByAutoId] setValue:@{@"name" : self.name, @"text": @"", @"image":[imageData base64EncodedStringWithOptions:0]}];
     }
 }
 
@@ -259,6 +265,29 @@
     region.center = location;
     [aMapView setRegion:region animated:YES];
 }
+
+#pragma mark - PhotoPicker Delegate
+
+- (IBAction)getCamera:(id)sender
+{
+    self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    [self presentViewController:self.imagePicker animated:YES completion:nil];
+}
+
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self.imagePicker dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *img = [info objectForKey:UIImagePickerControllerOriginalImage];
+    UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil);
+    [self pushPhotoToFirebase:img];
+    [self.imagePicker dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 
 /*
