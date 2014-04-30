@@ -27,6 +27,9 @@
 		8614D860190DD06C007DF163 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8614D842190DD06C007DF163 /* UIKit.framework */; };
 		8614D868190DD06C007DF163 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8614D866190DD06C007DF163 /* InfoPlist.strings */; };
 		8614D86A190DD06C007DF163 /* GetThereTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8614D869190DD06C007DF163 /* GetThereTests.m */; };
+		FA29A5911910F87400D37741 /* GTChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA29A5901910F87400D37741 /* GTChatTableViewCell.m */; };
+		FA29A59D1910F8D000D37741 /* UIColor+BTWColor.m in Sources */ = {isa = PBXBuildFile; fileRef = FA29A59A1910F8D000D37741 /* UIColor+BTWColor.m */; };
+		FA29A59E1910F8D000D37741 /* UIFont+BTWFont.m in Sources */ = {isa = PBXBuildFile; fileRef = FA29A59C1910F8D000D37741 /* UIFont+BTWFont.m */; };
 		FA67C017190F3B3200C22804 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA67C016190F3B3200C22804 /* MapKit.framework */; };
 		FA67C021190F3C3400C22804 /* GTEventMenuTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67C01E190F3C3400C22804 /* GTEventMenuTableViewCell.m */; };
 		FAC283FC1910B781006249C3 /* GTConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC283FB1910B781006249C3 /* GTConstants.m */; };
@@ -72,6 +75,12 @@
 		8614D867190DD06C007DF163 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8614D869190DD06C007DF163 /* GetThereTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GetThereTests.m; sourceTree = "<group>"; };
 		8F3885E821CD4B1C831AE9A7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		FA29A58F1910F87400D37741 /* GTChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTChatTableViewCell.h; path = Classes/Subviews/GTChatTableViewCell.h; sourceTree = "<group>"; };
+		FA29A5901910F87400D37741 /* GTChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTChatTableViewCell.m; path = Classes/Subviews/GTChatTableViewCell.m; sourceTree = "<group>"; };
+		FA29A5991910F8D000D37741 /* UIColor+BTWColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+BTWColor.h"; path = "Classes/Categories/UIColor+BTWColor.h"; sourceTree = "<group>"; };
+		FA29A59A1910F8D000D37741 /* UIColor+BTWColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+BTWColor.m"; path = "Classes/Categories/UIColor+BTWColor.m"; sourceTree = "<group>"; };
+		FA29A59B1910F8D000D37741 /* UIFont+BTWFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIFont+BTWFont.h"; path = "Classes/Categories/UIFont+BTWFont.h"; sourceTree = "<group>"; };
+		FA29A59C1910F8D000D37741 /* UIFont+BTWFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIFont+BTWFont.m"; path = "Classes/Categories/UIFont+BTWFont.m"; sourceTree = "<group>"; };
 		FA67C016190F3B3200C22804 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		FA67C01D190F3C3400C22804 /* GTEventMenuTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTEventMenuTableViewCell.h; path = Classes/GTEventMenuTableViewCell.h; sourceTree = "<group>"; };
 		FA67C01E190F3C3400C22804 /* GTEventMenuTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTEventMenuTableViewCell.m; path = Classes/GTEventMenuTableViewCell.m; sourceTree = "<group>"; };
@@ -116,6 +125,8 @@
 			children = (
 				74774C9D1910918F00CE4DE3 /* GTChatViewController.h */,
 				74774C9E1910918F00CE4DE3 /* GTChatViewController.m */,
+				FA29A58F1910F87400D37741 /* GTChatTableViewCell.h */,
+				FA29A5901910F87400D37741 /* GTChatTableViewCell.m */,
 				427746C01910CB700043BBFA /* GTMapAnnotation.h */,
 				427746C11910CB700043BBFA /* GTMapAnnotation.m */,
 			);
@@ -164,6 +175,7 @@
 				8614D84D190DD06C007DF163 /* GTAppDelegate.h */,
 				8614D84E190DD06C007DF163 /* GTAppDelegate.m */,
 				8614D850190DD06C007DF163 /* Main.storyboard */,
+				FA29A5981910F89A00D37741 /* Categories */,
 				FA67C018190F3B7400C22804 /* UI */,
 				8614D856190DD06C007DF163 /* Images.xcassets */,
 				8614D845190DD06C007DF163 /* Supporting Files */,
@@ -200,6 +212,17 @@
 				8614D866190DD06C007DF163 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		FA29A5981910F89A00D37741 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				FA29A5991910F8D000D37741 /* UIColor+BTWColor.h */,
+				FA29A59A1910F8D000D37741 /* UIColor+BTWColor.m */,
+				FA29A59B1910F8D000D37741 /* UIFont+BTWFont.h */,
+				FA29A59C1910F8D000D37741 /* UIFont+BTWFont.m */,
+			);
+			name = Categories;
 			sourceTree = "<group>";
 		};
 		FA67C018190F3B7400C22804 /* UI */ = {
@@ -371,8 +394,11 @@
 				FAC283FC1910B781006249C3 /* GTConstants.m in Sources */,
 				8614D84B190DD06C007DF163 /* main.m in Sources */,
 				FA67C021190F3C3400C22804 /* GTEventMenuTableViewCell.m in Sources */,
+				FA29A59D1910F8D000D37741 /* UIColor+BTWColor.m in Sources */,
 				427746C21910CB700043BBFA /* GTMapAnnotation.m in Sources */,
 				74774C9919108F6200CE4DE3 /* GTViewController.m in Sources */,
+				FA29A5911910F87400D37741 /* GTChatTableViewCell.m in Sources */,
+				FA29A59E1910F8D000D37741 /* UIFont+BTWFont.m in Sources */,
 				FAC283FF1910B877006249C3 /* GTLoginViewController.m in Sources */,
 				8614D84F190DD06C007DF163 /* GTAppDelegate.m in Sources */,
 				74774C9F1910918F00CE4DE3 /* GTChatViewController.m in Sources */,

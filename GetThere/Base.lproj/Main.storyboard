@@ -71,7 +71,7 @@
             </objects>
             <point key="canvasLocation" x="672" y="-2"/>
         </scene>
-        <!--Chat View Controller-->
+        <!--Chat View Controller - Event Details-->
         <scene sceneID="sJP-Dt-uAH">
             <objects>
                 <viewController id="uiW-xh-cz2" customClass="GTChatViewController" sceneMemberID="viewController">
@@ -121,7 +121,9 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="kxY-e3-bl6"/>
+                    <navigationItem key="navigationItem" title="Event Details" id="kxY-e3-bl6">
+                        <barButtonItem key="rightBarButtonItem" title="Invite" id="1hE-Cd-HuE"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="chatInputTextField" destination="iAH-OW-4iK" id="gWH-JZ-RUa"/>
                         <outlet property="mapView" destination="4be-Oh-WdB" id="ZAu-OI-EnO"/>

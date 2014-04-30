@@ -201,6 +201,9 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField*)aTextField
 {
+    if ([aTextField.text length] == 0) {
+        return NO;
+    }
     [aTextField resignFirstResponder];
     
     // This will also add the message to our local array self.chat because

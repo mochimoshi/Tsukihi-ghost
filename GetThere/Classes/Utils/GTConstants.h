@@ -10,4 +10,10 @@
 
 @interface GTConstants : NSObject
 
+extern CGFloat kCellMargin;
+extern CGFloat kHorizontalMargin;
+extern CGFloat kVerticalMargin;
+
+extern CGFloat kChatImageDimension;
+
 @end
