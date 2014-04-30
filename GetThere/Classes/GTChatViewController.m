@@ -50,6 +50,8 @@
         // Reload the table view so the new message will show up.
         [self.tableView reloadData];
     }];
+    
+    self.name = @"Egg Custard";
 }
 
 - (void)viewDidLoad
