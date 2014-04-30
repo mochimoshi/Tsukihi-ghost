@@ -53,6 +53,7 @@
         [self.chat addObject:snapshot.value];
         // Reload the table view so the new message will show up.
         [self.tableView reloadData];
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }];
     
     self.imagePicker = [[UIImagePickerController alloc] init];

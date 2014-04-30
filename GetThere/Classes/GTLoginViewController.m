@@ -42,11 +42,18 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+}
+
 - (IBAction)didTapLogin:(id)sender
 {
     if([self.nameField.text length] > 0) {
         [[NSUserDefaults standardUserDefaults] setObject:self.nameField.text forKey:@"userName"];
         [self.nameField setText:@""];
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
         [self performSegueWithIdentifier:@"loginModalSegue" sender:nil];
         return;
     }
