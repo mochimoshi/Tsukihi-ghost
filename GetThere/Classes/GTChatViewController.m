@@ -11,7 +11,7 @@
 #import <MapKit/MapKit.h>
 #import <Firebase/Firebase.h>
 
-@interface GTChatViewController ()<UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface GTChatViewController ()<UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, MKMapViewDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -20,6 +20,7 @@
 @property (strong, nonatomic) NSMutableArray *chat;
 @property (strong, nonatomic) Firebase *firebase;
 @property (strong, nonatomic) NSString *name;
+@property (strong, nonatomic) UIImage *picture;
 
 @end
 
@@ -122,6 +123,20 @@
     }
 }
 
+#pragma mark - 
+- (void)pushPhotoToFirebase:(UIImage *)picture
+{
+    if(self.picture) {
+        NSData *imageData = [UIImageJPEGRepresentation(self.picture, 0.8) base64EncodedDataWithOptions:0];
+        
+        [[self.firebase childByAutoId] setValue:@{@"name" : self.name, @"text": @"", @"image":imageData}];
+        
+        // Flush the image variable so a new one can be taken
+        self.picture = nil;
+    }
+}
+
+
 #pragma mark - TextField delegate
 
 - (BOOL)textFieldShouldReturn:(UITextField*)aTextField
@@ -130,7 +145,7 @@
     
     // This will also add the message to our local array self.chat because
     // the FEventTypeChildAdded event will be immediately fired.
-    [[self.firebase childByAutoId] setValue:@{@"name" : self.name, @"text": aTextField.text}];
+    [[self.firebase childByAutoId] setValue:@{@"name" : self.name, @"text": aTextField.text, @"image":@""}];
     
     [aTextField setText:@""];
     return NO;
@@ -176,6 +191,20 @@
     [UIView commitAnimations];
 }
 
+#pragma mark - MapView Delegate
+
+- (void)mapView:(MKMapView *)aMapView didUpdateUserLocation:(MKUserLocation *)aUserLocation {
+    MKCoordinateRegion region;
+    MKCoordinateSpan span;
+    span.latitudeDelta = 0.005;
+    span.longitudeDelta = 0.005;
+    CLLocationCoordinate2D location;
+    location.latitude = aUserLocation.coordinate.latitude;
+    location.longitude = aUserLocation.coordinate.longitude;
+    region.span = span;
+    region.center = location;
+    [aMapView setRegion:region animated:YES];
+}
 
 
 /*
