@@ -55,7 +55,11 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" title="Events" id="jJc-nB-vfA">
-                        <barButtonItem key="leftBarButtonItem" title="Logout" id="pgY-b3-zey"/>
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="pgY-b3-zey">
+                            <connections>
+                                <action selector="logout:" destination="vXZ-lx-hvc" id="e3X-PQ-4fN"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Add" id="e5e-C0-WId"/>
                     </navigationItem>
                     <connections>
@@ -99,7 +103,7 @@
                                 <rect key="frame" x="39" y="531" width="261" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="send"/>
                                 <connections>
                                     <outlet property="delegate" destination="uiW-xh-cz2" id="9Cf-ml-tte"/>
                                 </connections>
@@ -168,6 +172,9 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="go"/>
+                                <connections>
+                                    <outlet property="delegate" destination="Uh8-Yj-gF5" id="72h-Ol-huB"/>
+                                </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DsZ-wK-DRw">
                                 <rect key="frame" x="133" y="179" width="54" height="30"/>

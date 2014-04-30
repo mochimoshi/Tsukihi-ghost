@@ -8,7 +8,7 @@
 
 #import "GTLoginViewController.h"
 
-@interface GTLoginViewController ()
+@interface GTLoginViewController ()<UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
 
@@ -46,6 +46,7 @@
 {
     if([self.nameField.text length] > 0) {
         [[NSUserDefaults standardUserDefaults] setObject:self.nameField.text forKey:@"userName"];
+        [self.nameField setText:@""];
         [self performSegueWithIdentifier:@"loginModalSegue" sender:nil];
         return;
     }
@@ -60,6 +61,15 @@
 - (IBAction)resignResponder:(id)sender
 {
     [self.nameField resignFirstResponder];
+}
+
+#pragma mark - TextField Delegate
+- (BOOL)textFieldShouldReturn:(UITextField*)aTextField
+{
+    [aTextField resignFirstResponder];
+    
+    [self didTapLogin:nil];
+    return NO;
 }
 
 /*

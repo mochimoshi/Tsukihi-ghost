@@ -44,12 +44,12 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Text field handling
 
-// This method is called when the user enters text in the text field.
-// We add the chat message to our Firebase.
-
-
+- (IBAction)logout:(id)sender
+{
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"userName"];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
@@ -76,15 +76,13 @@
 
     cell.textLabel.text = [self.eventNames objectAtIndex: indexPath.row];
     cell.detailTextLabel.text = [self.eventDetails objectAtIndex: indexPath.row];
-
-    //static NSString *CellIdentifier = @"mentionsTweetCell";
-    //GTEventMenuTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:index];
     
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
     [self performSegueWithIdentifier:@"pushToChat" sender:nil];
 }
 
