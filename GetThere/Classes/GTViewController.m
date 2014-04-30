@@ -9,19 +9,22 @@
 #import "GTViewController.h"
 #import "GTEventMenuTableViewCell.h"
 
+#import "GTChatViewController.h"
 
 
-//@interface GTViewController ()<UITableViewDataSource, UITableViewDelegate>
+@interface GTViewController ()<UITableViewDataSource, UITableViewDelegate>
 
-//@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) NSArray *event_details;
 
-//@end
+@property (strong, nonatomic) NSArray *event_names;
+
+@end
 
 @implementation GTViewController
 
-@synthesize nameField;
-@synthesize textField;
-@synthesize tableView;
+
+
 
 #pragma mark - Setup
 
@@ -29,8 +32,9 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-	
-    
+    self.event_names = @[@"TCS Night Market", @"Dinner with Mom", @"DMV Driving Test"];
+    self.event_details = @[@"6:00PM Today-White Plaza, Stanford", @"8:00PM Tomorrow-Crepevine", @"10:00AM Thursday-Los Altos DMV"];
+    self.title = @"Events";
     
 }
 
@@ -58,10 +62,10 @@
 - (NSInteger)tableView:(UITableView*)table numberOfRowsInSection:(NSInteger)section
 {
     // This is the number of chat messages.
-    return [self.chat count];
+    return [self.event_names count];
 }
 
-- (UITableViewCell*)tableView:(UITableView*)table cellForRowAtIndexPath:(NSIndexPath *)index
+- (UITableViewCell*)tableView:(UITableView*)table cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [table dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -70,26 +74,19 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
-    NSDictionary* chatMessage = [self.chat objectAtIndex:index.row];
-    if (chatMessage != nil) {
-        cell.textLabel.text = chatMessage[@"text"];
-        cell.detailTextLabel.text = chatMessage[@"name"];
-    }
+
+    cell.textLabel.text = [self.event_names objectAtIndex: indexPath.row];
+    cell.detailTextLabel.text = [self.event_details objectAtIndex: indexPath.row];
+
     //static NSString *CellIdentifier = @"mentionsTweetCell";
     //GTEventMenuTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:index];
     
     return cell;
 }
 
-
-// This method will be called when the user touches on the tableView, at
-// which point we will hide the keyboard (if open). This method is called
-// because UITouchTableView.m calls nextResponder in its touch handler.
-- (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([textField isFirstResponder]) {
-        [textField resignFirstResponder];
-    }
+    [self performSegueWithIdentifier:@"pushToChat" sender:nil];
 }
 
 @end

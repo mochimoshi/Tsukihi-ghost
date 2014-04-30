@@ -11,12 +11,5 @@
 
 @interface GTViewController : UIViewController
 
-@property (nonatomic, strong) NSString* name;
-@property (nonatomic, strong) NSMutableArray* chat;
-@property (nonatomic, strong) Firebase* firebase;
-
-@property (weak, nonatomic) IBOutlet UITextField *textField;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIButton *nameField;
 
 @end
