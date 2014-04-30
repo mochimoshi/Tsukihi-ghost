@@ -10,18 +10,13 @@
 #import "GTEventMenuTableViewCell.h"
 
 
+@interface GTViewController ()<UITableViewDataSource, UITableViewDelegate>
 
-//@interface GTViewController ()<UITableViewDataSource, UITableViewDelegate>
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-//@property (weak, nonatomic) IBOutlet UITableView *tableView;
-
-//@end
+@end
 
 @implementation GTViewController
-
-@synthesize nameField;
-@synthesize textField;
-@synthesize tableView;
 
 #pragma mark - Setup
 
@@ -30,8 +25,6 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
 	
-    
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -39,13 +32,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-#pragma mark - Text field handling
-#pragma mark - Text field handling
-
-// This method is called when the user enters text in the text field.
-// We add the chat message to our Firebase.
-
 
 #pragma mark - Table view data source
 
@@ -58,7 +44,7 @@
 - (NSInteger)tableView:(UITableView*)table numberOfRowsInSection:(NSInteger)section
 {
     // This is the number of chat messages.
-    return [self.chat count];
+    return 3;
 }
 
 - (UITableViewCell*)tableView:(UITableView*)table cellForRowAtIndexPath:(NSIndexPath *)index
@@ -69,27 +55,14 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
-    
-    NSDictionary* chatMessage = [self.chat objectAtIndex:index.row];
-    if (chatMessage != nil) {
-        cell.textLabel.text = chatMessage[@"text"];
-        cell.detailTextLabel.text = chatMessage[@"name"];
-    }
+
+    cell.textLabel.text = @"Wow";
+    cell.detailTextLabel.text = @"Such label";
+
     //static NSString *CellIdentifier = @"mentionsTweetCell";
     //GTEventMenuTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:index];
     
     return cell;
-}
-
-
-// This method will be called when the user touches on the tableView, at
-// which point we will hide the keyboard (if open). This method is called
-// because UITouchTableView.m calls nextResponder in its touch handler.
-- (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
-{
-    if ([textField isFirstResponder]) {
-        [textField resignFirstResponder];
-    }
 }
 
 @end

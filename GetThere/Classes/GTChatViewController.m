@@ -92,7 +92,32 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 0;
+    return [self.chat count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"chatCell";
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    }
+    
+    NSDictionary* chatMessage = [self.chat objectAtIndex:indexPath.row];
+    if (chatMessage != nil) {
+        cell.textLabel.text = chatMessage[@"text"];
+        cell.detailTextLabel.text = chatMessage[@"name"];
+    }
+    
+    return cell;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if([self.chatInputTextField isFirstResponder]) {
+        [self.chatInputTextField resignFirstResponder];
+    }
 }
 
 #pragma mark - TextField delegate
@@ -148,6 +173,8 @@
     
     [UIView commitAnimations];
 }
+
+
 
 /*
 #pragma mark - Navigation
