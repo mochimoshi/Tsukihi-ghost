@@ -10,6 +10,8 @@
 
 @interface GTLoginViewController ()
 
+@property (weak, nonatomic) IBOutlet UITextField *nameField;
+
 @end
 
 @implementation GTLoginViewController
@@ -27,12 +29,37 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self.nameField.layer setBorderColor:[UIColor colorWithWhite:1.0 alpha:0.4].CGColor];
+    [self.nameField.layer setBorderWidth:1.0];
+    [self.nameField.layer setCornerRadius:4.0];
+    [self.nameField setAttributedPlaceholder:[[NSAttributedString alloc] initWithString:@"Enter your name to continue"
+                                                                             attributes:@{NSForegroundColorAttributeName: [UIColor colorWithWhite:1.0 alpha:0.4]}]];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)didTapLogin:(id)sender
+{
+    if([self.nameField.text length] > 0) {
+        [[NSUserDefaults standardUserDefaults] setObject:self.nameField.text forKey:@"userName"];
+        [self performSegueWithIdentifier:@"loginModalSegue" sender:nil];
+        return;
+    }
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error!"
+                                                    message:@"Please enter a name."
+                                                   delegate:nil
+                                          cancelButtonTitle:@"Okay!"
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
+- (IBAction)resignResponder:(id)sender
+{
+    [self.nameField resignFirstResponder];
 }
 
 /*

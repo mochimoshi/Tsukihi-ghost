@@ -53,7 +53,7 @@
         [self.tableView reloadData];
     }];
     
-    self.name = @"Egg Custard";
+    self.name = [[NSUserDefaults standardUserDefaults] objectForKey:@"userName"];
 }
 
 - (void)viewDidLoad
