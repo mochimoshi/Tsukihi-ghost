@@ -38,6 +38,8 @@
         [self.contentView addSubview:self.timestampLabel];
         
         self.locationImageView = [[UIImageView alloc] initWithFrame:CGRectMake(kCellMargin, kCellMargin, kChatImageDimension, kChatImageDimension)];
+        [self.locationImageView setContentMode:UIViewContentModeScaleAspectFill];
+        [self.locationImageView setClipsToBounds:YES];
         [self.contentView addSubview:self.locationImageView];
     }
     return self;

@@ -171,10 +171,12 @@
     if ([chatMessage objectForKey:@"image"]) {
         return kCellMargin * 2 + kChatImageDimension + kPadding * 3 + kLineHeight * 2;
     }
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame) - 2 * kHorizontalMargin, kHorizontalMargin)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame) - 2 * kHorizontalMargin, kHorizontalMargin)];
     [label setFont:[UIFont lightHelveticaWithSize:12.0]];
     [label setText:chatMessage[@"text"]];
-    [label sizeToFitWithExpectedWidth:CGRectGetWidth(self.tableView.frame) - 2 * kCellMargin];
+    [label setLineBreakMode:NSLineBreakByWordWrapping];
+    [label setNumberOfLines:0];
+    [label sizeToFitWithExpectedWidth:CGRectGetWidth(self.view.frame) - 2 * kCellMargin];
     
     return kCellMargin * 2 + kPadding * 3 + kLineHeight * 2 + CGRectGetHeight(label.frame);
 }
