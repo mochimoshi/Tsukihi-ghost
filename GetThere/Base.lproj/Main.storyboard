@@ -103,7 +103,7 @@
                                 </connections>
                             </tableView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="iAH-OW-4iK">
-                                <rect key="frame" x="42" y="528" width="268" height="30"/>
+                                <rect key="frame" x="74" y="528" width="236" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="send"/>
@@ -111,35 +111,33 @@
                                     <outlet property="delegate" destination="uiW-xh-cz2" id="9Cf-ml-tte"/>
                                 </connections>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5n3-Vr-Je0">
-                                <rect key="frame" x="11" y="528" width="21" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dmb-8g-hQ1">
+                                <rect key="frame" x="10" y="528" width="54" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="x7a-Zb-PFF"/>
-                                    <constraint firstAttribute="width" constant="21" id="xk2-az-Hft"/>
+                                    <constraint firstAttribute="width" constant="54" id="K58-oH-jgn"/>
                                 </constraints>
-                                <state key="normal" title="+">
+                                <state key="normal" title="Camera">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="getCamera:" destination="uiW-xh-cz2" eventType="touchUpInside" id="oPf-Zm-2pa"/>
+                                    <action selector="getCamera:" destination="uiW-xh-cz2" eventType="touchUpInside" id="2rR-oj-oRK"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="FXc-rD-VGG" secondAttribute="trailing" id="1Zw-7B-cY3"/>
-                            <constraint firstItem="iAH-OW-4iK" firstAttribute="leading" secondItem="5n3-Vr-Je0" secondAttribute="trailing" constant="10" id="3P0-PQ-Dgj"/>
+                            <constraint firstItem="iAH-OW-4iK" firstAttribute="leading" secondItem="dmb-8g-hQ1" secondAttribute="trailing" constant="10" id="1gP-QQ-mve"/>
                             <constraint firstItem="FXc-rD-VGG" firstAttribute="top" secondItem="4be-Oh-WdB" secondAttribute="bottom" id="3UZ-jL-LEt"/>
                             <constraint firstItem="FXc-rD-VGG" firstAttribute="leading" secondItem="s6Y-Cr-7iw" secondAttribute="leading" id="5qT-ej-ZrR"/>
                             <constraint firstAttribute="trailing" secondItem="iAH-OW-4iK" secondAttribute="trailing" constant="10" id="B0y-t4-srP"/>
                             <constraint firstAttribute="trailing" secondItem="4be-Oh-WdB" secondAttribute="trailing" id="E7E-JW-eQc"/>
                             <constraint firstItem="4be-Oh-WdB" firstAttribute="top" secondItem="s6Y-Cr-7iw" secondAttribute="top" id="FKm-Wm-LGp"/>
-                            <constraint firstItem="laq-tY-YbJ" firstAttribute="top" secondItem="5n3-Vr-Je0" secondAttribute="bottom" constant="10" id="Ldn-YK-k2r"/>
-                            <constraint firstItem="iAH-OW-4iK" firstAttribute="leading" secondItem="5n3-Vr-Je0" secondAttribute="trailing" constant="10" id="Qgi-Tt-b8Y"/>
-                            <constraint firstItem="5n3-Vr-Je0" firstAttribute="leading" secondItem="s6Y-Cr-7iw" secondAttribute="leading" constant="11" id="YWs-by-8FR"/>
-                            <constraint firstItem="5n3-Vr-Je0" firstAttribute="top" secondItem="FXc-rD-VGG" secondAttribute="bottom" constant="5" id="chp-2I-WB7"/>
+                            <constraint firstItem="dmb-8g-hQ1" firstAttribute="leading" secondItem="s6Y-Cr-7iw" secondAttribute="leading" constant="10" id="Id8-r7-Qyu"/>
                             <constraint firstItem="laq-tY-YbJ" firstAttribute="top" secondItem="iAH-OW-4iK" secondAttribute="bottom" constant="10" id="eKO-IP-Ffu"/>
+                            <constraint firstItem="laq-tY-YbJ" firstAttribute="top" secondItem="dmb-8g-hQ1" secondAttribute="bottom" constant="10" id="gH7-Ei-LUa"/>
+                            <constraint firstItem="iAH-OW-4iK" firstAttribute="top" secondItem="FXc-rD-VGG" secondAttribute="bottom" constant="5" id="gMX-aZ-LdB"/>
                             <constraint firstItem="4be-Oh-WdB" firstAttribute="leading" secondItem="s6Y-Cr-7iw" secondAttribute="leading" id="pPw-VZ-Lqf"/>
                         </constraints>
                     </view>
