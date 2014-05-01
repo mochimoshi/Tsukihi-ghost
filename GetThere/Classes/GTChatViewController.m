@@ -73,6 +73,15 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self setDummyMapPins];
+    CLLocationCoordinate2D coordinate;
+    coordinate.latitude = 37.4240943;
+    coordinate.longitude = -122.1701957;
+
+    MKMapCamera *camera = [[MKMapCamera alloc] init];
+    [camera setCenterCoordinate:coordinate];
+    [camera setAltitude:3000.0];
+
+    [self.mapView setCamera:camera animated:YES];
 }
 
 
@@ -284,18 +293,18 @@
 
 #pragma mark - MapView Delegate
 
-- (void)mapView:(MKMapView *)aMapView didUpdateUserLocation:(MKUserLocation *)aUserLocation {
-    MKCoordinateRegion region;
-    MKCoordinateSpan span;
-    span.latitudeDelta = 0.005;
-    span.longitudeDelta = 0.005;
-    CLLocationCoordinate2D location;
-    location.latitude = aUserLocation.coordinate.latitude;
-    location.longitude = aUserLocation.coordinate.longitude;
-    region.span = span;
-    region.center = location;
-    [aMapView setRegion:region animated:YES];
-}
+//- (void)mapView:(MKMapView *)aMapView didUpdateUserLocation:(MKUserLocation *)aUserLocation {
+//    MKCoordinateRegion region;
+//    MKCoordinateSpan span;
+//    span.latitudeDelta = 0.005;
+//    span.longitudeDelta = 0.005;
+//    CLLocationCoordinate2D location;
+//    location.latitude = aUserLocation.coordinate.latitude;
+//    location.longitude = aUserLocation.coordinate.longitude;
+//    region.span = span;
+//    region.center = location;
+//    [aMapView setRegion:region animated:YES];
+//}
 
 #pragma mark - PhotoPicker Delegate
 
