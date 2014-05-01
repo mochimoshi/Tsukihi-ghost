@@ -14,6 +14,10 @@ extern CGFloat kCellMargin;
 extern CGFloat kHorizontalMargin;
 extern CGFloat kVerticalMargin;
 
+extern CGFloat kLineHeight;
+
+extern CGFloat kPadding;
+
 extern CGFloat kChatImageDimension;
 
 @end

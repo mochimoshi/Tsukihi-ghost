@@ -10,9 +10,13 @@
 
 @implementation GTConstants
 
-CGFloat kCellMargin = 5;
+CGFloat kCellMargin = 10;
 CGFloat kHorizontalMargin = 10;
 CGFloat kVerticalMargin = 10;
+
+CGFloat kPadding = 3;
+
+CGFloat kLineHeight = 12;
 
 CGFloat kChatImageDimension = 80;
 

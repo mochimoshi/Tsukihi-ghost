@@ -34,6 +34,8 @@
 		FA67C021190F3C3400C22804 /* GTEventMenuTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67C01E190F3C3400C22804 /* GTEventMenuTableViewCell.m */; };
 		FAC283FC1910B781006249C3 /* GTConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC283FB1910B781006249C3 /* GTConstants.m */; };
 		FAC283FF1910B877006249C3 /* GTLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC283FE1910B877006249C3 /* GTLoginViewController.m */; };
+		FAC827971911F03B007181DF /* UILabel+GTLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC827961911F03B007181DF /* UILabel+GTLabel.m */; };
+		FAC8279A1911F79F007181DF /* GTUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC827991911F79F007181DF /* GTUtilities.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +91,10 @@
 		FAC283FB1910B781006249C3 /* GTConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTConstants.m; path = Classes/Utils/GTConstants.m; sourceTree = "<group>"; };
 		FAC283FD1910B877006249C3 /* GTLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTLoginViewController.h; path = Classes/GTLoginViewController.h; sourceTree = "<group>"; };
 		FAC283FE1910B877006249C3 /* GTLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTLoginViewController.m; path = Classes/GTLoginViewController.m; sourceTree = "<group>"; };
+		FAC827951911F03B007181DF /* UILabel+GTLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UILabel+GTLabel.h"; path = "Classes/Categories/UILabel+GTLabel.h"; sourceTree = "<group>"; };
+		FAC827961911F03B007181DF /* UILabel+GTLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UILabel+GTLabel.m"; path = "Classes/Categories/UILabel+GTLabel.m"; sourceTree = "<group>"; };
+		FAC827981911F79F007181DF /* GTUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTUtilities.h; path = Classes/Utils/GTUtilities.h; sourceTree = "<group>"; };
+		FAC827991911F79F007181DF /* GTUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTUtilities.m; path = Classes/Utils/GTUtilities.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +187,8 @@
 				8614D845190DD06C007DF163 /* Supporting Files */,
 				FAC283FA1910B781006249C3 /* GTConstants.h */,
 				FAC283FB1910B781006249C3 /* GTConstants.m */,
+				FAC827981911F79F007181DF /* GTUtilities.h */,
+				FAC827991911F79F007181DF /* GTUtilities.m */,
 			);
 			path = GetThere;
 			sourceTree = "<group>";
@@ -221,6 +229,8 @@
 				FA29A59A1910F8D000D37741 /* UIColor+BTWColor.m */,
 				FA29A59B1910F8D000D37741 /* UIFont+BTWFont.h */,
 				FA29A59C1910F8D000D37741 /* UIFont+BTWFont.m */,
+				FAC827951911F03B007181DF /* UILabel+GTLabel.h */,
+				FAC827961911F03B007181DF /* UILabel+GTLabel.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -399,6 +409,8 @@
 				74774C9919108F6200CE4DE3 /* GTViewController.m in Sources */,
 				FA29A5911910F87400D37741 /* GTChatTableViewCell.m in Sources */,
 				FA29A59E1910F8D000D37741 /* UIFont+BTWFont.m in Sources */,
+				FAC8279A1911F79F007181DF /* GTUtilities.m in Sources */,
+				FAC827971911F03B007181DF /* UILabel+GTLabel.m in Sources */,
 				FAC283FF1910B877006249C3 /* GTLoginViewController.m in Sources */,
 				8614D84F190DD06C007DF163 /* GTAppDelegate.m in Sources */,
 				74774C9F1910918F00CE4DE3 /* GTChatViewController.m in Sources */,

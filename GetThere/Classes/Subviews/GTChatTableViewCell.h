@@ -11,7 +11,10 @@
 @interface GTChatTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) UILabel *message;
-@property (strong, nonatomic) UILabel *userName;
-@property (strong, nonatomic) UIImageView *image;
+@property (strong, nonatomic) UILabel *usernameLabel;
+@property (strong, nonatomic) UILabel *timestampLabel;
+@property (strong, nonatomic) UIImageView *locationImageView;
+
+- (void)repositionCellItems;
 
 @end

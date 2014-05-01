@@ -8,6 +8,12 @@
 
 #import "GTChatViewController.h"
 #import "GTMapAnnotation.h"
+#import "GTChatTableViewCell.h"
+
+#import "UILabel+GTLabel.h"
+#import "UIFont+BTWFont.h"
+#import "GTConstants.h"
+#import "GTUtilities.h"
 
 #import <MapKit/MapKit.h>
 #import <Firebase/Firebase.h>
@@ -150,6 +156,20 @@
 
 #pragma mark - TableView delegate
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *chatMessage = [self.chat objectAtIndex:indexPath.row];
+    if ([chatMessage objectForKey:@"image"]) {
+        return kCellMargin * 2 + kChatImageDimension + kPadding * 3 + kLineHeight * 2;
+    }
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.tableView.frame) - 2 * kHorizontalMargin, kHorizontalMargin)];
+    [label setFont:[UIFont lightHelveticaWithSize:12.0]];
+    [label setText:chatMessage[@"text"]];
+    [label sizeToFitWithExpectedWidth:CGRectGetWidth(self.tableView.frame) - 2 * kCellMargin];
+    
+    return kCellMargin * 2 + kPadding * 3 + kLineHeight * 2 + CGRectGetHeight(label.frame);
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [self.chat count];
@@ -158,10 +178,10 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"chatCell";
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    GTChatTableViewCell *cell = (GTChatTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        cell = [[GTChatTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
     NSDictionary* chatMessage = [self.chat objectAtIndex:indexPath.row];
@@ -169,13 +189,20 @@
         if ([chatMessage objectForKey:@"image"]){
             NSData *picData = [[NSData alloc] initWithBase64EncodedString:chatMessage[@"image"] options:0];
             UIImage *picture = [UIImage imageWithData:picData];
-            // Do stuff here with the picture!
             
+            [cell.usernameLabel setText: chatMessage[@"name"]];
+            [cell.message setText: @""];
+            [cell.locationImageView setImage:picture];
+            [cell.timestampLabel setText:chatMessage[@"timestamp"]];
         } else {
-            cell.textLabel.text = chatMessage[@"text"];
-            cell.detailTextLabel.text = chatMessage[@"name"];
+            [cell.message setText: chatMessage[@"text"]];
+            [cell.usernameLabel setText: chatMessage[@"name"]];
+            [cell.locationImageView setImage:nil];
+            [cell.timestampLabel setText:chatMessage[@"timestamp"]];
         }
     }
+    
+    [cell repositionCellItems];
     
     return cell;
 }
@@ -193,7 +220,7 @@
 {
     if(picture) {
         NSData *imageData = UIImageJPEGRepresentation(picture, 0.8);
-        [[self.firebase childByAutoId] setValue:@{@"name" : self.name, @"text": @"", @"image":[imageData base64EncodedStringWithOptions:0]}];
+        [[self.firebase childByAutoId] setValue:@{@"name" : self.name, @"timestamp": [GTUtilities formattedDateStringFromDate:[NSDate date]], @"text": @"", @"image":[imageData base64EncodedStringWithOptions:0]}];
     }
 }
 
@@ -209,7 +236,7 @@
     
     // This will also add the message to our local array self.chat because
     // the FEventTypeChildAdded event will be immediately fired.
-    [[self.firebase childByAutoId] setValue:@{@"name" : self.name, @"text": aTextField.text}];
+    [[self.firebase childByAutoId] setValue:@{@"name" : self.name,  @"timestamp": [GTUtilities formattedDateStringFromDate:[NSDate date]], @"text": aTextField.text}];
     
     [aTextField setText:@""];
     return NO;
