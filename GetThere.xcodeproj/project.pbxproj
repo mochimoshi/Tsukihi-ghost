@@ -27,6 +27,7 @@
 		8614D860190DD06C007DF163 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8614D842190DD06C007DF163 /* UIKit.framework */; };
 		8614D868190DD06C007DF163 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8614D866190DD06C007DF163 /* InfoPlist.strings */; };
 		8614D86A190DD06C007DF163 /* GetThereTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8614D869190DD06C007DF163 /* GetThereTests.m */; };
+		C7B8D34289A54AE889742B9B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EC5E4120249846D09A1694E3 /* libPods.a */; };
 		FA29A5911910F87400D37741 /* GTChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA29A5901910F87400D37741 /* GTChatTableViewCell.m */; };
 		FA29A59D1910F8D000D37741 /* UIColor+BTWColor.m in Sources */ = {isa = PBXBuildFile; fileRef = FA29A59A1910F8D000D37741 /* UIColor+BTWColor.m */; };
 		FA29A59E1910F8D000D37741 /* UIFont+BTWFont.m in Sources */ = {isa = PBXBuildFile; fileRef = FA29A59C1910F8D000D37741 /* UIFont+BTWFont.m */; };
@@ -34,6 +35,9 @@
 		FA67C021190F3C3400C22804 /* GTEventMenuTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67C01E190F3C3400C22804 /* GTEventMenuTableViewCell.m */; };
 		FAC283FC1910B781006249C3 /* GTConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC283FB1910B781006249C3 /* GTConstants.m */; };
 		FAC283FF1910B877006249C3 /* GTLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC283FE1910B877006249C3 /* GTLoginViewController.m */; };
+		FAC5819719171DCB002E3AE9 /* GTNewEventTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC5819619171DCB002E3AE9 /* GTNewEventTableViewController.m */; };
+		FAC5819A191735E4002E3AE9 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC58198191735E4002E3AE9 /* AddressBook.framework */; };
+		FAC5819B191735E4002E3AE9 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC58199191735E4002E3AE9 /* AddressBookUI.framework */; };
 		FAC827971911F03B007181DF /* UILabel+GTLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC827961911F03B007181DF /* UILabel+GTLabel.m */; };
 		FAC8279A1911F79F007181DF /* GTUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC827991911F79F007181DF /* GTUtilities.m */; };
 /* End PBXBuildFile section */
@@ -77,6 +81,7 @@
 		8614D867190DD06C007DF163 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8614D869190DD06C007DF163 /* GetThereTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GetThereTests.m; sourceTree = "<group>"; };
 		8F3885E821CD4B1C831AE9A7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		EC5E4120249846D09A1694E3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA29A58F1910F87400D37741 /* GTChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTChatTableViewCell.h; path = Classes/Subviews/GTChatTableViewCell.h; sourceTree = "<group>"; };
 		FA29A5901910F87400D37741 /* GTChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTChatTableViewCell.m; path = Classes/Subviews/GTChatTableViewCell.m; sourceTree = "<group>"; };
 		FA29A5991910F8D000D37741 /* UIColor+BTWColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+BTWColor.h"; path = "Classes/Categories/UIColor+BTWColor.h"; sourceTree = "<group>"; };
@@ -91,6 +96,10 @@
 		FAC283FB1910B781006249C3 /* GTConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTConstants.m; path = Classes/Utils/GTConstants.m; sourceTree = "<group>"; };
 		FAC283FD1910B877006249C3 /* GTLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTLoginViewController.h; path = Classes/GTLoginViewController.h; sourceTree = "<group>"; };
 		FAC283FE1910B877006249C3 /* GTLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTLoginViewController.m; path = Classes/GTLoginViewController.m; sourceTree = "<group>"; };
+		FAC5819519171DCB002E3AE9 /* GTNewEventTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTNewEventTableViewController.h; path = Classes/GTNewEventTableViewController.h; sourceTree = "<group>"; };
+		FAC5819619171DCB002E3AE9 /* GTNewEventTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTNewEventTableViewController.m; path = Classes/GTNewEventTableViewController.m; sourceTree = "<group>"; };
+		FAC58198191735E4002E3AE9 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		FAC58199191735E4002E3AE9 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		FAC827951911F03B007181DF /* UILabel+GTLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UILabel+GTLabel.h"; path = "Classes/Categories/UILabel+GTLabel.h"; sourceTree = "<group>"; };
 		FAC827961911F03B007181DF /* UILabel+GTLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UILabel+GTLabel.m"; path = "Classes/Categories/UILabel+GTLabel.m"; sourceTree = "<group>"; };
 		FAC827981911F79F007181DF /* GTUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTUtilities.h; path = Classes/Utils/GTUtilities.h; sourceTree = "<group>"; };
@@ -102,6 +111,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAC5819A191735E4002E3AE9 /* AddressBook.framework in Frameworks */,
+				FAC5819B191735E4002E3AE9 /* AddressBookUI.framework in Frameworks */,
 				74774C9519108A4200CE4DE3 /* libc++.dylib in Frameworks */,
 				74774C9319108A3400CE4DE3 /* libicucore.dylib in Frameworks */,
 				74E4B086190FBAC0005E8DA1 /* CFNetwork.framework in Frameworks */,
@@ -110,6 +121,7 @@
 				8614D843190DD06C007DF163 /* UIKit.framework in Frameworks */,
 				8614D83F190DD06C007DF163 /* Foundation.framework in Frameworks */,
 				74774C9719108AFB00CE4DE3 /* Firebase.framework in Frameworks */,
+				C7B8D34289A54AE889742B9B /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,6 +174,8 @@
 		8614D83D190DD06C007DF163 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FAC58198191735E4002E3AE9 /* AddressBook.framework */,
+				FAC58199191735E4002E3AE9 /* AddressBookUI.framework */,
 				74774C9619108AFB00CE4DE3 /* Firebase.framework */,
 				74774C9419108A4200CE4DE3 /* libc++.dylib */,
 				74774C9219108A3400CE4DE3 /* libicucore.dylib */,
@@ -171,6 +185,7 @@
 				8614D840190DD06C007DF163 /* CoreGraphics.framework */,
 				8614D842190DD06C007DF163 /* UIKit.framework */,
 				8614D85D190DD06C007DF163 /* XCTest.framework */,
+				EC5E4120249846D09A1694E3 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -252,6 +267,8 @@
 				74774C9819108F6200CE4DE3 /* GTViewController.m */,
 				FA67C01D190F3C3400C22804 /* GTEventMenuTableViewCell.h */,
 				FA67C01E190F3C3400C22804 /* GTEventMenuTableViewCell.m */,
+				FAC5819519171DCB002E3AE9 /* GTNewEventTableViewController.h */,
+				FAC5819619171DCB002E3AE9 /* GTNewEventTableViewController.m */,
 			);
 			name = EventsMenu;
 			sourceTree = "<group>";
@@ -413,6 +430,7 @@
 				FAC827971911F03B007181DF /* UILabel+GTLabel.m in Sources */,
 				FAC283FF1910B877006249C3 /* GTLoginViewController.m in Sources */,
 				8614D84F190DD06C007DF163 /* GTAppDelegate.m in Sources */,
+				FAC5819719171DCB002E3AE9 /* GTNewEventTableViewController.m in Sources */,
 				74774C9F1910918F00CE4DE3 /* GTChatViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
