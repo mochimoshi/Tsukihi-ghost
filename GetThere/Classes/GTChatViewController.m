@@ -351,17 +351,16 @@
     UIButton *img = (UIButton *) sender;
     [self.previewImage setImage:img.currentBackgroundImage];
     [self.previewImage setAlpha:1.0];
-    [self.tableView setAlpha:0];
     [self.chatInputTextField resignFirstResponder];
 }
 
 - (void)chatInputActive:(id)sender
 {
     NSLog(@"text input active");
-    if (self.tableView.alpha == 0) {
-        NSLog(@"change op");
-        self.tableView.alpha = 1.0;
-        self.previewImage.alpha = 0;
+    if (self.previewImage.alpha == 1.0) {
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.previewImage setAlpha: 0.0];
+        }];
     }
 }
 
