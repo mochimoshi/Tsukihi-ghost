@@ -36,11 +36,12 @@
         [self.timestampLabel setFont:[UIFont lightHelveticaWithSize:10.0]];
         [self.timestampLabel setTextColor:[UIColor secondaryBlackColor]];
         [self.contentView addSubview:self.timestampLabel];
+ 
+        self.locationImageView = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.locationImageView.frame = CGRectMake(kCellMargin, kCellMargin, kChatImageDimension, kChatImageDimension);
         
-        self.locationImageView = [[UIImageView alloc] initWithFrame:CGRectMake(kCellMargin, kCellMargin, kChatImageDimension, kChatImageDimension)];
-        [self.locationImageView setContentMode:UIViewContentModeScaleAspectFill];
-        [self.locationImageView setClipsToBounds:YES];
         [self.contentView addSubview:self.locationImageView];
+        
     }
     return self;
 }
@@ -51,7 +52,7 @@
     
     CGFloat expectedY = 0;
     
-    if(!self.locationImageView.image) {
+    if(!self.locationImageView.currentBackgroundImage) {
         CGRect messageFrame = self.message.frame;
         messageFrame.origin.y = CGRectGetMaxY(self.usernameLabel.frame) + kPadding;
         [self.message setFrame: messageFrame];
@@ -78,6 +79,7 @@
     timestampFrame.origin.y = expectedY + kPadding;
     [self.timestampLabel setFrame:timestampFrame];
 }
+
 
 - (void)awakeFromNib
 {

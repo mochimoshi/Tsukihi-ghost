@@ -23,8 +23,11 @@
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UITextField *chatInputTextField;
+@property (strong, nonatomic) IBOutlet UIImageView *previewImage;
+
 
 @property (strong, nonatomic) UIImagePickerController *imagePicker;
+
 
 @property (strong, nonatomic) NSMutableArray *chat;
 @property (strong, nonatomic) Firebase *firebase;
@@ -64,6 +67,13 @@
     
     self.imagePicker = [[UIImagePickerController alloc] init];
     [self.imagePicker setDelegate:self];
+
+    // creating the preview image as transparent
+    [self.previewImage setAlpha:0];
+    [self.view addSubview:self.previewImage];
+    
+    // setting up text field response
+    [self.chatInputTextField addTarget:self action:@selector(chatInputActive:) forControlEvents:UIControlEventEditingDidBegin];
     
     self.name = [[NSUserDefaults standardUserDefaults] objectForKey:@"userName"];
 }
@@ -203,12 +213,16 @@
             
             [cell.usernameLabel setText: chatMessage[@"name"]];
             [cell.message setText: @""];
-            [cell.locationImageView setImage:picture];
+            
+            [cell.locationImageView setBackgroundImage:picture forState:UIControlStateNormal];
+            [cell.locationImageView addTarget:self action:@selector(expandPhoto:) forControlEvents:UIControlEventTouchUpInside];
+
+
             [cell.timestampLabel setText:chatMessage[@"timestamp"]];
         } else {
             [cell.message setText: chatMessage[@"text"]];
             [cell.usernameLabel setText: chatMessage[@"name"]];
-            [cell.locationImageView setImage:nil];
+            [cell.locationImageView setBackgroundImage:nil forState:UIControlStateNormal];
             [cell.timestampLabel setText:chatMessage[@"timestamp"]];
         }
     }
@@ -330,6 +344,26 @@
     [self.imagePicker dismissViewControllerAnimated:YES completion:nil];
 }
 
+// expand photo to bottom half of screen when clicked on
+- (void)expandPhoto:(id)sender
+{
+    NSLog(@"button was clicked");
+    UIButton *img = (UIButton *) sender;
+    [self.previewImage setImage:img.currentBackgroundImage];
+    [self.previewImage setAlpha:1.0];
+    [self.tableView setAlpha:0];
+    [self.chatInputTextField resignFirstResponder];
+}
+
+- (void)chatInputActive:(id)sender
+{
+    NSLog(@"text input active");
+    if (self.tableView.alpha == 0) {
+        NSLog(@"change op");
+        self.tableView.alpha = 1.0;
+        self.previewImage.alpha = 0;
+    }
+}
 
 
 /*

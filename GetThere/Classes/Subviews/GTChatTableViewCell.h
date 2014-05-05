@@ -13,7 +13,7 @@
 @property (strong, nonatomic) UILabel *message;
 @property (strong, nonatomic) UILabel *usernameLabel;
 @property (strong, nonatomic) UILabel *timestampLabel;
-@property (strong, nonatomic) UIImageView *locationImageView;
+@property (strong, nonatomic) UIButton *locationImageView;
 
 - (void)repositionCellItems;
 
