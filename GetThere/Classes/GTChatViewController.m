@@ -7,6 +7,7 @@
 //
 
 #import "GTChatViewController.h"
+#import "GTPersonViewController.h"
 #import "GTMapAnnotation.h"
 #import "GTChatTableViewCell.h"
 
@@ -230,6 +231,25 @@
     [cell repositionCellItems];
     
     return cell;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"pushToPerson"]) {
+        GTPersonViewController *controller = (GTPersonViewController *)segue.destinationViewController;
+        controller.mapView = self.mapView;
+        controller.sender = sender;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    /*NSLog(@"hello");
+    GTPersonViewController * flipViewController = [[GTPersonViewController alloc] initWithNibName:@"flip" bundle:[NSBundle mainBundle]];
+    [self.view addSubview:flipViewController.view];*/
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
+    [self performSegueWithIdentifier:@"pushToPerson" sender:cell];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate

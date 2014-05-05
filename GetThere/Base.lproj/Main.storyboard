@@ -158,11 +158,58 @@
                         <outlet property="previewImage" destination="UOa-gG-nrH" id="ZXt-Xp-W9W"/>
                         <outlet property="tableView" destination="FXc-rD-VGG" id="mLQ-xV-aew"/>
                         <outlet property="view" destination="FXc-rD-VGG" id="iNx-tb-Wy0"/>
+                        <segue destination="Mg7-vm-JaO" kind="push" identifier="pushToPerson" id="YMC-QD-l8C"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eum-bG-Dc4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1159" y="-2"/>
+        </scene>
+        <!--Person View Controller - Friend Details-->
+        <scene sceneID="mTY-hn-BNT">
+            <objects>
+                <viewController id="Mg7-vm-JaO" customClass="GTPersonViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="IPB-vx-04Q"/>
+                        <viewControllerLayoutGuide type="bottom" id="p4G-Zc-9jB"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Yz3-3c-frX">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UnM-FY-KId">
+                                <rect key="frame" x="0.0" y="157" width="320" height="411"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="Mg7-vm-JaO" id="hW5-2q-fVN"/>
+                                </connections>
+                            </mapView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CU3-UN-J5f">
+                                <rect key="frame" x="110" y="78" width="100" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="PersonInfo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QxH-y9-yEA">
+                                <rect key="frame" x="119" y="107" width="83" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Friend Details" id="9sK-Cg-LA2"/>
+                    <connections>
+                        <outlet property="mapView" destination="UnM-FY-KId" id="JLf-Yy-rxm"/>
+                        <outlet property="personInfo" destination="QxH-y9-yEA" id="4Fa-wq-tXb"/>
+                        <outlet property="personName" destination="CU3-UN-J5f" id="szd-If-yvn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fIY-Hz-PJj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1639" y="-2"/>
         </scene>
         <!--New Event Table View Controller - New Event-->
         <scene sceneID="Bas-Uw-ZiP">
