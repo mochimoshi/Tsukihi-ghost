@@ -48,6 +48,14 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"userName"]) {
+        [self performSegueWithIdentifier:@"loginModalSegue" sender:nil];
+    }
+}
+
 - (IBAction)didTapLogin:(id)sender
 {
     if([self.nameField.text length] > 0) {

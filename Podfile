@@ -1,4 +1,4 @@
 platform :ios, '7.0'
 
 pod 'AFNetworking'
-pod 'Firebase', '~> 1.0.0'
+pod 'RETableViewManager', '~> 1.5.10'
