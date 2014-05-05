@@ -36,6 +36,8 @@
 		FAC283FC1910B781006249C3 /* GTConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC283FB1910B781006249C3 /* GTConstants.m */; };
 		FAC283FF1910B877006249C3 /* GTLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC283FE1910B877006249C3 /* GTLoginViewController.m */; };
 		FAC5819719171DCB002E3AE9 /* GTNewEventTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC5819619171DCB002E3AE9 /* GTNewEventTableViewController.m */; };
+		FAC5819A191735E4002E3AE9 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC58198191735E4002E3AE9 /* AddressBook.framework */; };
+		FAC5819B191735E4002E3AE9 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC58199191735E4002E3AE9 /* AddressBookUI.framework */; };
 		FAC827971911F03B007181DF /* UILabel+GTLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC827961911F03B007181DF /* UILabel+GTLabel.m */; };
 		FAC8279A1911F79F007181DF /* GTUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC827991911F79F007181DF /* GTUtilities.m */; };
 /* End PBXBuildFile section */
@@ -96,6 +98,8 @@
 		FAC283FE1910B877006249C3 /* GTLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTLoginViewController.m; path = Classes/GTLoginViewController.m; sourceTree = "<group>"; };
 		FAC5819519171DCB002E3AE9 /* GTNewEventTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTNewEventTableViewController.h; path = Classes/GTNewEventTableViewController.h; sourceTree = "<group>"; };
 		FAC5819619171DCB002E3AE9 /* GTNewEventTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTNewEventTableViewController.m; path = Classes/GTNewEventTableViewController.m; sourceTree = "<group>"; };
+		FAC58198191735E4002E3AE9 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		FAC58199191735E4002E3AE9 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		FAC827951911F03B007181DF /* UILabel+GTLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UILabel+GTLabel.h"; path = "Classes/Categories/UILabel+GTLabel.h"; sourceTree = "<group>"; };
 		FAC827961911F03B007181DF /* UILabel+GTLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UILabel+GTLabel.m"; path = "Classes/Categories/UILabel+GTLabel.m"; sourceTree = "<group>"; };
 		FAC827981911F79F007181DF /* GTUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTUtilities.h; path = Classes/Utils/GTUtilities.h; sourceTree = "<group>"; };
@@ -107,6 +111,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAC5819A191735E4002E3AE9 /* AddressBook.framework in Frameworks */,
+				FAC5819B191735E4002E3AE9 /* AddressBookUI.framework in Frameworks */,
 				74774C9519108A4200CE4DE3 /* libc++.dylib in Frameworks */,
 				74774C9319108A3400CE4DE3 /* libicucore.dylib in Frameworks */,
 				74E4B086190FBAC0005E8DA1 /* CFNetwork.framework in Frameworks */,
@@ -168,6 +174,8 @@
 		8614D83D190DD06C007DF163 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FAC58198191735E4002E3AE9 /* AddressBook.framework */,
+				FAC58199191735E4002E3AE9 /* AddressBookUI.framework */,
 				74774C9619108AFB00CE4DE3 /* Firebase.framework */,
 				74774C9419108A4200CE4DE3 /* libc++.dylib */,
 				74774C9219108A3400CE4DE3 /* libicucore.dylib */,
