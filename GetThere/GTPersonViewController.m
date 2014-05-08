@@ -8,6 +8,7 @@
 
 #import "GTPersonViewController.h"
 #import "GTChatTableViewCell.h"
+#import <CoreLocation/CoreLocation.h>
 
 @interface GTPersonViewController ()
 
@@ -43,5 +44,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 @end

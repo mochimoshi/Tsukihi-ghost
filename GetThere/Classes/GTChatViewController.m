@@ -18,8 +18,9 @@
 
 #import <MapKit/MapKit.h>
 #import <Firebase/Firebase.h>
+#import <CoreLocation/CoreLocation.h>
 
-@interface GTChatViewController ()<UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface GTChatViewController ()<UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,CLLocationManagerDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -35,6 +36,9 @@
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSMutableArray *mapPinData;
 
+/* location manager */
+@property (strong, nonatomic, retain) CLLocationManager *locationManager;
+
 @end
 
 @implementation GTChatViewController
@@ -45,7 +49,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+
     }
     return self;
 }
@@ -53,6 +57,7 @@
 - (void)awakeFromNib
 {
     // Initialize array that will store chat messages.
+    [self startStandardUpdates];
     self.chat = [[NSMutableArray alloc] init];
     
     // Initialize the root of our Firebase namespace.
@@ -385,6 +390,36 @@
     }
 }
 
+- (void)locationManager:(CLLocationManager *)manager
+     didUpdateLocations:(NSArray *)locations {
+    // If it's a relatively recent event, turn off updates to save power.
+    CLLocation* location = [locations lastObject];
+    NSDate* eventDate = location.timestamp;
+    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
+    if (abs(howRecent) < 15.0) {
+        // If the event is recent, do something with it.
+        NSLog(@"latitude %+.6f, longitude %+.6f\n",
+              location.coordinate.latitude,
+              location.coordinate.longitude);
+    }
+}
+
+- (void)startStandardUpdates
+{
+    NSLog(@"Standard updates started\n");
+    // Create the location manager if this object does not
+    // already have one.
+    if (nil == self.locationManager)
+        self.locationManager = [[CLLocationManager alloc] init];
+    
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
+    
+    // Set a movement threshold for new events.
+    self.locationManager.distanceFilter = 500; // meters
+    
+    [self.locationManager startUpdatingLocation];
+}
 
 /*
 #pragma mark - Navigation

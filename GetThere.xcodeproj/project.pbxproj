@@ -16,6 +16,7 @@
 		74E4B086190FBAC0005E8DA1 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74E4B085190FBAC0005E8DA1 /* CFNetwork.framework */; };
 		74F3D0BF19176F9B0051C5D0 /* GTPersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74F3D0BD19176F9B0051C5D0 /* GTPersonViewController.m */; };
 		74F3D0C61917708C0051C5D0 /* GTPersonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74F3D0C51917708C0051C5D0 /* GTPersonTableViewCell.m */; };
+		74F3D0C8191B8B400051C5D0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74F3D0C7191B8B400051C5D0 /* CoreLocation.framework */; };
 		8614D83F190DD06C007DF163 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8614D83E190DD06C007DF163 /* Foundation.framework */; };
 		8614D841190DD06C007DF163 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8614D840190DD06C007DF163 /* CoreGraphics.framework */; };
 		8614D843190DD06C007DF163 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8614D842190DD06C007DF163 /* UIKit.framework */; };
@@ -69,6 +70,7 @@
 		74F3D0BD19176F9B0051C5D0 /* GTPersonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTPersonViewController.m; sourceTree = "<group>"; };
 		74F3D0C41917708C0051C5D0 /* GTPersonTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTPersonTableViewCell.h; sourceTree = "<group>"; };
 		74F3D0C51917708C0051C5D0 /* GTPersonTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTPersonTableViewCell.m; sourceTree = "<group>"; };
+		74F3D0C7191B8B400051C5D0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		8614D83B190DD06C007DF163 /* GetThere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GetThere.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8614D83E190DD06C007DF163 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8614D840190DD06C007DF163 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -117,6 +119,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74F3D0C8191B8B400051C5D0 /* CoreLocation.framework in Frameworks */,
 				FAC5819A191735E4002E3AE9 /* AddressBook.framework in Frameworks */,
 				FAC5819B191735E4002E3AE9 /* AddressBookUI.framework in Frameworks */,
 				74774C9519108A4200CE4DE3 /* libc++.dylib in Frameworks */,
@@ -191,6 +194,7 @@
 		8614D83D190DD06C007DF163 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				74F3D0C7191B8B400051C5D0 /* CoreLocation.framework */,
 				FAC58198191735E4002E3AE9 /* AddressBook.framework */,
 				FAC58199191735E4002E3AE9 /* AddressBookUI.framework */,
 				74774C9619108AFB00CE4DE3 /* Firebase.framework */,
