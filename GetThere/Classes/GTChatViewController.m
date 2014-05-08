@@ -38,6 +38,10 @@
 
 /* location manager */
 @property (strong, nonatomic, retain) CLLocationManager *locationManager;
+@property (nonatomic, assign) CLLocationDegrees currentLatitude;
+@property (nonatomic, assign) CLLocationDegrees currentLongitude;
+@property (strong, nonatomic) NSMutableArray *mapPins;
+
 
 @end
 
@@ -100,15 +104,38 @@
     [self.mapView setCamera:camera animated:YES];
 }
 
+- (void) setMapCoords
+{
+    CLLocationCoordinate2D coordinate;
+    coordinate.latitude = self.currentLatitude;
+    coordinate.longitude = self.currentLongitude;
+    
+    MKMapCamera *camera = [[MKMapCamera alloc] init];
+    [camera setCenterCoordinate:coordinate];
+    [camera setAltitude:3000.0];
+    
+    [self.mapView setCamera:camera animated:YES];
+    
+}
+
+
 
 #pragma mark - Set dummy map pins
 - (void)setDummyMapPins
 {
-    // Sorry..super disgusting dummy array
-    self.mapPinData = [[NSMutableArray alloc] initWithArray:@[@{@"title":@"Jason Jong", @"subtitle": @"Gelato Classico: 0.5 mi away", @"longitude":[NSNumber numberWithDouble:     -122.163283], @"latitude":[NSNumber numberWithDouble:37.446097]},
+    if (self.mapPins == nil) {
+        self.mapPins = [[NSMutableArray alloc]init];
+    } else {
+        [self.mapView removeAnnotations:self.mapPins];
+        [self.mapPins removeAllObjects];
+        
+    }
+    // Sorry..super disgusting dummy array. This really should be pulled from the db
+    /*self.mapPinData = [[NSMutableArray alloc] initWithArray:@[@{@"title":@"Jason Jong", @"subtitle": @"Gelato Classico: 0.5 mi away", @"longitude":[NSNumber numberWithDouble:     -122.163283], @"latitude":[NSNumber numberWithDouble:37.446097]},
         @{@"title":@"Angela Yeung", @"subtitle":@"Meyer Library: 0.3 mi away" , @"longitude":[NSNumber numberWithDouble:-122.167474], @"latitude":[NSNumber numberWithDouble:37.425956]},
-        @{@"title":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"longitude":[NSNumber numberWithDouble:-122.165388], @"latitude":[NSNumber numberWithDouble:37.427577]}]];
-    
+                                                              @{@"title":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"longitude":[NSNumber numberWithDouble:self.currentLongitude], @"latitude":[NSNumber numberWithDouble:37.427577]}]];*/
+    self.mapPinData = [[NSMutableArray alloc] initWithArray:@[@{@"title":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"longitude":[NSNumber numberWithDouble:self.currentLongitude], @"latitude":[NSNumber numberWithDouble:self.currentLatitude]}]];
+
     [self setMapPins];
 }
 
@@ -131,10 +158,12 @@
     [mapPin setTitle:pinData[@"title"]];
     [mapPin setSubtitle:pinData[@"subtitle"]];
     [mapPin setCoordinate:coords];
+    [self.mapPins addObject:mapPin];
     
     [self.mapView addAnnotation:mapPin];
     
 }
+
 
 /* Changes colors of pins, but..changes *all* of them.
  
@@ -400,6 +429,10 @@
         NSLog(@"latitude %+.6f, longitude %+.6f\n",
               location.coordinate.latitude,
               location.coordinate.longitude);
+        self.currentLatitude = location.coordinate.latitude;
+        self.currentLongitude = location.coordinate.longitude;
+        [self setMapCoords];
+        [self setDummyMapPins];
     }
 }
 
