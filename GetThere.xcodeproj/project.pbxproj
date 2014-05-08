@@ -14,6 +14,9 @@
 		74774C9919108F6200CE4DE3 /* GTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74774C9819108F6200CE4DE3 /* GTViewController.m */; };
 		74774C9F1910918F00CE4DE3 /* GTChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74774C9E1910918F00CE4DE3 /* GTChatViewController.m */; };
 		74E4B086190FBAC0005E8DA1 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74E4B085190FBAC0005E8DA1 /* CFNetwork.framework */; };
+		74F3D0BF19176F9B0051C5D0 /* GTPersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74F3D0BD19176F9B0051C5D0 /* GTPersonViewController.m */; };
+		74F3D0C61917708C0051C5D0 /* GTPersonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74F3D0C51917708C0051C5D0 /* GTPersonTableViewCell.m */; };
+		74F3D0C8191B8B400051C5D0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74F3D0C7191B8B400051C5D0 /* CoreLocation.framework */; };
 		8614D83F190DD06C007DF163 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8614D83E190DD06C007DF163 /* Foundation.framework */; };
 		8614D841190DD06C007DF163 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8614D840190DD06C007DF163 /* CoreGraphics.framework */; };
 		8614D843190DD06C007DF163 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8614D842190DD06C007DF163 /* UIKit.framework */; };
@@ -63,6 +66,11 @@
 		74774C9D1910918F00CE4DE3 /* GTChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTChatViewController.h; path = Classes/GTChatViewController.h; sourceTree = "<group>"; };
 		74774C9E1910918F00CE4DE3 /* GTChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTChatViewController.m; path = Classes/GTChatViewController.m; sourceTree = "<group>"; };
 		74E4B085190FBAC0005E8DA1 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		74F3D0BC19176F9B0051C5D0 /* GTPersonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTPersonViewController.h; sourceTree = "<group>"; };
+		74F3D0BD19176F9B0051C5D0 /* GTPersonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTPersonViewController.m; sourceTree = "<group>"; };
+		74F3D0C41917708C0051C5D0 /* GTPersonTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTPersonTableViewCell.h; sourceTree = "<group>"; };
+		74F3D0C51917708C0051C5D0 /* GTPersonTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTPersonTableViewCell.m; sourceTree = "<group>"; };
+		74F3D0C7191B8B400051C5D0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		8614D83B190DD06C007DF163 /* GetThere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GetThere.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8614D83E190DD06C007DF163 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8614D840190DD06C007DF163 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -111,6 +119,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74F3D0C8191B8B400051C5D0 /* CoreLocation.framework in Frameworks */,
 				FAC5819A191735E4002E3AE9 /* AddressBook.framework in Frameworks */,
 				FAC5819B191735E4002E3AE9 /* AddressBookUI.framework in Frameworks */,
 				74774C9519108A4200CE4DE3 /* libc++.dylib in Frameworks */,
@@ -151,6 +160,17 @@
 			name = Chat;
 			sourceTree = "<group>";
 		};
+		74F3D0BB19176F6C0051C5D0 /* PersonInfo */ = {
+			isa = PBXGroup;
+			children = (
+				74F3D0BC19176F9B0051C5D0 /* GTPersonViewController.h */,
+				74F3D0BD19176F9B0051C5D0 /* GTPersonViewController.m */,
+				74F3D0C41917708C0051C5D0 /* GTPersonTableViewCell.h */,
+				74F3D0C51917708C0051C5D0 /* GTPersonTableViewCell.m */,
+			);
+			name = PersonInfo;
+			sourceTree = "<group>";
+		};
 		8614D832190DD06B007DF163 = {
 			isa = PBXGroup;
 			children = (
@@ -174,6 +194,7 @@
 		8614D83D190DD06C007DF163 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				74F3D0C7191B8B400051C5D0 /* CoreLocation.framework */,
 				FAC58198191735E4002E3AE9 /* AddressBook.framework */,
 				FAC58199191735E4002E3AE9 /* AddressBookUI.framework */,
 				74774C9619108AFB00CE4DE3 /* Firebase.framework */,
@@ -253,6 +274,7 @@
 		FA67C018190F3B7400C22804 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				74F3D0BB19176F6C0051C5D0 /* PersonInfo */,
 				FAC284001910B87F006249C3 /* Login */,
 				FA67C019190F3B8500C22804 /* EventsMenu */,
 				74774CA01910919300CE4DE3 /* Chat */,
@@ -425,9 +447,11 @@
 				427746C21910CB700043BBFA /* GTMapAnnotation.m in Sources */,
 				74774C9919108F6200CE4DE3 /* GTViewController.m in Sources */,
 				FA29A5911910F87400D37741 /* GTChatTableViewCell.m in Sources */,
+				74F3D0C61917708C0051C5D0 /* GTPersonTableViewCell.m in Sources */,
 				FA29A59E1910F8D000D37741 /* UIFont+BTWFont.m in Sources */,
 				FAC8279A1911F79F007181DF /* GTUtilities.m in Sources */,
 				FAC827971911F03B007181DF /* UILabel+GTLabel.m in Sources */,
+				74F3D0BF19176F9B0051C5D0 /* GTPersonViewController.m in Sources */,
 				FAC283FF1910B877006249C3 /* GTLoginViewController.m in Sources */,
 				8614D84F190DD06C007DF163 /* GTAppDelegate.m in Sources */,
 				FAC5819719171DCB002E3AE9 /* GTNewEventTableViewController.m in Sources */,
