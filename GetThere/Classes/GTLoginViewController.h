@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AFNetworking/AFNetworking.h>
 
 @interface GTLoginViewController : UIViewController
+
+@property (strong, nonatomic) NSDictionary* userInfo;
+@property (strong, nonatomic) NSMutableString *userId;
 
 @end

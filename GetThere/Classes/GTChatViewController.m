@@ -8,6 +8,7 @@
 
 #import "GTChatViewController.h"
 #import "GTPersonViewController.h"
+#import "GTLoginViewController.h"
 #import "GTMapAnnotation.h"
 #import "GTChatTableViewCell.h"
 
@@ -42,6 +43,9 @@
 @property (nonatomic, assign) CLLocationDegrees currentLongitude;
 @property (strong, nonatomic) NSMutableArray *mapPins;
 
+/* http manager */
+@property (strong, nonatomic) AFHTTPRequestOperationManager *httpManager;
+
 
 @end
 
@@ -61,7 +65,7 @@
 - (void)awakeFromNib
 {
     // Initialize array that will store chat messages.
-    [self startStandardUpdates];
+
     self.chat = [[NSMutableArray alloc] init];
     
     // Initialize the root of our Firebase namespace.
@@ -86,6 +90,11 @@
     [self.chatInputTextField addTarget:self action:@selector(chatInputActive:) forControlEvents:UIControlEventEditingDidBegin];
     
     self.name = [[NSUserDefaults standardUserDefaults] objectForKey:@"userName"];
+    
+    if (self.httpManager == nil) {
+        self.httpManager = [AFHTTPRequestOperationManager manager];
+    }
+    [self startStandardUpdates];
 }
 
 - (void)viewDidLoad
@@ -431,10 +440,21 @@
               location.coordinate.longitude);
         self.currentLatitude = location.coordinate.latitude;
         self.currentLongitude = location.coordinate.longitude;
+        //[self saveLocationUpdate :self.currentLatitude :self.currentLongitude];
         [self setMapCoords];
         [self setDummyMapPins];
     }
 }
+
+/*- (void)saveLocationUpdate:(CLLocationDegrees)lat :(CLLocationDegrees)lon
+{
+    NSDictionary *params = @{@"user": @{@"user_id": GTLoginViewController.userId, @"user_last_lat": [NSNumber numberWithDouble:lat], @"user_last_lon": [NSNumber numberWithDouble:lon]}};
+    [self.httpManager GET:@"http://tsukihi.org/backtier/users/login" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}*/
 
 - (void)startStandardUpdates
 {

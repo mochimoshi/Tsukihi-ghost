@@ -11,7 +11,7 @@
 @interface GTLoginViewController ()<UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
-
+@property (strong, nonatomic) AFHTTPRequestOperationManager *httpManager;
 @end
 
 @implementation GTLoginViewController
@@ -34,6 +34,9 @@
     [self.nameField.layer setCornerRadius:4.0];
     [self.nameField setAttributedPlaceholder:[[NSAttributedString alloc] initWithString:@"Enter your name to continue"
                                                                              attributes:@{NSForegroundColorAttributeName: [UIColor colorWithWhite:1.0 alpha:0.4]}]];
+    if (self.httpManager == nil) {
+         self.httpManager = [AFHTTPRequestOperationManager manager];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -59,19 +62,38 @@
 
 - (IBAction)didTapLogin:(id)sender
 {
-    if([self.nameField.text length] > 0) {
-        [[NSUserDefaults standardUserDefaults] setObject:self.nameField.text forKey:@"userName"];
-        [self.nameField setText:@""];
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
-        [self performSegueWithIdentifier:@"loginModalSegue" sender:nil];
-        return;
+    [self sendLoginQuery];
+}
+            
+- (void)setUserInfo
+{
+    [[NSUserDefaults standardUserDefaults] setObject:self.nameField.text forKey:@"userName"];
+    [self.nameField setText:@""];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+    [self performSegueWithIdentifier:@"loginModalSegue" sender:nil];
+}
+
+
+- (void)sendLoginQuery
+{
+    if ([self.nameField.text length] > 0) {
+        NSDictionary *params = @{@"user": @{@"user_name": [self.nameField.text lowercaseString], @"password": @"password"}};
+        [self.httpManager GET:@"http://tsukihi.org/backtier/users/login" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"JSON: %@", responseObject);
+            self.userInfo = [(NSDictionary *)responseObject objectForKey:@"user"];
+            self.userId = [self.userInfo objectForKey:@"id"];
+            NSLog(@"here");
+            [self setUserInfo];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"Error: %@", error);
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error!"
+                                                            message:@"Please enter a name."
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Okay!"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }];
     }
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error!"
-                                                    message:@"Please enter a name."
-                                                   delegate:nil
-                                          cancelButtonTitle:@"Okay!"
-                                          otherButtonTitles:nil];
-    [alert show];
 }
 
 - (IBAction)resignResponder:(id)sender
