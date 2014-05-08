@@ -81,7 +81,7 @@
             NSLog(@"JSON: %@", responseObject);
             global_userInfo = [(NSDictionary *)responseObject objectForKey:@"user"];
             global_userId = [global_userInfo objectForKey:@"id"];
-            global_curEventId = [NSMutableString stringWithString: @"1"]; // even more hacky
+            //global_curEventId = [NSMutableString stringWithString: @"1"]; // even more hacky
             NSLog(@"here");
             //[self setUserInfo];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -114,6 +114,11 @@
     // creating the preview image as transparent
     [self.previewImage setAlpha:0];
     [self.view addSubview:self.previewImage];
+    
+    self.previewImage.userInteractionEnabled = YES;
+    UITapGestureRecognizer *photoMinimize = [[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(photoTapGesture:)];
+    photoMinimize.numberOfTapsRequired = 1;
+    [self.previewImage addGestureRecognizer:photoMinimize];
     
     // setting up text field response
     [self.chatInputTextField addTarget:self action:@selector(chatInputActive:) forControlEvents:UIControlEventEditingDidBegin];
@@ -456,6 +461,16 @@
 - (void)chatInputActive:(id)sender
 {
     NSLog(@"text input active");
+    if (self.previewImage.alpha == 1.0) {
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.previewImage setAlpha: 0.0];
+        }];
+    }
+}
+
+- (void)photoTapGesture: (id)sender
+{
+    NSLog(@"photo tapped");
     if (self.previewImage.alpha == 1.0) {
         [UIView animateWithDuration:0.3 animations:^{
             [self.previewImage setAlpha: 0.0];
