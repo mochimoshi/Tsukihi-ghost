@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Uh8-Yj-gF5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Uh8-Yj-gF5">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -94,12 +94,12 @@
                                     <outlet property="delegate" destination="uiW-xh-cz2" id="Bzv-Js-l3t"/>
                                 </connections>
                             </mapView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UOa-gG-nrH">
-                                <rect key="frame" x="0.0" y="279" width="320" height="241"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UOa-gG-nrH">
+                                <rect key="frame" x="0.0" y="282" width="320" height="241"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="FXc-rD-VGG">
-                                <rect key="frame" x="0.0" y="279" width="320" height="241"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="FXc-rD-VGG">
+                                <rect key="frame" x="0.0" y="282" width="320" height="241"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -138,15 +138,19 @@
                             <constraint firstAttribute="trailing" secondItem="FXc-rD-VGG" secondAttribute="trailing" id="1Zw-7B-cY3"/>
                             <constraint firstItem="iAH-OW-4iK" firstAttribute="leading" secondItem="dmb-8g-hQ1" secondAttribute="trailing" constant="10" id="1gP-QQ-mve"/>
                             <constraint firstItem="FXc-rD-VGG" firstAttribute="top" secondItem="4be-Oh-WdB" secondAttribute="bottom" id="3UZ-jL-LEt"/>
+                            <constraint firstItem="FXc-rD-VGG" firstAttribute="leading" secondItem="UOa-gG-nrH" secondAttribute="leading" id="5Wi-ls-Wyt"/>
                             <constraint firstItem="FXc-rD-VGG" firstAttribute="leading" secondItem="s6Y-Cr-7iw" secondAttribute="leading" id="5qT-ej-ZrR"/>
                             <constraint firstAttribute="trailing" secondItem="iAH-OW-4iK" secondAttribute="trailing" constant="10" id="B0y-t4-srP"/>
                             <constraint firstAttribute="trailing" secondItem="4be-Oh-WdB" secondAttribute="trailing" id="E7E-JW-eQc"/>
                             <constraint firstItem="4be-Oh-WdB" firstAttribute="top" secondItem="s6Y-Cr-7iw" secondAttribute="top" id="FKm-Wm-LGp"/>
                             <constraint firstItem="dmb-8g-hQ1" firstAttribute="leading" secondItem="s6Y-Cr-7iw" secondAttribute="leading" constant="10" id="Id8-r7-Qyu"/>
+                            <constraint firstItem="FXc-rD-VGG" firstAttribute="top" secondItem="UOa-gG-nrH" secondAttribute="top" id="PZn-R3-f5x"/>
                             <constraint firstItem="laq-tY-YbJ" firstAttribute="top" secondItem="iAH-OW-4iK" secondAttribute="bottom" constant="10" id="eKO-IP-Ffu"/>
                             <constraint firstItem="laq-tY-YbJ" firstAttribute="top" secondItem="dmb-8g-hQ1" secondAttribute="bottom" constant="10" id="gH7-Ei-LUa"/>
                             <constraint firstItem="iAH-OW-4iK" firstAttribute="top" secondItem="FXc-rD-VGG" secondAttribute="bottom" constant="5" id="gMX-aZ-LdB"/>
+                            <constraint firstItem="FXc-rD-VGG" firstAttribute="trailing" secondItem="UOa-gG-nrH" secondAttribute="trailing" id="kGG-bS-cIm"/>
                             <constraint firstItem="4be-Oh-WdB" firstAttribute="leading" secondItem="s6Y-Cr-7iw" secondAttribute="leading" id="pPw-VZ-Lqf"/>
+                            <constraint firstItem="FXc-rD-VGG" firstAttribute="bottom" secondItem="UOa-gG-nrH" secondAttribute="bottom" id="s0m-C1-7vJ"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Event Details" id="kxY-e3-bl6">

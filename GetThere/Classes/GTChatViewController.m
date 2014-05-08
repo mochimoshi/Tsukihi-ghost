@@ -266,7 +266,7 @@
             [cell.usernameLabel setText: chatMessage[@"name"]];
             [cell.message setText: @""];
             
-            [cell.locationImageView setBackgroundImage:picture forState:UIControlStateNormal];
+            [cell.locationImageView setImage:picture forState:UIControlStateNormal];
             [cell.locationImageView addTarget:self action:@selector(expandPhoto:) forControlEvents:UIControlEventTouchUpInside];
 
 
