@@ -184,7 +184,16 @@
     /*self.mapPinData = [[NSMutableArray alloc] initWithArray:@[@{@"title":@"Jason Jong", @"subtitle": @"Gelato Classico: 0.5 mi away", @"longitude":[NSNumber numberWithDouble:     -122.163283], @"latitude":[NSNumber numberWithDouble:37.446097]},
         @{@"title":@"Angela Yeung", @"subtitle":@"Meyer Library: 0.3 mi away" , @"longitude":[NSNumber numberWithDouble:-122.167474], @"latitude":[NSNumber numberWithDouble:37.425956]},
                                                               @{@"title":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"longitude":[NSNumber numberWithDouble:self.currentLongitude], @"latitude":[NSNumber numberWithDouble:37.427577]}]];*/
-    self.mapPinData = [[NSMutableArray alloc] initWithArray:@[@{@"title":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"longitude":[NSNumber numberWithDouble:self.currentLongitude], @"latitude":[NSNumber numberWithDouble:self.currentLatitude]}]];
+    /*self.mapPinData = [[NSMutableArray alloc] initWithArray:@[@{@"title":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"longitude":[NSNumber numberWithDouble:self.currentLongitude], @"latitude":[NSNumber numberWithDouble:self.currentLatitude]}]];*/
+    NSDictionary *params = @{@"event": @{@"id": @"1"}};
+    [self.httpManager GET:@"http://localhost:3000/events/get_event_attendee_locations" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        /*global_userInfo = [(NSDictionary *)responseObject objectForKey:@"user"];
+        global_userId = [global_userInfo objectForKey:@"id"];*/
+        self.mapPinData = [(NSDictionary *)responseObject objectForKey:@"list"];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
 
     [self setMapPins];
 }
@@ -200,13 +209,24 @@
 #pragma mark - Adds a single map pin
 -(void) addOnePin:(NSDictionary *)pinData
 {
-    CLLocationCoordinate2D coords;
+    /*CLLocationCoordinate2D coords;
     coords.latitude = [pinData[@"latitude"] doubleValue];
     coords.longitude = [pinData[@"longitude"] doubleValue];
     
     GTMapAnnotation *mapPin = [[GTMapAnnotation alloc]init];
     [mapPin setTitle:pinData[@"title"]];
     [mapPin setSubtitle:pinData[@"subtitle"]];
+    [mapPin setCoordinate:coords];
+    [self.mapPins addObject:mapPin];
+    
+    [self.mapView addAnnotation:mapPin];*/
+    CLLocationCoordinate2D coords;
+    coords.latitude = [pinData[@"user_last_lat"] doubleValue];
+    coords.longitude = [pinData[@"user_last_long"] doubleValue];
+    
+    GTMapAnnotation *mapPin = [[GTMapAnnotation alloc]init];
+    [mapPin setTitle:pinData[@"user_name"]];
+    [mapPin setSubtitle:pinData[@""]];
     [mapPin setCoordinate:coords];
     [self.mapPins addObject:mapPin];
     
