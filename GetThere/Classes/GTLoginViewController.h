@@ -8,10 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import <AFNetworking/AFNetworking.h>
+#import "GTChatViewController.h"
 
 @interface GTLoginViewController : UIViewController
 
-@property (strong, nonatomic) NSDictionary* userInfo;
-@property (strong, nonatomic) NSMutableString *userId;
+/*@property (strong, nonatomic) NSDictionary* userInfo;
+@property (strong, nonatomic) NSMutableString *userId;*/
+
+extern NSDictionary* global_userInfo;
+extern NSMutableString *global_userId;
 
 @end

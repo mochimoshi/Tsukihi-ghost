@@ -10,4 +10,6 @@
 
 @interface GTChatViewController : UIViewController
 
+extern NSMutableString *global_curEventId;
+
 @end
