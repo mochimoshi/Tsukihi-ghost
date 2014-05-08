@@ -23,6 +23,8 @@
 
 @interface GTChatViewController ()<UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,CLLocationManagerDelegate>
 
+/* user info */
+
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UITextField *chatInputTextField;
@@ -440,21 +442,21 @@
               location.coordinate.longitude);
         self.currentLatitude = location.coordinate.latitude;
         self.currentLongitude = location.coordinate.longitude;
-        //[self saveLocationUpdate :self.currentLatitude :self.currentLongitude];
+        [self saveLocationUpdate :self.currentLatitude :self.currentLongitude];
         [self setMapCoords];
         [self setDummyMapPins];
     }
 }
 
-/*- (void)saveLocationUpdate:(CLLocationDegrees)lat :(CLLocationDegrees)lon
+- (void)saveLocationUpdate:(CLLocationDegrees)lat :(CLLocationDegrees)lon
 {
-    NSDictionary *params = @{@"user": @{@"user_id": GTLoginViewController.userId, @"user_last_lat": [NSNumber numberWithDouble:lat], @"user_last_lon": [NSNumber numberWithDouble:lon]}};
-    [self.httpManager GET:@"http://tsukihi.org/backtier/users/login" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSDictionary *params = @{@"user": @{@"user_id": userId, @"user_last_lat": [NSNumber numberWithDouble:lat], @"user_last_lon": [NSNumber numberWithDouble:lon]}};
+    [self.httpManager GET:@"http://tsukihi.org/backtier/users/update_location" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-}*/
+}
 
 - (void)startStandardUpdates
 {

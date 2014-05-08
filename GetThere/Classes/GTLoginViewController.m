@@ -8,10 +8,15 @@
 
 #import "GTLoginViewController.h"
 
+NSDictionary *userInfo = nil;
+NSMutableString *userId = nil;
+
 @interface GTLoginViewController ()<UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
 @property (strong, nonatomic) AFHTTPRequestOperationManager *httpManager;
+
+
 @end
 
 @implementation GTLoginViewController
@@ -20,6 +25,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+
         // Custom initialization
     }
     return self;
@@ -80,8 +86,11 @@
         NSDictionary *params = @{@"user": @{@"user_name": [self.nameField.text lowercaseString], @"password": @"password"}};
         [self.httpManager GET:@"http://tsukihi.org/backtier/users/login" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"JSON: %@", responseObject);
-            self.userInfo = [(NSDictionary *)responseObject objectForKey:@"user"];
-            self.userId = [self.userInfo objectForKey:@"id"];
+            userInfo = [(NSDictionary *)responseObject objectForKey:@"user"];
+            userId = [userInfo objectForKey:@"id"];
+            GTChatViewController *chatView = [[GTChatViewController alloc] initWithNibName:@"GTChatViewController" bundle:nil];
+            chatView.userInfo = userInfo;
+            chatView.userId = userId;
             NSLog(@"here");
             [self setUserInfo];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
