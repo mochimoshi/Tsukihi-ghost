@@ -8,8 +8,8 @@
 
 #import "GTLoginViewController.h"
 
-NSDictionary *userInfo = nil;
-NSMutableString *userId = nil;
+NSDictionary *global_userInfo = nil;
+NSMutableString *global_userId = nil;
 
 @interface GTLoginViewController ()<UITextFieldDelegate>
 
@@ -86,11 +86,8 @@ NSMutableString *userId = nil;
         NSDictionary *params = @{@"user": @{@"user_name": [self.nameField.text lowercaseString], @"password": @"password"}};
         [self.httpManager GET:@"http://tsukihi.org/backtier/users/login" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"JSON: %@", responseObject);
-            userInfo = [(NSDictionary *)responseObject objectForKey:@"user"];
-            userId = [userInfo objectForKey:@"id"];
-            GTChatViewController *chatView = [[GTChatViewController alloc] initWithNibName:@"GTChatViewController" bundle:nil];
-            chatView.userInfo = userInfo;
-            chatView.userId = userId;
+            global_userInfo = [(NSDictionary *)responseObject objectForKey:@"user"];
+            global_userId = [global_userInfo objectForKey:@"id"];
             NSLog(@"here");
             [self setUserInfo];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

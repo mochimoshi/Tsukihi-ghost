@@ -10,7 +10,6 @@
 
 @interface GTChatViewController : UIViewController
 
-@property (nonatomic, retain) NSDictionary *userInfo;
-@property (nonatomic, retain) NSMutableString *userId;
+extern NSMutableString *global_curEventId;
 
 @end
