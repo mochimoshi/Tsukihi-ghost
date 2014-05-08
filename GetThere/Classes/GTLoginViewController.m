@@ -8,9 +8,6 @@
 
 #import "GTLoginViewController.h"
 
-NSDictionary *global_userInfo = nil;
-NSMutableString *global_userId = nil;
-
 @interface GTLoginViewController ()<UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
@@ -20,6 +17,8 @@ NSMutableString *global_userId = nil;
 @end
 
 @implementation GTLoginViewController
+
+#define kLoginURL @"http://tsukihi.org/backtier/users/login"
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -59,7 +58,7 @@ NSMutableString *global_userId = nil;
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    if([[NSUserDefaults standardUserDefaults] objectForKey:@"userName"]) {
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]) {
         [self performSegueWithIdentifier:@"loginModalSegue" sender:nil];
         return;
     }
@@ -73,7 +72,6 @@ NSMutableString *global_userId = nil;
             
 - (void)setUserInfo
 {
-    [[NSUserDefaults standardUserDefaults] setObject:self.nameField.text forKey:@"userName"];
     [self.nameField setText:@""];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
     [self performSegueWithIdentifier:@"loginModalSegue" sender:nil];
@@ -84,11 +82,10 @@ NSMutableString *global_userId = nil;
 {
     if ([self.nameField.text length] > 0) {
         NSDictionary *params = @{@"user": @{@"user_name": [self.nameField.text lowercaseString], @"password": @"password"}};
-        [self.httpManager GET:@"http://tsukihi.org/backtier/users/login" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self.httpManager GET:kLoginURL parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"JSON: %@", responseObject);
-            global_userInfo = [(NSDictionary *)responseObject objectForKey:@"user"];
-            global_userId = [global_userInfo objectForKey:@"id"];
-            NSLog(@"here");
+            [[NSUserDefaults standardUserDefaults] setValue:[[responseObject objectForKey:@"user"] objectForKey: @"user_name"] forKey:@"userName"];
+            [[NSUserDefaults standardUserDefaults] setValue:[[responseObject objectForKey:@"user"] objectForKey:@"id"] forKey:@"userID"];
             [self setUserInfo];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"Error: %@", error);

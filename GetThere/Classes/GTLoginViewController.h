@@ -15,7 +15,4 @@
 /*@property (strong, nonatomic) NSDictionary* userInfo;
 @property (strong, nonatomic) NSMutableString *userId;*/
 
-extern NSDictionary* global_userInfo;
-extern NSMutableString *global_userId;
-
 @end
