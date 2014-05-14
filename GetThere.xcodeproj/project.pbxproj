@@ -17,6 +17,7 @@
 		74F3D0BF19176F9B0051C5D0 /* GTPersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74F3D0BD19176F9B0051C5D0 /* GTPersonViewController.m */; };
 		74F3D0C61917708C0051C5D0 /* GTPersonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74F3D0C51917708C0051C5D0 /* GTPersonTableViewCell.m */; };
 		74F3D0C8191B8B400051C5D0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74F3D0C7191B8B400051C5D0 /* CoreLocation.framework */; };
+		74F3D0CC192333330051C5D0 /* GTChatService.m in Sources */ = {isa = PBXBuildFile; fileRef = 74F3D0CB192333330051C5D0 /* GTChatService.m */; };
 		8614D83F190DD06C007DF163 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8614D83E190DD06C007DF163 /* Foundation.framework */; };
 		8614D841190DD06C007DF163 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8614D840190DD06C007DF163 /* CoreGraphics.framework */; };
 		8614D843190DD06C007DF163 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8614D842190DD06C007DF163 /* UIKit.framework */; };
@@ -75,6 +76,8 @@
 		74F3D0C41917708C0051C5D0 /* GTPersonTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTPersonTableViewCell.h; sourceTree = "<group>"; };
 		74F3D0C51917708C0051C5D0 /* GTPersonTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTPersonTableViewCell.m; sourceTree = "<group>"; };
 		74F3D0C7191B8B400051C5D0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		74F3D0CA192333330051C5D0 /* GTChatService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTChatService.h; path = Classes/Service/GTChatService.h; sourceTree = "<group>"; };
+		74F3D0CB192333330051C5D0 /* GTChatService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTChatService.m; path = Classes/Service/GTChatService.m; sourceTree = "<group>"; };
 		8614D83B190DD06C007DF163 /* GetThere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GetThere.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8614D83E190DD06C007DF163 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8614D840190DD06C007DF163 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -184,6 +187,15 @@
 			name = PersonInfo;
 			sourceTree = "<group>";
 		};
+		74F3D0C9192333050051C5D0 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				74F3D0CA192333330051C5D0 /* GTChatService.h */,
+				74F3D0CB192333330051C5D0 /* GTChatService.m */,
+			);
+			name = Service;
+			sourceTree = "<group>";
+		};
 		8614D832190DD06B007DF163 = {
 			isa = PBXGroup;
 			children = (
@@ -232,6 +244,7 @@
 				8614D84E190DD06C007DF163 /* GTAppDelegate.m */,
 				8614D850190DD06C007DF163 /* Main.storyboard */,
 				FA29A5981910F89A00D37741 /* Categories */,
+				74F3D0C9192333050051C5D0 /* Service */,
 				FA67C018190F3B7400C22804 /* UI */,
 				8614D856190DD06C007DF163 /* Images.xcassets */,
 				8614D845190DD06C007DF163 /* Supporting Files */,
@@ -482,6 +495,7 @@
 				8614D84B190DD06C007DF163 /* main.m in Sources */,
 				FA67C021190F3C3400C22804 /* GTEventMenuTableViewCell.m in Sources */,
 				FA29A59D1910F8D000D37741 /* UIColor+BTWColor.m in Sources */,
+				74F3D0CC192333330051C5D0 /* GTChatService.m in Sources */,
 				427746C21910CB700043BBFA /* GTMapAnnotation.m in Sources */,
 				74774C9919108F6200CE4DE3 /* GTViewController.m in Sources */,
 				FA29A5911910F87400D37741 /* GTChatTableViewCell.m in Sources */,
