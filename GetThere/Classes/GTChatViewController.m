@@ -25,10 +25,11 @@
 
 /* user info */
 
-@property (weak, nonatomic) IBOutlet MKMapView *mapView;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UITextField *chatInputTextField;
-@property (strong, nonatomic) IBOutlet UIImageView *previewImage;
+@property (strong, nonatomic) MKMapView *mapView;
+@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) UITextField *chatInputTextField;
+@property (strong, nonatomic) UIButton *chatImagingButton;
+@property (strong, nonatomic) UIImageView *previewImage;
 
 
 @property (strong, nonatomic) UIImagePickerController *imagePicker;
@@ -57,6 +58,9 @@
 
 #define kFirechatNS @"https://getthere.firebaseio.com/"
 
+static const CGFloat kInputHeight = 30;
+static const CGFloat kNavBarHeight = 64;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -83,20 +87,9 @@
         [self.chat addObject:snapshot.value];
         // Reload the table view so the new message will show up.
         [self.tableView reloadData];
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0]
+                              atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }];
-    
-    self.imagePicker = [[UIImagePickerController alloc] init];
-    [self.imagePicker setDelegate:self];
-
-    // creating the preview image as transparent
-    [self.previewImage setAlpha:0];
-    [self.view addSubview:self.previewImage];
-    
-    self.previewImage.userInteractionEnabled = YES;
-    UITapGestureRecognizer *photoMinimize = [[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(photoTapGesture:)];
-    photoMinimize.numberOfTapsRequired = 1;
-    [self.previewImage addGestureRecognizer:photoMinimize];
     
     // setting up text field response
     [self.chatInputTextField addTarget:self action:@selector(chatInputActive:) forControlEvents:UIControlEventEditingDidBegin];
@@ -110,17 +103,104 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    [self createViews];
+    [self setupViews];
+ 
     [self setDummyMapPins];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
     CLLocationCoordinate2D coordinate;
     coordinate.latitude = 37.4240943;
     coordinate.longitude = -122.1701957;
-
+    
     MKMapCamera *camera = [[MKMapCamera alloc] init];
     [camera setCenterCoordinate:coordinate];
     [camera setAltitude:3000.0];
-
+    
     [self.mapView setCamera:camera animated:YES];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self selector:@selector(keyboardWillShow:)
+     name:UIKeyboardWillShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self selector:@selector(keyboardWillHide:)
+     name:UIKeyboardWillHideNotification object:nil];
+}
+
+// Unsubscribe from keyboard show/hide notifications.
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter]
+     removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)createViews
+{
+    self.imagePicker = [[UIImagePickerController alloc] init];
+    [self.imagePicker setDelegate:self];
+    
+    self.mapView = [[MKMapView alloc] init];
+    [self.mapView setDelegate:self];
+    [self.view addSubview: self.mapView];
+    
+    self.chatImagingButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.chatImagingButton setTitle:NSLocalizedString(@"Camera", nil) forState:UIControlStateNormal];
+    [self.chatImagingButton addTarget:self action:@selector(getCamera:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.chatImagingButton];
+    
+    self.chatInputTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
+    [self.chatInputTextField setDelegate:self];
+    [self.view addSubview:self.chatInputTextField];
+    
+    self.tableView = [[UITableView alloc] init];
+    [self.tableView setDelegate:self];
+    [self.tableView setDataSource:self];
+    [self.view addSubview:self.tableView];
+    
+    // creating the preview image as transparent
+    self.previewImage = [[UIImageView alloc] init];
+    [self.previewImage setContentMode:UIViewContentModeScaleAspectFill];
+    [self.previewImage setClipsToBounds:YES];
+    [self.previewImage setAlpha:0];
+    [self.view addSubview:self.previewImage];
+    
+    self.previewImage.userInteractionEnabled = YES;
+    UITapGestureRecognizer *photoMinimize = [[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(photoTapGesture:)];
+    photoMinimize.numberOfTapsRequired = 1;
+    [self.previewImage addGestureRecognizer:photoMinimize];
+}
+
+- (void)setupViews
+{
+    [self.mapView setFrame:CGRectMake(0,
+                                      kNavBarHeight,
+                                      CGRectGetWidth(self.view.frame),
+                                      CGRectGetHeight(self.view.frame) / 2.0 - kNavBarHeight)];
+    
+    CGRect buttonFrame = [self.chatImagingButton frame];
+    buttonFrame.origin.x = kHorizontalMargin;
+    buttonFrame.origin.y = CGRectGetHeight(self.view.frame) - kVerticalMargin - kInputHeight;
+    [self.chatImagingButton setFrame:buttonFrame];
+    [self.chatImagingButton sizeToFit];
+    
+    [self.chatInputTextField setFrame:CGRectMake(CGRectGetMaxX(self.chatImagingButton.frame) + kPadding,
+                                                CGRectGetMinY(self.chatImagingButton.frame),
+                                                CGRectGetWidth(self.view.frame) - CGRectGetMaxX(self.chatImagingButton.frame) - kPadding - 2 * kHorizontalMargin,
+                                                 kInputHeight)];
+    [self.tableView setFrame:CGRectMake(0,
+                                        CGRectGetHeight(self.mapView.frame) + kNavBarHeight,
+                                        CGRectGetWidth(self.view.frame),
+                                        CGRectGetHeight(self.view.frame) - CGRectGetHeight(self.mapView.frame) - kNavBarHeight - kInputHeight - kVerticalMargin)];
+    [self.previewImage setFrame:self.tableView.frame];
 }
 
 - (void) setMapCoords
@@ -216,30 +296,6 @@
     return pinView;
 }
 */
-
-#pragma mark - Keyboard handling
-
-// Subscribe to keyboard show/hide notifications.
-- (void)viewWillAppear:(BOOL)animated
-{
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self selector:@selector(keyboardWillShow:)
-     name:UIKeyboardWillShowNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self selector:@selector(keyboardWillHide:)
-     name:UIKeyboardWillHideNotification object:nil];
-}
-
-// Unsubscribe from keyboard show/hide notifications.
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [[NSNotificationCenter defaultCenter]
-     removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter]
-     removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-}
 
 - (void)didReceiveMemoryWarning
 {
