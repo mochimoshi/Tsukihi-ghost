@@ -14,6 +14,8 @@
 #import <RETableViewManager/RETableViewManager.h>
 #import <RETableViewManager/RETableViewOptionsController.h>
 
+#import <AFNetworking/AFNetworking.h>
+
 @interface GTNewEventTableViewController ()<RETableViewManagerDelegate>
 
 @property (strong, nonatomic) RETableViewManager *manager;
@@ -30,6 +32,8 @@
 @end
 
 @implementation GTNewEventTableViewController
+
+#define kNewEventURL @"http://tsukihi.org/backtier/events/create"
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -127,6 +131,27 @@
     RETableViewItem *buttonItem = [RETableViewItem itemWithTitle:@"Create meetup!" accessoryType:UITableViewCellAccessoryNone selectionHandler:^(RETableViewItem *item) {
         item.title = @"Submitting...";
         [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
+        
+        NSDictionary *eventDictionary = @{@"event": @{@"user_id" : [[NSUserDefaults standardUserDefaults] valueForKey:@"userID"],
+                                                      @"event_name": self.eventNameItem.value,
+                                                      @"location": self.eventLocationItem.value,
+                                                      @"start_time": self.eventStartTimeItem.value,
+                                                      @"end_time": self.eventEndTimeItem.value,
+                                                      @"notes": self.eventNoteItem.value}};
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        [manager GET:kNewEventURL parameters:eventDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops! Network connectivity issue."
+                                                            message:@"The event cannot be submitted at the moment. Please try again shortly!"
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Okay"
+                                                  otherButtonTitles: nil];
+            [alert show];
+            NSLog(@"Error: %@", error.localizedDescription);
+            item.title = @"Create meetup!";
+            [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
+        }];
     }];
     buttonItem.textAlignment = NSTextAlignmentCenter;
     [section addItem:buttonItem];

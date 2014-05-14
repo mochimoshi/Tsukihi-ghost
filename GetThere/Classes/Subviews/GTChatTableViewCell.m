@@ -39,6 +39,7 @@
  
         self.locationImageView = [UIButton buttonWithType:UIButtonTypeCustom];
         self.locationImageView.frame = CGRectMake(kCellMargin, kCellMargin, kChatImageDimension, kChatImageDimension);
+        [self.locationImageView.imageView setContentMode:UIViewContentModeScaleAspectFill];
         
         [self.contentView addSubview:self.locationImageView];
         

@@ -67,32 +67,8 @@
 - (void)awakeFromNib
 {
 
-    if (self.httpManager == nil) {
+    if (!self.httpManager) {
         self.httpManager = [AFHTTPRequestOperationManager manager];
-    }
-    
-    // Initialize array that will store chat messages.
-    // TODO: DELETE THIS WHOLE BLOCK. SUPER HACKY auto login, for demo purposes
-    if (![self logged_in]) {
-        
-        // stupid default, change to real login
-        NSDictionary *params = @{@"user": @{@"user_name": @"angela", @"password": @"password"}};
-        [self.httpManager GET:@"http://tsukihi.org/backtier/users/login" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            NSLog(@"JSON: %@", responseObject);
-            global_userInfo = [(NSDictionary *)responseObject objectForKey:@"user"];
-            global_userId = [global_userInfo objectForKey:@"id"];
-            //global_curEventId = [NSMutableString stringWithString: @"1"]; // even more hacky
-            NSLog(@"here");
-            //[self setUserInfo];
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"Error: %@", error);
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error!"
-                                                            message:@"Please enter a name."
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"Okay!"
-                                                  otherButtonTitles:nil];
-            [alert show];
-        }];
     }
     
     self.chat = [[NSMutableArray alloc] init];
@@ -127,15 +103,6 @@
     
 
     [self startStandardUpdates];
-}
-
-- (BOOL)logged_in
-{
-    if (global_userId == nil) {
-        return FALSE;
-    } else {
-        return TRUE;
-    }
 }
 
 - (void)viewDidLoad
@@ -319,7 +286,7 @@
             [cell.usernameLabel setText: chatMessage[@"name"]];
             [cell.message setText: @""];
             
-            [cell.locationImageView setBackgroundImage:picture forState:UIControlStateNormal];
+            [cell.locationImageView setImage:picture forState:UIControlStateNormal];
             [cell.locationImageView addTarget:self action:@selector(expandPhoto:) forControlEvents:UIControlEventTouchUpInside];
 
 
@@ -519,7 +486,10 @@
 
 - (void)saveLocationUpdate:(CLLocationDegrees)lat :(CLLocationDegrees)lon
 {
-    NSDictionary *params = @{@"user": @{@"user_id": global_userId, @"user_last_lat": [NSNumber numberWithDouble:lat], @"user_last_lon": [NSNumber numberWithDouble:lon]}};
+    NSInteger userID = [[NSUserDefaults standardUserDefaults] integerForKey:@"userID"];
+    NSDictionary *params = @{@"user": @{@"user_id": [NSNumber numberWithInteger:userID],
+                                        @"user_last_lat": [NSNumber numberWithDouble:lat],
+                                        @"user_last_lon": [NSNumber numberWithDouble:lon]}};
     [self.httpManager GET:@"http://tsukihi.org/backtier/users/update_location" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
