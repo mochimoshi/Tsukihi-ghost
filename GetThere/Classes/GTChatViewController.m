@@ -194,11 +194,10 @@ static const CGFloat kNavBarHeight = 64;
                                                 CGRectGetMinY(self.chatImagingButton.frame),
                                                 CGRectGetWidth(self.view.frame) - CGRectGetMaxX(self.chatImagingButton.frame) - kPadding - 2 * kHorizontalMargin,
                                                  kInputHeight)];
-    
     [self.tableView setFrame:CGRectMake(0,
-                                        (CGRectGetHeight(self.view.frame) / 2.0) + kNavBarHeight,
+                                        CGRectGetHeight(self.mapView.frame) + kNavBarHeight,
                                         CGRectGetWidth(self.view.frame),
-                                        (CGRectGetHeight(self.view.frame) / 2.0) - kNavBarHeight - CGRectGetMinY(buttonFrame))];
+                                        CGRectGetHeight(self.view.frame) - CGRectGetHeight(self.mapView.frame) - kNavBarHeight - kInputHeight - kVerticalMargin)];
     [self.previewImage setFrame:self.tableView.frame];
 }
 
