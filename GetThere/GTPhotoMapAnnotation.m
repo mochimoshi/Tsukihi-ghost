@@ -1,31 +1,17 @@
 //
-//  GTPhotoMapAnnotation.m
+//  GTMapAnnotation.m
 //  GetThere
 //
-//  Created by Jessica Liu on 5/13/14.
+//  Created by Jessica Liu on 4/29/14.
 //  Copyright (c) 2014 Chromatiqa. All rights reserved.
 //
 
-#import "GTPhotoMapAnnotation.h"
+#import "GTMapAnnotation.h"
 
-@implementation GTPhotoMapAnnotation
+@implementation GTMapAnnotation
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-    }
-    return self;
-}
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
+@synthesize title;
+@synthesize subtitle;
+@synthesize coordinate;
 
 @end

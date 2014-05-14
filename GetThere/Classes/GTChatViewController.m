@@ -45,6 +45,8 @@
 @property (nonatomic, assign) CLLocationDegrees currentLongitude;
 @property (strong, nonatomic) NSMutableArray *mapPins;
 
+@property (strong, nonatomic) UIImage *picture;
+
 /* http manager */
 @property (strong, nonatomic) AFHTTPRequestOperationManager *httpManager;
 
@@ -286,7 +288,7 @@
             [cell.usernameLabel setText: chatMessage[@"name"]];
             [cell.message setText: @""];
             
-            [cell.locationImageView setImage:picture forState:UIControlStateNormal];
+            [cell.locationImageView setBackgroundImage:picture forState:UIControlStateNormal];
             [cell.locationImageView addTarget:self action:@selector(expandPhoto:) forControlEvents:UIControlEventTouchUpInside];
 
 
@@ -338,6 +340,24 @@
         NSData *imageData = UIImageJPEGRepresentation(picture, 0.8);
         [[self.firebase childByAutoId] setValue:@{@"name" : self.name, @"timestamp": [GTUtilities formattedDateStringFromDate:[NSDate date]], @"text": @"", @"image":[imageData base64EncodedStringWithOptions:0]}];
     }
+}
+
+- (void)addPhotoToMap:(UIImage *)picture
+{
+    // create new custom map pin
+    CLLocationCoordinate2D coords;
+    coords.latitude = self.currentLatitude;
+    coords.longitude = self.currentLongitude;
+    
+    GTMapAnnotation *mapPin = [[GTMapAnnotation alloc]init];
+    [mapPin setTitle:@"photo1"];
+    [mapPin setSubtitle:@"blahdibah"];
+    [mapPin setCoordinate:coords];
+    [self.mapPins addObject:mapPin];
+    self.picture = picture;
+    [self mapView:self.mapView viewForAnnotation:mapPin];
+    
+    [self.mapView addAnnotation:mapPin];
 }
 
 
@@ -432,6 +452,7 @@
     UIImage *img = [info objectForKey:UIImagePickerControllerOriginalImage];
     UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil);
     [self pushPhotoToFirebase:img];
+    [self addPhotoToMap:img];
     [self.imagePicker dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -512,6 +533,23 @@
     self.locationManager.distanceFilter = 500; // meters
     
     [self.locationManager startUpdatingLocation];
+}
+
+- (MKAnnotationView *)mapView:(MKMapView *)map viewForAnnotation:(id <MKAnnotation>)annotation
+{
+    static NSString *AnnotationViewID = @"annotationViewID";
+    
+    MKAnnotationView *annotationView = (MKAnnotationView *)[map dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
+    
+    if (annotationView == nil)
+    {
+        annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+    }
+    
+    annotationView.image = self.picture;
+    annotationView.annotation = annotation;
+    
+    return annotationView;
 }
 
 /*

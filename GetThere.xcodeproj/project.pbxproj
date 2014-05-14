@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		424905F6192331A200E17AB6 /* GTPhotoMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 424905F5192331A200E17AB6 /* GTPhotoMapAnnotation.m */; };
 		427746C21910CB700043BBFA /* GTMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 427746C11910CB700043BBFA /* GTMapAnnotation.m */; };
 		74774C9319108A3400CE4DE3 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74774C9219108A3400CE4DE3 /* libicucore.dylib */; };
 		74774C9519108A4200CE4DE3 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74774C9419108A4200CE4DE3 /* libc++.dylib */; };
@@ -60,6 +61,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		424905F4192331A200E17AB6 /* GTPhotoMapAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTPhotoMapAnnotation.h; sourceTree = "<group>"; };
+		424905F5192331A200E17AB6 /* GTPhotoMapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTPhotoMapAnnotation.m; sourceTree = "<group>"; };
 		427746C01910CB700043BBFA /* GTMapAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMapAnnotation.h; sourceTree = "<group>"; };
 		427746C11910CB700043BBFA /* GTMapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMapAnnotation.m; sourceTree = "<group>"; };
 		74774C8F190FD91C00CE4DE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
@@ -169,6 +172,8 @@
 				FA29A5901910F87400D37741 /* GTChatTableViewCell.m */,
 				427746C01910CB700043BBFA /* GTMapAnnotation.h */,
 				427746C11910CB700043BBFA /* GTMapAnnotation.m */,
+				424905F4192331A200E17AB6 /* GTPhotoMapAnnotation.h */,
+				424905F5192331A200E17AB6 /* GTPhotoMapAnnotation.m */,
 			);
 			name = Chat;
 			sourceTree = "<group>";
@@ -487,6 +492,7 @@
 				FA29A5911910F87400D37741 /* GTChatTableViewCell.m in Sources */,
 				74F3D0C61917708C0051C5D0 /* GTPersonTableViewCell.m in Sources */,
 				FA29A59E1910F8D000D37741 /* UIFont+BTWFont.m in Sources */,
+				424905F6192331A200E17AB6 /* GTPhotoMapAnnotation.m in Sources */,
 				FAC8279A1911F79F007181DF /* GTUtilities.m in Sources */,
 				FAC827971911F03B007181DF /* UILabel+GTLabel.m in Sources */,
 				74F3D0BF19176F9B0051C5D0 /* GTPersonViewController.m in Sources */,
