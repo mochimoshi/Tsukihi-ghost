@@ -80,7 +80,7 @@ static const CGFloat kNavBarHeight = 64;
     
     self.chat = [[NSMutableArray alloc] init];
     // take this out later 
-    NSDictionary *params = @{@"user": @{@"user_name": @"angela", @"password": @"password"}};
+    /*NSDictionary *params = @{@"user": @{@"user_name": @"jessica", @"password": @"password"}};
     [self.httpManager GET:@"http://tsukihi.org/backtier/users/login" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         [[NSUserDefaults standardUserDefaults] setValue:[[responseObject objectForKey:@"user"] objectForKey: @"user_name"] forKey:@"userName"];
@@ -94,7 +94,7 @@ static const CGFloat kNavBarHeight = 64;
                                               cancelButtonTitle:@"Okay!"
                                               otherButtonTitles:nil];
         [alert show];
-    }];
+    }];*/
     
     
     // Initialize the root of our Firebase namespace.
@@ -254,17 +254,17 @@ static const CGFloat kNavBarHeight = 64;
     /*self.mapPinData = [[NSMutableArray alloc] initWithArray:@[@{@"title":@"Jason Jong", @"subtitle": @"Gelato Classico: 0.5 mi away", @"longitude":[NSNumber numberWithDouble:     -122.163283], @"latitude":[NSNumber numberWithDouble:37.446097]},
         @{@"title":@"Angela Yeung", @"subtitle":@"Meyer Library: 0.3 mi away" , @"longitude":[NSNumber numberWithDouble:-122.167474], @"latitude":[NSNumber numberWithDouble:37.425956]},
                                                               @{@"title":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"longitude":[NSNumber numberWithDouble:self.currentLongitude], @"latitude":[NSNumber numberWithDouble:37.427577]}]];*/
-    self.mapPinData = [[NSMutableArray alloc] initWithArray:@[@{@"user_name":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"user_last_long":[NSNumber numberWithDouble:self.currentLongitude], @"user_last_lat":[NSNumber numberWithDouble:self.currentLatitude]}]];
-   /* NSDictionary *params = @{@"event": @{@"id": @"1"}};
+    /*self.mapPinData = [[NSMutableArray alloc] initWithArray:@[@{@"user_name":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"user_last_long":[NSNumber numberWithDouble:self.currentLongitude], @"user_last_lat":[NSNumber numberWithDouble:self.currentLatitude]}]];*/
+    NSDictionary *params = @{@"event": @{@"id": @"1"}};
     [self.httpManager GET:@"http://tsukihi.org/backtier/events/get_event_attendee_locations" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         self.mapPinData = [(NSDictionary *)responseObject objectForKey:@"list"];
-        [self setMapPins];
+        //[self setMapPins];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
-    }];*/
+    }];
     
-    [self setMapPins];
+    //[self setMapPins];
 
     
 }
@@ -283,10 +283,8 @@ static const CGFloat kNavBarHeight = 64;
 {
     //NSLog(pinData[@"user_name"]);
     CLLocationCoordinate2D coords;
-    coords.latitude = [pinData[@"user_last_lat"] doubleValue];
-
     coords.longitude = [pinData[@"user_last_long"] doubleValue];
-    
+    coords.latitude = [pinData[@"user_last_lat"] doubleValue];
     GTMapAnnotation *mapPin = [[GTMapAnnotation alloc]init];
     [mapPin setTitle:pinData[@"user_name"]];
     [mapPin setSubtitle:pinData[@""]];
@@ -587,8 +585,7 @@ static const CGFloat kNavBarHeight = 64;
         self.currentLatitude = location.coordinate.latitude;
         self.currentLongitude = location.coordinate.longitude;
         [self saveLocationUpdate :self.currentLatitude :self.currentLongitude];
-        [self setMapCoords];
-        [self setDummyMapPins];
+
     }
 }
 
@@ -600,6 +597,8 @@ static const CGFloat kNavBarHeight = 64;
                                         @"user_last_lon": [NSNumber numberWithDouble:lon]}};
     [self.httpManager GET:@"http://tsukihi.org/backtier/users/update_location" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
+        [self setMapCoords];
+        [self setDummyMapPins];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
