@@ -59,7 +59,7 @@
 #define kFirechatNS @"https://getthere.firebaseio.com/"
 
 #define kAttendeeLocations @"http://tsukihi.org/backtier/events/get_event_attendee_locations"
-
+#define kUpdateLocation @"http://tsukihi.org/backtier/users/update_location"
 static const CGFloat kInputHeight = 30;
 static const CGFloat kNavBarHeight = 64;
 
@@ -554,19 +554,19 @@ static const CGFloat kNavBarHeight = 64;
               location.coordinate.longitude);
         self.currentLatitude = location.coordinate.latitude;
         self.currentLongitude = location.coordinate.longitude;
-        [self saveLocationUpdate :self.currentLatitude :self.currentLongitude];
+        [self saveLocationUpdateWithLatitude:self.currentLatitude longitude:self.currentLongitude];
         [self setMapCoords];
         [self setDummyMapPins];
     }
 }
 
-- (void)saveLocationUpdate:(CLLocationDegrees)lat :(CLLocationDegrees)lon
+- (void)saveLocationUpdateWithLatitude:(CLLocationDegrees)lat longitude:(CLLocationDegrees)lon
 {
     NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
-    NSDictionary *params = @{@"user": @{@"user_id": userID,
+    NSDictionary *params = @{@"user": @{@"id": userID,
                                         @"user_last_lat": [NSNumber numberWithDouble:lat],
-                                        @"user_last_lon": [NSNumber numberWithDouble:lon]}};
-    [self.httpManager GET:@"http://tsukihi.org/backtier/users/update_location" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                        @"user_last_long": [NSNumber numberWithDouble:lon]}};
+    [self.httpManager GET:kUpdateLocation parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
