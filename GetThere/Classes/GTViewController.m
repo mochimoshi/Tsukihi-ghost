@@ -12,6 +12,7 @@
 #import "GTChatViewController.h"
 
 #import <AFNetworking/AFNetworking.h>
+#import "GTUtilities.h"
 
 @interface GTViewController ()<UITableViewDataSource, UITableViewDelegate>
 
@@ -31,9 +32,14 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    [self getEvents];
     self.title = @"Events";
     
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self getEvents];
 }
 
 - (void)didReceiveMemoryWarning
@@ -88,9 +94,9 @@
     }
     
     NSDictionary *eventInfo = [self.events objectAtIndex:indexPath.row];
-
+    NSString *start = [eventInfo objectForKey:@"start_time"];
     cell.textLabel.text = [eventInfo objectForKey:@"event_name"];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"Starts %@ @ %@", [eventInfo objectForKey:@"start_time"], [eventInfo objectForKey:@"location"]];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"Starts %@ @ %@", [GTUtilities formattedDateStringFromDateString:start], [eventInfo objectForKey:@"location"]];
     
     return cell;
 }

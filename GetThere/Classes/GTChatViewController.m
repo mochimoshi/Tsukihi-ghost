@@ -459,7 +459,7 @@ static const CGFloat kNavBarHeight = 64;
     [aTextField resignFirstResponder];
     
     NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
-    NSDictionary *params = @{@"message": @{@"user_id": userID, @"text": aTextField.text, @"date_time": [GTUtilities formattedDateStringFromDate:[NSDate date]]}};
+    NSDictionary *params = @{@"message": @{@"user_id": userID, @"text": aTextField.text}};
     [self.httpManager GET:kMessageLocation parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [self.tableView reloadData];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

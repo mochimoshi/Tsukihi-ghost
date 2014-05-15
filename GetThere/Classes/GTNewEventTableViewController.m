@@ -16,6 +16,8 @@
 
 #import <AFNetworking/AFNetworking.h>
 
+#import "GTUtilities.h"
+
 @interface GTNewEventTableViewController ()<RETableViewManagerDelegate>
 
 @property (strong, nonatomic) RETableViewManager *manager;
@@ -64,6 +66,9 @@
 
     self.eventStartTimeItem = [REDateTimeItem itemWithTitle:@"Start time" value:[NSDate date] placeholder:nil format:@"MM/dd/yyyy hh:mm a" datePickerMode:UIDatePickerModeDateAndTime];
     self.eventEndTimeItem = [REDateTimeItem itemWithTitle:@"End time" value:[NSDate date] placeholder:nil format:@"MM/dd/yyyy hh:mm a" datePickerMode:UIDatePickerModeDateAndTime];
+    
+    [self.eventStartTimeItem setMinuteInterval:15];
+    [self.eventEndTimeItem setMinuteInterval:15];
     
     // Use inline date picker in iOS 7
     if (REUIKitIsFlatMode()) {

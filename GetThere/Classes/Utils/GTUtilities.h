@@ -10,6 +10,7 @@
 
 @interface GTUtilities : NSObject
 
++ (NSString *)formattedDateStringFromDateString:(NSString *)dateString;
 + (NSString *)formattedDateStringFromDate:(NSDate *)date;
 
 @end
