@@ -47,6 +47,7 @@
 @property (strong, nonatomic) NSMutableArray *mapPins;
 
 @property (strong, nonatomic) UIImage *picture;
+@property (strong, nonatomic) NSMutableArray *photoPins;
 
 /* http manager */
 @property (strong, nonatomic) AFHTTPRequestOperationManager *httpManager;
@@ -82,6 +83,23 @@ static const CGFloat kNavBarHeight = 64;
     }
     
     self.chat = [[NSMutableArray alloc] init];
+    // take this out later 
+    /*NSDictionary *params = @{@"user": @{@"user_name": @"jessica", @"password": @"password"}};
+    [self.httpManager GET:@"http://tsukihi.org/backtier/users/login" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        [[NSUserDefaults standardUserDefaults] setValue:[[responseObject objectForKey:@"user"] objectForKey: @"user_name"] forKey:@"userName"];
+        [[NSUserDefaults standardUserDefaults] setValue:[[responseObject objectForKey:@"user"] objectForKey:@"id"] forKey:@"userID"];
+        //[self setUserInfo];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error!"
+                                                        message:@"Please enter a name."
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Okay!"
+                                              otherButtonTitles:nil];
+        [alert show];
+    }];*/
+    
     
     // Initialize the root of our Firebase namespace.
 //    self.firebase = [[Firebase alloc] initWithUrl:kFirechatNS];
@@ -107,11 +125,11 @@ static const CGFloat kNavBarHeight = 64;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     [self createViews];
     [self setupViews];
  
-    [self setDummyMapPins];
+    //[self setDummyMapPins];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -239,16 +257,18 @@ static const CGFloat kNavBarHeight = 64;
     [self.httpManager GET:kAttendeeLocations parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         self.mapPinData = [(NSDictionary *)responseObject objectForKey:@"list"];
+        [self setMapPins];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
 
-    [self setMapPins];
+    
 }
 
 #pragma mark - Set map pins from mapPinData
 -(void) setMapPins
 {
+    NSLog(@"setting map pins");
     for (NSDictionary *dict in self.mapPinData) {
         [self addOnePin:dict];
     }
@@ -257,29 +277,18 @@ static const CGFloat kNavBarHeight = 64;
 #pragma mark - Adds a single map pin
 -(void) addOnePin:(NSDictionary *)pinData
 {
-    /*CLLocationCoordinate2D coords;
-    coords.latitude = [pinData[@"latitude"] doubleValue];
-    coords.longitude = [pinData[@"longitude"] doubleValue];
-    
-    GTMapAnnotation *mapPin = [[GTMapAnnotation alloc]init];
-    [mapPin setTitle:pinData[@"title"]];
-    [mapPin setSubtitle:pinData[@"subtitle"]];
-    [mapPin setCoordinate:coords];
-    [self.mapPins addObject:mapPin];
-    
-    [self.mapView addAnnotation:mapPin];*/
+    //NSLog(pinData[@"user_name"]);
     CLLocationCoordinate2D coords;
-    coords.latitude = [pinData[@"user_last_lat"] doubleValue];
     coords.longitude = [pinData[@"user_last_long"] doubleValue];
-    
+    coords.latitude = [pinData[@"user_last_lat"] doubleValue];
     GTMapAnnotation *mapPin = [[GTMapAnnotation alloc]init];
     [mapPin setTitle:pinData[@"user_name"]];
     [mapPin setSubtitle:pinData[@""]];
     [mapPin setCoordinate:coords];
+    mapPin.displayType = @"user";
     [self.mapPins addObject:mapPin];
     
     [self.mapView addAnnotation:mapPin];
-    
 }
 
 /* Changes colors of pins, but..changes *all* of them.
@@ -406,20 +415,37 @@ static const CGFloat kNavBarHeight = 64;
 
 - (void)addPhotoToMap:(UIImage *)picture
 {
-    // create new custom map pin
+    /* clear all existing photo pins */
+    if (self.photoPins == nil) {
+        self.photoPins = [[NSMutableArray alloc]init];
+    } else {
+        //[self.mapView removeAnnotations:self.photoPins];
+        [self.photoPins removeAllObjects];
+    }
+    
+    // Get all photopins from database?
+    self.photoPins = [[NSMutableArray alloc] initWithArray:@[@{@"user_name":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"lon":[NSNumber numberWithDouble:self.currentLongitude], @"lat":[NSNumber numberWithDouble:self.currentLatitude]}]];
+    for (NSDictionary *dict in self.photoPins) {
+        [self addOnePhotoPin:dict :picture];
+    }
+}
+    
+
+-(void) addOnePhotoPin:(NSDictionary *)pinData :(UIImage *)picture
+{
+    // create new custom photo pin
     CLLocationCoordinate2D coords;
     coords.latitude = self.currentLatitude;
     coords.longitude = self.currentLongitude;
-    
-    GTMapAnnotation *mapPin = [[GTMapAnnotation alloc]init];
-    [mapPin setTitle:@"photo1"];
-    [mapPin setSubtitle:@"blahdibah"];
-    [mapPin setCoordinate:coords];
-    [self.mapPins addObject:mapPin];
-    self.picture = picture;
-    [self mapView:self.mapView viewForAnnotation:mapPin];
-    
-    [self.mapView addAnnotation:mapPin];
+    NSLog(@"about to add photo pin");
+    GTMapAnnotation *photoPin = [[GTMapAnnotation alloc]init];
+    [photoPin setCoordinate:coords];
+    photoPin.displayType = @"photo";
+    NSLog(@"Added photo pin");
+    self.picture = picture; // change to param?
+    [self mapView:self.mapView viewForAnnotation:photoPin];
+    NSLog(@"Almost there...");
+    [self.mapView addAnnotation:photoPin];
 }
 
 
@@ -516,9 +542,10 @@ static const CGFloat kNavBarHeight = 64;
               location.coordinate.longitude);
         self.currentLatitude = location.coordinate.latitude;
         self.currentLongitude = location.coordinate.longitude;
+
         [self saveLocationUpdateWithLatitude:self.currentLatitude longitude:self.currentLongitude];
-        [self setMapCoords];
-        [self setDummyMapPins];
+        //[self setMapCoords];
+        //[self setDummyMapPins];
     }
 }
 
@@ -530,6 +557,8 @@ static const CGFloat kNavBarHeight = 64;
                                         @"user_last_long": [NSNumber numberWithDouble:lon]}};
     [self.httpManager GET:kUpdateLocation parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
+        [self setMapCoords];
+        [self setDummyMapPins];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
@@ -552,7 +581,8 @@ static const CGFloat kNavBarHeight = 64;
     [self.locationManager startUpdatingLocation];
 }
 
-- (MKAnnotationView *)mapView:(MKMapView *)map viewForAnnotation:(id <MKAnnotation>)annotation
+//- (MKAnnotationView *)createCustomPhotoPin :(MKMapView *)map viewForAnnotation:(id <MKAnnotation>)annotation :(UIImage *)picture
+- (MKAnnotationView *) mapView:(MKMapView *)map viewForAnnotation:(id <MKAnnotation>)annotation
 {
     if ([annotation isKindOfClass: [MKUserLocation class]])
         return nil;
@@ -566,9 +596,23 @@ static const CGFloat kNavBarHeight = 64;
         annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
     }
     
-    annotationView.image = self.picture;
-    annotationView.annotation = annotation;
+    // scale picture size
+    CGRect rect = CGRectMake(0,0,50,50);
+    CGFloat scale = [[UIScreen mainScreen]scale];
+    NSLog(@"5");
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
+    [[UIBezierPath bezierPathWithRoundedRect:rect
+                                cornerRadius:25.0] addClip];
     
+    [self.picture drawInRect:CGRectMake(0,0,rect.size.width,rect.size.height)];
+    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    NSLog(@"6");
+    annotationView.image = newImage;
+
+    annotationView.annotation = annotation;
+    NSLog(@"done");
+    //[self.mapView addAnnotation:annotation];
     return annotationView;
 }
 

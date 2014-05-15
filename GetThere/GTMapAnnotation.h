@@ -13,10 +13,12 @@
     NSString *title;
     NSString *subtitle;
     CLLocationCoordinate2D coordinate;
+    //NSString *displayType;
 }
 
 @property (nonatomic, copy) NSString * title;
 @property (nonatomic, copy) NSString * subtitle;
+@property (nonatomic, copy) NSString *displayType;
 @property (nonatomic, assign)CLLocationCoordinate2D coordinate;
 
 @end

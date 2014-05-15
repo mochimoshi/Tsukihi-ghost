@@ -13,5 +13,6 @@
 @synthesize title;
 @synthesize subtitle;
 @synthesize coordinate;
+@synthesize displayType;
 
 @end
