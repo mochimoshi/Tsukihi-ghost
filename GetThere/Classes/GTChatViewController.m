@@ -14,6 +14,7 @@
 
 #import "UILabel+GTLabel.h"
 #import "UIFont+BTWFont.h"
+#import "UIImage+BTWImage.h"
 #import "GTConstants.h"
 #import "GTUtilities.h"
 
@@ -61,10 +62,12 @@
 
 #define kAttendeeLocations @"http://tsukihi.org/backtier/events/get_event_attendee_locations"
 #define kUpdateLocation @"http://tsukihi.org/backtier/users/update_location"
-#define kMessageLocation @"https://tsukihi.org/backtier/messages/create"
+#define kMessageLocation @"http://tsukihi.org/backtier/messages/create"
+#define kPhotoLocation @"http://tsukihi.org/backtier/messages/upload_photo"
 
 static const CGFloat kInputHeight = 30;
 static const CGFloat kNavBarHeight = 64;
+static const CGFloat kMaxImageSize = 1024;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -253,7 +256,7 @@ static const CGFloat kNavBarHeight = 64;
         
     }
 
-    NSDictionary *params = @{@"event": @{@"id": @"1"}};
+    NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:self.eventID]}};
     [self.httpManager GET:kAttendeeLocations parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         self.mapPinData = [(NSDictionary *)responseObject objectForKey:@"list"];
@@ -401,10 +404,16 @@ static const CGFloat kNavBarHeight = 64;
 - (void)pushPhotoToBackend:(UIImage *)picture
 {
     if(picture) {
-        NSData *imageData = UIImageJPEGRepresentation(picture, 0.8);
+        picture = [picture resizedImageToFitInSize:CGSizeMake(kMaxImageSize, kMaxImageSize) scaleIfSmaller:NO];
+        NSData *imageData = UIImageJPEGRepresentation(picture, 0.5);
         NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
-        NSDictionary *params = @{@"message": @{@"user_id": userID}};
-        [self.httpManager GET:kMessageLocation parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *params = @{@"user_id": userID,
+                                 @"event_id": [NSNumber numberWithInteger:self.eventID],
+                                 @"latitude": [NSNumber numberWithDouble:self.currentLatitude],
+                                 @"longitude": [NSNumber numberWithDouble:self.currentLongitude]};
+        [self.httpManager POST:kPhotoLocation parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+            [formData appendPartWithFileData:imageData name:@"filename" fileName:@"photo_" mimeType:@"image/jpeg"];
+        } success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"JSON: %@", responseObject);
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"Error: %@", error);
@@ -424,7 +433,7 @@ static const CGFloat kNavBarHeight = 64;
     }
     
     // Get all photopins from database?
-    self.photoPins = [[NSMutableArray alloc] initWithArray:@[@{@"user_name":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"lon":[NSNumber numberWithDouble:self.currentLongitude], @"lat":[NSNumber numberWithDouble:self.currentLatitude]}]];
+    self.photoPins = [[NSMutableArray alloc] init];
     for (NSDictionary *dict in self.photoPins) {
         [self addOnePhotoPin:dict :picture];
     }
@@ -459,7 +468,9 @@ static const CGFloat kNavBarHeight = 64;
     [aTextField resignFirstResponder];
     
     NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
-    NSDictionary *params = @{@"message": @{@"user_id": userID, @"text": aTextField.text}};
+    NSDictionary *params = @{@"message": @{@"user_id": userID,
+                                           @"text": aTextField.text,
+                                           @"event_id": [NSNumber numberWithInteger:self.eventID]}};
     [self.httpManager GET:kMessageLocation parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [self.tableView reloadData];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

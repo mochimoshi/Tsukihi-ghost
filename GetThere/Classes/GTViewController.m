@@ -107,4 +107,13 @@
     [self performSegueWithIdentifier:@"pushToChat" sender:nil];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if([[segue identifier] isEqualToString:@"pushToChat"]) {
+        GTChatViewController *chatVC = segue.destinationViewController;
+        NSDictionary *eventInfo = [self.events objectAtIndex:self.tableView.indexPathForSelectedRow.row];
+        chatVC.eventID = [[eventInfo objectForKey:@"id"] integerValue];
+    }
+}
+
 @end
