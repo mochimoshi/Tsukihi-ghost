@@ -11,7 +11,7 @@
 
 @interface GTPersonViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet MKMapView *mapView;
-@property (weak, nonatomic) id sender;
+@property (assign, nonatomic) CLLocationCoordinate2D centerCoordinate;
+@property (strong, nonatomic) NSString *userName;
 
 @end

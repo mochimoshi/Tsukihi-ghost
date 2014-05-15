@@ -236,8 +236,6 @@ static const CGFloat kNavBarHeight = 64;
     NSDictionary *params = @{@"event": @{@"id": @"1"}};
     [self.httpManager GET:kAttendeeLocations parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
-        /*global_userInfo = [(NSDictionary *)responseObject objectForKey:@"user"];
-        global_userId = [global_userInfo objectForKey:@"id"];*/
         self.mapPinData = [(NSDictionary *)responseObject objectForKey:@"list"];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -365,16 +363,17 @@ static const CGFloat kNavBarHeight = 64;
 {
     if ([segue.identifier isEqualToString:@"pushToPerson"]) {
         GTPersonViewController *controller = (GTPersonViewController *)segue.destinationViewController;
-        controller.mapView = self.mapView;
-        controller.sender = sender;
+        GTChatTableViewCell *cell = (GTChatTableViewCell *)[self.tableView cellForRowAtIndexPath:self.tableView.indexPathForSelectedRow];
+        CLLocationCoordinate2D coordinate;
+        coordinate.latitude = self.currentLatitude;
+        coordinate.longitude = self.currentLongitude;
+        controller.centerCoordinate = coordinate;
+        controller.userName = cell.usernameLabel.text;
     }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    /*NSLog(@"hello");
-    GTPersonViewController * flipViewController = [[GTPersonViewController alloc] initWithNibName:@"flip" bundle:[NSBundle mainBundle]];
-    [self.view addSubview:flipViewController.view];*/
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
     [self performSegueWithIdentifier:@"pushToPerson" sender:cell];

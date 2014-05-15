@@ -14,6 +14,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *personName;
 @property (weak, nonatomic) IBOutlet UILabel *personInfo;
+@property (weak, nonatomic) IBOutlet MKMapView *mapView;
 
 
 @end
@@ -32,9 +33,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.mapView setCenterCoordinate:self.centerCoordinate animated:YES];
     // Do any additional setup after loading the view from its nib.
-    GTChatTableViewCell *userData = (GTChatTableViewCell *)self.sender;
-    self.personName.text = userData.usernameLabel.text;
+    self.personName.text = self.userName;
     self.personInfo.text = @"Last seen at LOCATION";
 }
 
