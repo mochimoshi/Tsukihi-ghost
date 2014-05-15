@@ -263,7 +263,7 @@ static const CGFloat kNavBarHeight = 64;
 
         NSLog(@"JSON: %@", responseObject);
         self.mapPinData = [(NSDictionary *)responseObject objectForKey:@"list"];
-        //[self setMapPins];
+        [self setMapPins];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
@@ -579,13 +579,13 @@ static const CGFloat kNavBarHeight = 64;
 - (MKAnnotationView *) mapView:(MKMapView *)map viewForAnnotation:(id <MKAnnotation>)annotation
 {
 
-   /* if ([((GTMapAnnotation *)annotation).displayType  isEqual: @"user"])
-        return nil;
-    NSLog(@"starting viewforannotation");*/
+
+    //NSLog(@"starting viewforannotation");*/
 
     if ([annotation isKindOfClass: [MKUserLocation class]])
         return nil;
-
+    if ([((GTMapAnnotation *)annotation).displayType  isEqual: @"user"])
+        return nil;
     static NSString *AnnotationViewID = @"annotationViewID";
     NSLog(@"1");
     MKAnnotationView *annotationView = (MKAnnotationView *)[map dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
