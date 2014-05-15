@@ -299,7 +299,6 @@ static const CGFloat kNavBarHeight = 64;
     [self.mapView addAnnotation:mapPin];
 }
 
-
 /* Changes colors of pins, but..changes *all* of them.
  
 -(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
@@ -523,58 +522,6 @@ static const CGFloat kNavBarHeight = 64;
 //    [aMapView setRegion:region animated:YES];
 //}
 
-#pragma mark - PhotoPicker Delegate
-
-- (IBAction)getCamera:(id)sender
-{
-    self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-    [self presentViewController:self.imagePicker animated:YES completion:nil];
-}
-
-
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
-{
-    [self.imagePicker dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    UIImage *img = [info objectForKey:UIImagePickerControllerOriginalImage];
-    UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil);
-    [self pushPhotoToFirebase:img];
-    [self addPhotoToMap:img];
-    [self.imagePicker dismissViewControllerAnimated:YES completion:nil];
-}
-
-// expand photo to bottom half of screen when clicked on
-- (void)expandPhoto:(id)sender
-{
-    NSLog(@"button was clicked");
-    UIButton *img = (UIButton *) sender;
-    [self.previewImage setImage:img.currentBackgroundImage];
-    [self.previewImage setAlpha:1.0];
-    [self.chatInputTextField resignFirstResponder];
-}
-
-- (void)chatInputActive:(id)sender
-{
-    NSLog(@"text input active");
-    if (self.previewImage.alpha == 1.0) {
-        [UIView animateWithDuration:0.3 animations:^{
-            [self.previewImage setAlpha: 0.0];
-        }];
-    }
-}
-
-- (void)photoTapGesture: (id)sender
-{
-    NSLog(@"photo tapped");
-    if (self.previewImage.alpha == 1.0) {
-        [UIView animateWithDuration:0.3 animations:^{
-            [self.previewImage setAlpha: 0.0];
-        }];
-    }
-}
 
 - (void)locationManager:(CLLocationManager *)manager
      didUpdateLocations:(NSArray *)locations {
@@ -631,11 +578,14 @@ static const CGFloat kNavBarHeight = 64;
 //- (MKAnnotationView *)createCustomPhotoPin :(MKMapView *)map viewForAnnotation:(id <MKAnnotation>)annotation :(UIImage *)picture
 - (MKAnnotationView *) mapView:(MKMapView *)map viewForAnnotation:(id <MKAnnotation>)annotation
 {
-    if([annotation isKindOfClass: [MKUserLocation class]])
+
+   /* if ([((GTMapAnnotation *)annotation).displayType  isEqual: @"user"])
         return nil;
-    if ([((GTMapAnnotation *)annotation).displayType  isEqual: @"user"])
+    NSLog(@"starting viewforannotation");*/
+
+    if ([annotation isKindOfClass: [MKUserLocation class]])
         return nil;
-    NSLog(@"starting viewforannotation");
+
     static NSString *AnnotationViewID = @"annotationViewID";
     NSLog(@"1");
     MKAnnotationView *annotationView = (MKAnnotationView *)[map dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
@@ -665,6 +615,59 @@ static const CGFloat kNavBarHeight = 64;
     NSLog(@"done");
     //[self.mapView addAnnotation:annotation];
     return annotationView;
+}
+
+#pragma mark - PhotoPicker Delegate
+
+- (IBAction)getCamera:(id)sender
+{
+    self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    [self presentViewController:self.imagePicker animated:YES completion:nil];
+}
+
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self.imagePicker dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *img = [info objectForKey:UIImagePickerControllerOriginalImage];
+    UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil);
+    [self pushPhotoToFirebase:img];
+    [self addPhotoToMap:img];
+    [self.imagePicker dismissViewControllerAnimated:YES completion:nil];
+}
+
+// expand photo to bottom half of screen when clicked on
+- (void)expandPhoto:(id)sender
+{
+    NSLog(@"button was clicked");
+    UIButton *img = (UIButton *) sender;
+    [self.previewImage setImage:img.currentBackgroundImage];
+    [self.previewImage setAlpha:1.0];
+    [self.chatInputTextField resignFirstResponder];
+}
+
+- (void)chatInputActive:(id)sender
+{
+    NSLog(@"text input active");
+    if (self.previewImage.alpha == 1.0) {
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.previewImage setAlpha: 0.0];
+        }];
+    }
+}
+
+- (void)photoTapGesture: (id)sender
+{
+    NSLog(@"photo tapped");
+    if (self.previewImage.alpha == 1.0) {
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.previewImage setAlpha: 0.0];
+        }];
+    }
 }
 
 /*
