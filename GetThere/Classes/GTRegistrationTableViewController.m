@@ -11,12 +11,15 @@
 #import <RETableViewManager/RETableViewManager.h>
 #import <RETableViewManager/RETableViewOptionsController.h>
 
-@interface GTRegistrationTableViewController ()
+#import <AFNetworking/AFNetworking.h>
+
+@interface GTRegistrationTableViewController ()<RETableViewManagerDelegate>
 
 @property (strong, nonatomic) RETableViewManager *manager;
 @property (strong, nonatomic) RETableViewSection *userInfoSection;
 @property (strong, nonatomic) RETableViewSection *userButton;
 
+@property (strong, nonatomic) RETextItem *userScreenName;
 @property (strong, nonatomic) RETextItem *userNameItem;
 @property (strong, nonatomic) RETextItem *userPhoneItem;
 @property (strong, nonatomic) RETextItem *userEmailItem;
@@ -25,6 +28,8 @@
 @end
 
 @implementation GTRegistrationTableViewController
+
+#define kRegisterLocation @"http://tsukihi.org/backtier/users/create"
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -56,12 +61,14 @@
     [self.manager addSection:section];
     
     self.userNameItem = [RETextItem itemWithTitle:@"Name" value:nil placeholder:@"John Doe"];
+    self.userScreenName = [RETextItem itemWithTitle:@"Screenname" value:nil placeholder:@"jdoe"];
     self.userPhoneItem = [RETextItem itemWithTitle:@"Phone" value:nil placeholder:@"15105551234"];
     self.userEmailItem = [RETextItem itemWithTitle:@"E-mail" value:nil placeholder:@"jdoe@example.cc"];
-    self.userPasswordItem = [RETextItem itemWithTitle:@"Password" value:@"password"];
+    self.userPasswordItem = [RETextItem itemWithTitle:@"Password" value:nil placeholder:@"password"];
     [self.userPasswordItem setSecureTextEntry:YES];
     
     [section addItem:self.userNameItem];
+    [section addItem:self.userScreenName];
     [section addItem:self.userPhoneItem];
     [section addItem:self.userEmailItem];
     [section addItem:self.userPasswordItem];
@@ -78,27 +85,25 @@
         item.title = @"Submitting...";
         [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
         
-//        NSDictionary *eventDictionary = @{@"user": @{@"user_id" : [[NSUserDefaults standardUserDefaults] valueForKey:@"userID"],
-//                                                      @"event_name": self.eventNameItem.value,
-//                                                      @"location": self.eventLocationItem.value,
-//                                                      @"start_time": self.eventStartTimeItem.value,
-//                                                      @"end_time": self.eventEndTimeItem.value,
-//                                                      @"invitee_ids": @[@1, @2, @3],
-//                                                      @"notes": self.eventNoteItem.value}};
-//        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-//        [manager GET:kNewEventURL parameters:eventDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//            [self dismissViewControllerAnimated:YES completion:nil];
-//        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops! Network connectivity issue."
-//                                                            message:@"The event cannot be submitted at the moment. Please try again shortly!"
-//                                                           delegate:nil
-//                                                  cancelButtonTitle:@"Okay"
-//                                                  otherButtonTitles: nil];
-//            [alert show];
-//            NSLog(@"Error: %@", error.localizedDescription);
-//            item.title = @"Create meetup!";
-//            [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
-//        }];
+        NSDictionary *params = @{@"user": @{@"user_real_name": self.userNameItem.value,
+                                            @"phone_number": self.userPhoneItem.value,
+                                            @"user_name": self.userScreenName.value,
+                                            @"password": self.userPasswordItem.value,
+                                            @"password_confirmation": self.userPasswordItem.value}};
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        [manager GET:kRegisterLocation parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops! Network connectivity issue."
+                                                            message:@"The user cannot be submitted at the moment. Please try again shortly!"
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Okay"
+                                                  otherButtonTitles: nil];
+            [alert show];
+            NSLog(@"Error: %@", error.localizedDescription);
+            item.title = @"Register!";
+            [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
+        }];
     }];
     buttonItem.textAlignment = NSTextAlignmentCenter;
     [section addItem:buttonItem];
@@ -119,20 +124,6 @@
 }
 
 #pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
-}
 
 /*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
