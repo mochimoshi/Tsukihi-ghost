@@ -58,6 +58,8 @@
 
 #define kFirechatNS @"https://getthere.firebaseio.com/"
 
+#define kAttendeeLocations @"http://tsukihi.org/backtier/events/get_event_attendee_locations"
+
 static const CGFloat kInputHeight = 30;
 static const CGFloat kNavBarHeight = 64;
 
@@ -150,6 +152,7 @@ static const CGFloat kNavBarHeight = 64;
     
     self.mapView = [[MKMapView alloc] init];
     [self.mapView setDelegate:self];
+    [self.mapView setShowsUserLocation:YES];
     [self.view addSubview: self.mapView];
     
     self.chatImagingButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -229,13 +232,9 @@ static const CGFloat kNavBarHeight = 64;
         [self.mapPins removeAllObjects];
         
     }
-    // Sorry..super disgusting dummy array. This really should be pulled from the db
-    /*self.mapPinData = [[NSMutableArray alloc] initWithArray:@[@{@"title":@"Jason Jong", @"subtitle": @"Gelato Classico: 0.5 mi away", @"longitude":[NSNumber numberWithDouble:     -122.163283], @"latitude":[NSNumber numberWithDouble:37.446097]},
-        @{@"title":@"Angela Yeung", @"subtitle":@"Meyer Library: 0.3 mi away" , @"longitude":[NSNumber numberWithDouble:-122.167474], @"latitude":[NSNumber numberWithDouble:37.425956]},
-                                                              @{@"title":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"longitude":[NSNumber numberWithDouble:self.currentLongitude], @"latitude":[NSNumber numberWithDouble:37.427577]}]];*/
-    /*self.mapPinData = [[NSMutableArray alloc] initWithArray:@[@{@"title":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"longitude":[NSNumber numberWithDouble:self.currentLongitude], @"latitude":[NSNumber numberWithDouble:self.currentLatitude]}]];*/
+
     NSDictionary *params = @{@"event": @{@"id": @"1"}};
-    [self.httpManager GET:@"http://localhost:3000/events/get_event_attendee_locations" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.httpManager GET:kAttendeeLocations parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         /*global_userInfo = [(NSDictionary *)responseObject objectForKey:@"user"];
         global_userId = [global_userInfo objectForKey:@"id"];*/
@@ -563,8 +562,8 @@ static const CGFloat kNavBarHeight = 64;
 
 - (void)saveLocationUpdate:(CLLocationDegrees)lat :(CLLocationDegrees)lon
 {
-    NSInteger userID = [[NSUserDefaults standardUserDefaults] integerForKey:@"userID"];
-    NSDictionary *params = @{@"user": @{@"user_id": [NSNumber numberWithInteger:userID],
+    NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
+    NSDictionary *params = @{@"user": @{@"user_id": userID,
                                         @"user_last_lat": [NSNumber numberWithDouble:lat],
                                         @"user_last_lon": [NSNumber numberWithDouble:lon]}};
     [self.httpManager GET:@"http://tsukihi.org/backtier/users/update_location" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
