@@ -8,6 +8,7 @@
 
 #import "GTAppDelegate.h"
 #import "TestFlightSDK3.0.0/TestFlight.h"
+#import <AFNetworking/AFNetworking.h>
 
 @implementation GTAppDelegate
 
@@ -15,6 +16,9 @@
 {
     // Override point for customization after application launch.
     [TestFlight takeOff:@"1a2fe4b0-5b78-4404-8e62-223add9c7156"];
+    
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+     (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     
     return YES;
 }
@@ -44,6 +48,36 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+{
+	NSLog(@"My token is: %@", deviceToken);
+    const unsigned char *dataBuffer = (const unsigned char *)[deviceToken bytes];
+    
+    if (!dataBuffer)
+        return;
+    
+    NSUInteger          dataLength  = [deviceToken length];
+    NSMutableString     *hexString  = [NSMutableString stringWithCapacity:(dataLength * 2)];
+    
+    for (int i = 0; i < dataLength; ++i)
+        [hexString appendString:[NSString stringWithFormat:@"%02lx", (unsigned long)dataBuffer[i]]];
+    
+    NSString *tokenString = [NSString stringWithString:hexString];
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *params = @{@"user": @{@"id": [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"], @"push_id": tokenString}};
+    [manager GET:@"http://tsukihi.org/users/update_info" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
+{
+	NSLog(@"Failed to get token, error: %@", error);
 }
 
 @end
