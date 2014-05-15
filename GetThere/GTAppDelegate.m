@@ -17,9 +17,6 @@
     // Override point for customization after application launch.
     [TestFlight takeOff:@"1a2fe4b0-5b78-4404-8e62-223add9c7156"];
     
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-     (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-    
     return YES;
 }
 							
