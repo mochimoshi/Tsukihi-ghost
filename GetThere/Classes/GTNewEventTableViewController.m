@@ -96,7 +96,7 @@
         
         // Generate sample options
         //
-        NSMutableArray *options = [[NSMutableArray alloc] initWithArray:@[@"Charles Chen", @"Fran Guo", @"Kosaki Onodera", @"Jessica Liu", @"Pearle Lun", @"Victoria Wang", @"James Wu", @"Angela Yeung"]];
+        NSMutableArray *options = [[NSMutableArray alloc] initWithArray:@[@"Jessica Liu", @"Angela Yeung"]];
         
         // Present options controller
         //
@@ -137,6 +137,7 @@
                                                       @"location": self.eventLocationItem.value,
                                                       @"start_time": self.eventStartTimeItem.value,
                                                       @"end_time": self.eventEndTimeItem.value,
+                                                      @"invitee_ids": @[@1, @2, @3],
                                                       @"notes": self.eventNoteItem.value}};
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         [manager GET:kNewEventURL parameters:eventDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -148,7 +149,7 @@
                                                   cancelButtonTitle:@"Okay"
                                                   otherButtonTitles: nil];
             [alert show];
-            NSLog(@"Error: %@ - %@", error.localizedDescription, par);
+            NSLog(@"Error: %@", error.localizedDescription);
             item.title = @"Create meetup!";
             [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
         }];
