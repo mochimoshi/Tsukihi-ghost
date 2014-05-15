@@ -61,6 +61,8 @@
 
 #define kAttendeeLocations @"http://tsukihi.org/backtier/events/get_event_attendee_locations"
 #define kUpdateLocation @"http://tsukihi.org/backtier/users/update_location"
+#define kMessageLocation @"https://tsukihi.org/backtier/messages/create"
+
 static const CGFloat kInputHeight = 30;
 static const CGFloat kNavBarHeight = 64;
 
@@ -100,18 +102,16 @@ static const CGFloat kNavBarHeight = 64;
     
     
     // Initialize the root of our Firebase namespace.
-    self.firebase = [[Firebase alloc] initWithUrl:kFirechatNS];
-    
-    [self.firebase observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
-        // Add the chat message to the array.
-        [self.chat addObject:snapshot.value];
-        // Reload the table view so the new message will show up.
-        [self.tableView reloadData];
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0]
-                              atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    }];
-
-    
+//    self.firebase = [[Firebase alloc] initWithUrl:kFirechatNS];
+//    
+//    [self.firebase observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+//        // Add the chat message to the array.
+//        [self.chat addObject:snapshot.value];
+//        // Reload the table view so the new message will show up.
+//        [self.tableView reloadData];
+//        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0]
+//                              atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+//    }];
     
     // setting up text field response
     [self.chatInputTextField addTarget:self action:@selector(chatInputActive:) forControlEvents:UIControlEventEditingDidBegin];
@@ -235,7 +235,7 @@ static const CGFloat kNavBarHeight = 64;
     MKMapCamera *camera = [[MKMapCamera alloc] init];
     [camera setCenterCoordinate:coordinate];
     [camera setAltitude:3000.0];
-    self.mapView.showsUserLocation = YES;
+    
     [self.mapView setCamera:camera animated:YES];
     
 }
@@ -253,22 +253,14 @@ static const CGFloat kNavBarHeight = 64;
         
     }
 
-    // Sorry..super disgusting dummy array. This really should be pulled from the db
-    /*self.mapPinData = [[NSMutableArray alloc] initWithArray:@[@{@"title":@"Jason Jong", @"subtitle": @"Gelato Classico: 0.5 mi away", @"longitude":[NSNumber numberWithDouble:     -122.163283], @"latitude":[NSNumber numberWithDouble:37.446097]},
-        @{@"title":@"Angela Yeung", @"subtitle":@"Meyer Library: 0.3 mi away" , @"longitude":[NSNumber numberWithDouble:-122.167474], @"latitude":[NSNumber numberWithDouble:37.425956]},
-                                                              @{@"title":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"longitude":[NSNumber numberWithDouble:self.currentLongitude], @"latitude":[NSNumber numberWithDouble:37.427577]}]];*/
-    /*self.mapPinData = [[NSMutableArray alloc] initWithArray:@[@{@"user_name":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"user_last_long":[NSNumber numberWithDouble:self.currentLongitude], @"user_last_lat":[NSNumber numberWithDouble:self.currentLatitude]}]];*/
     NSDictionary *params = @{@"event": @{@"id": @"1"}};
-    [self.httpManager GET:@"http://tsukihi.org/backtier/events/get_event_attendee_locations" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-
+    [self.httpManager GET:kAttendeeLocations parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         self.mapPinData = [(NSDictionary *)responseObject objectForKey:@"list"];
         [self setMapPins];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    
-    //[self setMapPins];
 
     
 }
@@ -404,13 +396,20 @@ static const CGFloat kNavBarHeight = 64;
     }
 }
 
-#pragma mark - pushPhotoToFirebase
+#pragma mark - photo upload
 
-- (void)pushPhotoToFirebase:(UIImage *)picture
+- (void)pushPhotoToBackend:(UIImage *)picture
 {
     if(picture) {
         NSData *imageData = UIImageJPEGRepresentation(picture, 0.8);
-        [[self.firebase childByAutoId] setValue:@{@"name" : self.name, @"timestamp": [GTUtilities formattedDateStringFromDate:[NSDate date]], @"text": @"", @"image":[imageData base64EncodedStringWithOptions:0]}];
+        NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
+        NSDictionary *params = @{@"message": @{@"user_id": userID}};
+        [self.httpManager GET:kMessageLocation parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"JSON: %@", responseObject);
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"Error: %@", error);
+        }];
+//        [[self.firebase childByAutoId] setValue:@{@"name" : self.name, @"timestamp": [GTUtilities formattedDateStringFromDate:[NSDate date]], @"text": @"", @"image":[imageData base64EncodedStringWithOptions:0]}];
     }
 }
 
@@ -459,9 +458,16 @@ static const CGFloat kNavBarHeight = 64;
     }
     [aTextField resignFirstResponder];
     
+    NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
+    NSDictionary *params = @{@"message": @{@"user_id": userID, @"text": aTextField.text}};
+    [self.httpManager GET:kMessageLocation parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self.tableView reloadData];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
     // This will also add the message to our local array self.chat because
     // the FEventTypeChildAdded event will be immediately fired.
-    [[self.firebase childByAutoId] setValue:@{@"name" : self.name,  @"timestamp": [GTUtilities formattedDateStringFromDate:[NSDate date]], @"text": aTextField.text}];
+//    [[self.firebase childByAutoId] setValue:@{@"name" : self.name,  @"timestamp": [GTUtilities formattedDateStringFromDate:[NSDate date]], @"text": aTextField.text}];
     
     [aTextField setText:@""];
     return NO;
@@ -578,24 +584,17 @@ static const CGFloat kNavBarHeight = 64;
 //- (MKAnnotationView *)createCustomPhotoPin :(MKMapView *)map viewForAnnotation:(id <MKAnnotation>)annotation :(UIImage *)picture
 - (MKAnnotationView *) mapView:(MKMapView *)map viewForAnnotation:(id <MKAnnotation>)annotation
 {
-
-
-    //NSLog(@"starting viewforannotation");*/
-
     if ([annotation isKindOfClass: [MKUserLocation class]])
         return nil;
-    if ([((GTMapAnnotation *)annotation).displayType  isEqual: @"user"])
-        return nil;
+        
     static NSString *AnnotationViewID = @"annotationViewID";
-    NSLog(@"1");
+    
     MKAnnotationView *annotationView = (MKAnnotationView *)[map dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
-    NSLog(@"2");
+    
     if (annotationView == nil)
     {
-        NSLog(@"3");
         annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
     }
-    NSLog(@"4");
     
     // scale picture size
     CGRect rect = CGRectMake(0,0,50,50);
@@ -635,7 +634,7 @@ static const CGFloat kNavBarHeight = 64;
 {
     UIImage *img = [info objectForKey:UIImagePickerControllerOriginalImage];
     UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil);
-    [self pushPhotoToFirebase:img];
+    [self pushPhotoToBackend:img];
     [self addPhotoToMap:img];
     [self.imagePicker dismissViewControllerAnimated:YES completion:nil];
 }

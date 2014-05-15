@@ -16,6 +16,8 @@
 
 #import <AFNetworking/AFNetworking.h>
 
+#import "GTUtilities.h"
+
 @interface GTNewEventTableViewController ()<RETableViewManagerDelegate>
 
 @property (strong, nonatomic) RETableViewManager *manager;
@@ -65,6 +67,9 @@
     self.eventStartTimeItem = [REDateTimeItem itemWithTitle:@"Start time" value:[NSDate date] placeholder:nil format:@"MM/dd/yyyy hh:mm a" datePickerMode:UIDatePickerModeDateAndTime];
     self.eventEndTimeItem = [REDateTimeItem itemWithTitle:@"End time" value:[NSDate date] placeholder:nil format:@"MM/dd/yyyy hh:mm a" datePickerMode:UIDatePickerModeDateAndTime];
     
+    [self.eventStartTimeItem setMinuteInterval:15];
+    [self.eventEndTimeItem setMinuteInterval:15];
+    
     // Use inline date picker in iOS 7
     if (REUIKitIsFlatMode()) {
         self.eventStartTimeItem.inlineDatePicker = YES;
@@ -96,7 +101,7 @@
         
         // Generate sample options
         //
-        NSMutableArray *options = [[NSMutableArray alloc] initWithArray:@[@"Charles Chen", @"Fran Guo", @"Kosaki Onodera", @"Jessica Liu", @"Pearle Lun", @"Victoria Wang", @"James Wu", @"Angela Yeung"]];
+        NSMutableArray *options = [[NSMutableArray alloc] initWithArray:@[@"Jessica Liu", @"Angela Yeung"]];
         
         // Present options controller
         //
@@ -137,6 +142,7 @@
                                                       @"location": self.eventLocationItem.value,
                                                       @"start_time": self.eventStartTimeItem.value,
                                                       @"end_time": self.eventEndTimeItem.value,
+                                                      @"invitee_ids": @[@1, @2, @3],
                                                       @"notes": self.eventNoteItem.value}};
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         [manager GET:kNewEventURL parameters:eventDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {

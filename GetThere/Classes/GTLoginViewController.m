@@ -11,6 +11,7 @@
 @interface GTLoginViewController ()<UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *nameField;
+@property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (strong, nonatomic) AFHTTPRequestOperationManager *httpManager;
 
 
@@ -37,7 +38,13 @@
     [self.nameField.layer setBorderColor:[UIColor colorWithWhite:1.0 alpha:0.4].CGColor];
     [self.nameField.layer setBorderWidth:1.0];
     [self.nameField.layer setCornerRadius:4.0];
-    [self.nameField setAttributedPlaceholder:[[NSAttributedString alloc] initWithString:@"Enter your name to continue"
+    [self.nameField setAttributedPlaceholder:[[NSAttributedString alloc] initWithString:@"Username"
+                                                                             attributes:@{NSForegroundColorAttributeName: [UIColor colorWithWhite:1.0 alpha:0.4]}]];
+    
+    [self.passwordField.layer setBorderColor:[UIColor colorWithWhite:1.0 alpha:0.4].CGColor];
+    [self.passwordField.layer setBorderWidth:1.0];
+    [self.passwordField.layer setCornerRadius:4.0];
+    [self.passwordField setAttributedPlaceholder:[[NSAttributedString alloc] initWithString:@"Password"
                                                                              attributes:@{NSForegroundColorAttributeName: [UIColor colorWithWhite:1.0 alpha:0.4]}]];
     if (self.httpManager == nil) {
          self.httpManager = [AFHTTPRequestOperationManager manager];
@@ -73,6 +80,7 @@
 - (void)setUserInfo
 {
     [self.nameField setText:@""];
+    [self.passwordField setText:@""];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
     [self performSegueWithIdentifier:@"loginModalSegue" sender:nil];
 }
@@ -81,7 +89,7 @@
 - (void)sendLoginQuery
 {
     if ([self.nameField.text length] > 0) {
-        NSDictionary *params = @{@"user": @{@"user_name": [self.nameField.text lowercaseString], @"password": @"password"}};
+        NSDictionary *params = @{@"user": @{@"user_name": [self.nameField.text lowercaseString], @"password": self.passwordField.text}};
         [self.httpManager GET:kLoginURL parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"JSON: %@", responseObject);
             [[NSUserDefaults standardUserDefaults] setValue:[[responseObject objectForKey:@"user"] objectForKey: @"user_name"] forKey:@"userName"];
@@ -92,9 +100,9 @@
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"Error: %@", error);
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error!"
-                                                            message:@"Please enter a name."
+                                                            message:@"Username / password is incorrect."
                                                            delegate:nil
-                                                  cancelButtonTitle:@"Okay!"
+                                                  cancelButtonTitle:@"Okay"
                                                   otherButtonTitles:nil];
             [alert show];
         }];
@@ -104,6 +112,7 @@
 - (IBAction)resignResponder:(id)sender
 {
     [self.nameField resignFirstResponder];
+    [self.passwordField resignFirstResponder];
 }
 
 #pragma mark - TextField Delegate
