@@ -60,7 +60,7 @@
 #define kFirechatNS @"https://getthere.firebaseio.com/"
 
 #define kAttendeeLocations @"http://tsukihi.org/backtier/events/get_event_attendee_locations"
-
+#define kUpdateLocation @"http://tsukihi.org/backtier/users/update_location"
 static const CGFloat kInputHeight = 30;
 static const CGFloat kNavBarHeight = 64;
 
@@ -382,16 +382,17 @@ static const CGFloat kNavBarHeight = 64;
 {
     if ([segue.identifier isEqualToString:@"pushToPerson"]) {
         GTPersonViewController *controller = (GTPersonViewController *)segue.destinationViewController;
-        controller.mapView = self.mapView;
-        controller.sender = sender;
+        GTChatTableViewCell *cell = (GTChatTableViewCell *)[self.tableView cellForRowAtIndexPath:self.tableView.indexPathForSelectedRow];
+        CLLocationCoordinate2D coordinate;
+        coordinate.latitude = self.currentLatitude;
+        coordinate.longitude = self.currentLongitude;
+        controller.centerCoordinate = coordinate;
+        controller.userName = cell.usernameLabel.text;
     }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    /*NSLog(@"hello");
-    GTPersonViewController * flipViewController = [[GTPersonViewController alloc] initWithNibName:@"flip" bundle:[NSBundle mainBundle]];
-    [self.view addSubview:flipViewController.view];*/
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
     [self performSegueWithIdentifier:@"pushToPerson" sender:cell];
@@ -588,18 +589,20 @@ static const CGFloat kNavBarHeight = 64;
               location.coordinate.longitude);
         self.currentLatitude = location.coordinate.latitude;
         self.currentLongitude = location.coordinate.longitude;
-        [self saveLocationUpdate :self.currentLatitude :self.currentLongitude];
 
+        [self saveLocationUpdateWithLatitude:self.currentLatitude longitude:self.currentLongitude];
+        //[self setMapCoords];
+        //[self setDummyMapPins];
     }
 }
 
-- (void)saveLocationUpdate:(CLLocationDegrees)lat :(CLLocationDegrees)lon
+- (void)saveLocationUpdateWithLatitude:(CLLocationDegrees)lat longitude:(CLLocationDegrees)lon
 {
     NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
-    NSDictionary *params = @{@"user": @{@"user_id": userID,
+    NSDictionary *params = @{@"user": @{@"id": userID,
                                         @"user_last_lat": [NSNumber numberWithDouble:lat],
-                                        @"user_last_lon": [NSNumber numberWithDouble:lon]}};
-    [self.httpManager GET:@"http://tsukihi.org/backtier/users/update_location" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                        @"user_last_long": [NSNumber numberWithDouble:lon]}};
+    [self.httpManager GET:kUpdateLocation parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         [self setMapCoords];
         [self setDummyMapPins];
