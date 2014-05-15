@@ -392,6 +392,11 @@
 				TargetAttributes = {
 					8614D83A190DD06C007DF163 = {
 						DevelopmentTeam = XUUSLN2K7U;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					8614D85B190DD06C007DF163 = {
 						TestTargetID = 8614D83A190DD06C007DF163;
@@ -635,7 +640,7 @@
 					"$(PROJECT_DIR)/GetThere/TestFlightSDK3.0.2",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "6A0838EC-FDD5-4632-8544-49E944AF73B8";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -661,7 +666,7 @@
 					"$(PROJECT_DIR)/GetThere/TestFlightSDK3.0.2",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "6A0838EC-FDD5-4632-8544-49E944AF73B8";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
