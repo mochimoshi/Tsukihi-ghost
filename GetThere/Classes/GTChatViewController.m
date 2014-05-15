@@ -59,6 +59,8 @@
 
 #define kFirechatNS @"https://getthere.firebaseio.com/"
 
+#define kAttendeeLocations @"http://tsukihi.org/backtier/events/get_event_attendee_locations"
+
 static const CGFloat kInputHeight = 30;
 static const CGFloat kNavBarHeight = 64;
 
@@ -250,6 +252,7 @@ static const CGFloat kNavBarHeight = 64;
         [self.mapPins removeAllObjects];
         
     }
+
     // Sorry..super disgusting dummy array. This really should be pulled from the db
     /*self.mapPinData = [[NSMutableArray alloc] initWithArray:@[@{@"title":@"Jason Jong", @"subtitle": @"Gelato Classico: 0.5 mi away", @"longitude":[NSNumber numberWithDouble:     -122.163283], @"latitude":[NSNumber numberWithDouble:37.446097]},
         @{@"title":@"Angela Yeung", @"subtitle":@"Meyer Library: 0.3 mi away" , @"longitude":[NSNumber numberWithDouble:-122.167474], @"latitude":[NSNumber numberWithDouble:37.425956]},
@@ -257,6 +260,7 @@ static const CGFloat kNavBarHeight = 64;
     /*self.mapPinData = [[NSMutableArray alloc] initWithArray:@[@{@"user_name":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"user_last_long":[NSNumber numberWithDouble:self.currentLongitude], @"user_last_lat":[NSNumber numberWithDouble:self.currentLatitude]}]];*/
     NSDictionary *params = @{@"event": @{@"id": @"1"}};
     [self.httpManager GET:@"http://tsukihi.org/backtier/events/get_event_attendee_locations" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+
         NSLog(@"JSON: %@", responseObject);
         self.mapPinData = [(NSDictionary *)responseObject objectForKey:@"list"];
         //[self setMapPins];
@@ -591,8 +595,8 @@ static const CGFloat kNavBarHeight = 64;
 
 - (void)saveLocationUpdate:(CLLocationDegrees)lat :(CLLocationDegrees)lon
 {
-    NSInteger userID = [[NSUserDefaults standardUserDefaults] integerForKey:@"userID"];
-    NSDictionary *params = @{@"user": @{@"user_id": [NSNumber numberWithInteger:userID],
+    NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
+    NSDictionary *params = @{@"user": @{@"user_id": userID,
                                         @"user_last_lat": [NSNumber numberWithDouble:lat],
                                         @"user_last_lon": [NSNumber numberWithDouble:lon]}};
     [self.httpManager GET:@"http://tsukihi.org/backtier/users/update_location" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
