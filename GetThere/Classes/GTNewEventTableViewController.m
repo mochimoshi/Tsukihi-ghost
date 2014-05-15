@@ -34,6 +34,7 @@
 @implementation GTNewEventTableViewController
 
 #define kNewEventURL @"http://tsukihi.org/backtier/events/create"
+//#define kNewEventURL @"http://localhost:3000/events/create"
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
