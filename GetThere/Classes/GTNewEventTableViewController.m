@@ -148,7 +148,7 @@
                                                   cancelButtonTitle:@"Okay"
                                                   otherButtonTitles: nil];
             [alert show];
-            NSLog(@"Error: %@", error.localizedDescription);
+            NSLog(@"Error: %@ - %@", error.localizedDescription, par);
             item.title = @"Create meetup!";
             [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
         }];

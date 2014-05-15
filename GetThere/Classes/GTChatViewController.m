@@ -60,6 +60,8 @@
 
 #define kAttendeeLocations @"http://tsukihi.org/backtier/events/get_event_attendee_locations"
 #define kUpdateLocation @"http://tsukihi.org/backtier/users/update_location"
+#define kMessageLocation @"https://tsukihi.org/backtier/messages/create"
+
 static const CGFloat kInputHeight = 30;
 static const CGFloat kNavBarHeight = 64;
 
@@ -82,16 +84,16 @@ static const CGFloat kNavBarHeight = 64;
     self.chat = [[NSMutableArray alloc] init];
     
     // Initialize the root of our Firebase namespace.
-    self.firebase = [[Firebase alloc] initWithUrl:kFirechatNS];
-    
-    [self.firebase observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
-        // Add the chat message to the array.
-        [self.chat addObject:snapshot.value];
-        // Reload the table view so the new message will show up.
-        [self.tableView reloadData];
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0]
-                              atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    }];
+//    self.firebase = [[Firebase alloc] initWithUrl:kFirechatNS];
+//    
+//    [self.firebase observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+//        // Add the chat message to the array.
+//        [self.chat addObject:snapshot.value];
+//        // Reload the table view so the new message will show up.
+//        [self.tableView reloadData];
+//        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0]
+//                              atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+//    }];
     
     // setting up text field response
     [self.chatInputTextField addTarget:self action:@selector(chatInputActive:) forControlEvents:UIControlEventEditingDidBegin];
@@ -385,13 +387,20 @@ static const CGFloat kNavBarHeight = 64;
     }
 }
 
-#pragma mark - pushPhotoToFirebase
+#pragma mark - photo upload
 
-- (void)pushPhotoToFirebase:(UIImage *)picture
+- (void)pushPhotoToBackend:(UIImage *)picture
 {
     if(picture) {
         NSData *imageData = UIImageJPEGRepresentation(picture, 0.8);
-        [[self.firebase childByAutoId] setValue:@{@"name" : self.name, @"timestamp": [GTUtilities formattedDateStringFromDate:[NSDate date]], @"text": @"", @"image":[imageData base64EncodedStringWithOptions:0]}];
+        NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
+        NSDictionary *params = @{@"message": @{@"user_id": userID}};
+        [self.httpManager GET:kMessageLocation parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"JSON: %@", responseObject);
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"Error: %@", error);
+        }];
+//        [[self.firebase childByAutoId] setValue:@{@"name" : self.name, @"timestamp": [GTUtilities formattedDateStringFromDate:[NSDate date]], @"text": @"", @"image":[imageData base64EncodedStringWithOptions:0]}];
     }
 }
 
@@ -423,9 +432,16 @@ static const CGFloat kNavBarHeight = 64;
     }
     [aTextField resignFirstResponder];
     
+    NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
+    NSDictionary *params = @{@"message": @{@"user_id": userID, @"text": aTextField.text, @"date_time": [GTUtilities formattedDateStringFromDate:[NSDate date]]}};
+    [self.httpManager GET:kMessageLocation parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self.tableView reloadData];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
     // This will also add the message to our local array self.chat because
     // the FEventTypeChildAdded event will be immediately fired.
-    [[self.firebase childByAutoId] setValue:@{@"name" : self.name,  @"timestamp": [GTUtilities formattedDateStringFromDate:[NSDate date]], @"text": aTextField.text}];
+//    [[self.firebase childByAutoId] setValue:@{@"name" : self.name,  @"timestamp": [GTUtilities formattedDateStringFromDate:[NSDate date]], @"text": aTextField.text}];
     
     [aTextField setText:@""];
     return NO;
@@ -574,7 +590,7 @@ static const CGFloat kNavBarHeight = 64;
 {
     UIImage *img = [info objectForKey:UIImagePickerControllerOriginalImage];
     UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil);
-    [self pushPhotoToFirebase:img];
+    [self pushPhotoToBackend:img];
     [self addPhotoToMap:img];
     [self.imagePicker dismissViewControllerAnimated:YES completion:nil];
 }

@@ -11,20 +11,18 @@
 
 #import "GTChatViewController.h"
 
+#import <AFNetworking/AFNetworking.h>
 
 @interface GTViewController ()<UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) NSArray *eventDetails;
-
-@property (strong, nonatomic) NSArray *eventNames;
+@property (strong, nonatomic) NSArray *events;
 
 @end
 
 @implementation GTViewController
 
-
-
+#define kUserEventsLocation @"http://tsukihi.org/backtier/users/get_events"
 
 #pragma mark - Setup
 
@@ -32,8 +30,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    self.eventNames = @[@"TCS Night Market", @"Dinner with Mom", @"DMV Driving Test"];
-    self.eventDetails = @[@"6:00PM Today-White Plaza, Stanford", @"8:00PM Tomorrow-Crepevine", @"10:00AM Thursday-Los Altos DMV"];
+    
+    [self getEvents];
     self.title = @"Events";
     
 }
@@ -42,6 +40,21 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)getEvents
+{
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *params = @{@"user": @{@"id": [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]}};
+    [manager GET:kUserEventsLocation parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if([responseObject isKindOfClass:[NSArray class]]) {
+            self.events = responseObject;
+            [self.tableView reloadData];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Network error!" message:@"The server is unavailable at the moment. Sorry!" delegate:nil cancelButtonTitle:@"Okay" otherButtonTitles: nil];
+        [alert show];
+    }];
 }
 
 
@@ -62,7 +75,7 @@
 - (NSInteger)tableView:(UITableView*)table numberOfRowsInSection:(NSInteger)section
 {
     // This is the number of chat messages.
-    return [self.eventNames count];
+    return [self.events count];
 }
 
 - (UITableViewCell*)tableView:(UITableView*)table cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -74,9 +87,10 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
+    NSDictionary *eventInfo = [self.events objectAtIndex:indexPath.row];
 
-    cell.textLabel.text = [self.eventNames objectAtIndex: indexPath.row];
-    cell.detailTextLabel.text = [self.eventDetails objectAtIndex: indexPath.row];
+    cell.textLabel.text = [eventInfo objectForKey:@"event_name"];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"Starts %@ @ %@", [eventInfo objectForKey:@"start_time"], [eventInfo objectForKey:@"location"]];
     
     return cell;
 }
