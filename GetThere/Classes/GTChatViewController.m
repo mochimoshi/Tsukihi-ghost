@@ -107,7 +107,7 @@ static const CGFloat kNavBarHeight = 64;
     [self createViews];
     [self setupViews];
  
-    [self setDummyMapPins];
+    //[self setDummyMapPins];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -212,7 +212,7 @@ static const CGFloat kNavBarHeight = 64;
     MKMapCamera *camera = [[MKMapCamera alloc] init];
     [camera setCenterCoordinate:coordinate];
     [camera setAltitude:3000.0];
-    
+    self.mapView.showsUserLocation = YES;
     [self.mapView setCamera:camera animated:YES];
     
 }
@@ -233,16 +233,14 @@ static const CGFloat kNavBarHeight = 64;
     /*self.mapPinData = [[NSMutableArray alloc] initWithArray:@[@{@"title":@"Jason Jong", @"subtitle": @"Gelato Classico: 0.5 mi away", @"longitude":[NSNumber numberWithDouble:     -122.163283], @"latitude":[NSNumber numberWithDouble:37.446097]},
         @{@"title":@"Angela Yeung", @"subtitle":@"Meyer Library: 0.3 mi away" , @"longitude":[NSNumber numberWithDouble:-122.167474], @"latitude":[NSNumber numberWithDouble:37.425956]},
                                                               @{@"title":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"longitude":[NSNumber numberWithDouble:self.currentLongitude], @"latitude":[NSNumber numberWithDouble:37.427577]}]];*/
-    /*self.mapPinData = [[NSMutableArray alloc] initWithArray:@[@{@"title":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"longitude":[NSNumber numberWithDouble:self.currentLongitude], @"latitude":[NSNumber numberWithDouble:self.currentLatitude]}]];*/
-    NSDictionary *params = @{@"event": @{@"id": @"1"}};
-    [self.httpManager GET:@"http://localhost:3000/events/get_event_attendee_locations" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    self.mapPinData = [[NSMutableArray alloc] initWithArray:@[@{@"user_name":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"user_last_long":[NSNumber numberWithDouble:self.currentLongitude], @"user_last_lat":[NSNumber numberWithDouble:self.currentLatitude]}]];
+   /* NSDictionary *params = @{@"event": @{@"id": @"1"}};
+    [self.httpManager GET:@"http://tsukihi.org/backtier/events/get_event_attendee_locations" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
-        /*global_userInfo = [(NSDictionary *)responseObject objectForKey:@"user"];
-        global_userId = [global_userInfo objectForKey:@"id"];*/
         self.mapPinData = [(NSDictionary *)responseObject objectForKey:@"list"];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
-    }];
+    }];*/
 
     [self setMapPins];
 }
@@ -602,7 +600,17 @@ static const CGFloat kNavBarHeight = 64;
         annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
     }
     
-    annotationView.image = self.picture;
+    // scale picture size
+    CGRect rect = CGRectMake(0,0,75,75);
+    CGFloat scale = [[UIScreen mainScreen]scale];
+    
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
+    [self.picture drawInRect:CGRectMake(0,0,rect.size.width,rect.size.height)];
+    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    annotationView.image = newImage;
+
     annotationView.annotation = annotation;
     
     return annotationView;
