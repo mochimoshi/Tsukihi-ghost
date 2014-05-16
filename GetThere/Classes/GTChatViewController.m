@@ -32,9 +32,7 @@
 @property (strong, nonatomic) UIButton *chatImagingButton;
 @property (strong, nonatomic) UIImageView *previewImage;
 
-
 @property (strong, nonatomic) UIImagePickerController *imagePicker;
-
 
 @property (strong, nonatomic) NSMutableArray *chat;
 @property (strong, nonatomic) Firebase *firebase;
@@ -42,9 +40,9 @@
 @property (strong, nonatomic) NSMutableArray *mapPinData;
 
 /* location manager */
-@property (strong, nonatomic, retain) CLLocationManager *locationManager;
-@property (nonatomic, assign) CLLocationDegrees currentLatitude;
-@property (nonatomic, assign) CLLocationDegrees currentLongitude;
+@property (strong, nonatomic) CLLocationManager *locationManager;
+@property (assign, nonatomic) CLLocationDegrees currentLatitude;
+@property (assign, nonatomic) CLLocationDegrees currentLongitude;
 @property (strong, nonatomic) NSMutableArray *mapPins;
 
 @property (strong, nonatomic) UIImage *picture;
