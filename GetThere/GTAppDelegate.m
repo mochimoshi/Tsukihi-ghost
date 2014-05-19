@@ -64,7 +64,7 @@
     NSString *tokenString = [NSString stringWithString:hexString];
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *params = @{@"user": @{@"id": [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"], @"push_id": tokenString}};
+    NSDictionary *params = @{@"user": @{@"id": [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"], @"push_token": tokenString}};
     [manager GET:@"http://tsukihi.org/backtier/users/update_info" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
