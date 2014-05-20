@@ -72,6 +72,13 @@
     }];
 }
 
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    NSLog(@"RECEIVED PUSH NOTIFICATION %@", userInfo);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReloadAppDelegateTable" object:nil];
+    NSLog(@"FINISHED PUSHING TO DEFAULT??");
+
+}
+
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
 {
 	NSLog(@"Failed to get token, error: %@", error);

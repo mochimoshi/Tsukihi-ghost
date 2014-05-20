@@ -62,6 +62,7 @@
 #define kUpdateLocation @"http://tsukihi.org/backtier/users/update_location"
 #define kMessageLocation @"http://tsukihi.org/backtier/messages/create"
 #define kPhotoLocation @"http://tsukihi.org/backtier/messages/upload_photo"
+#define kEventMessages @"http://tsukihi.org/backtier/events/get_event_messages"
 
 static const CGFloat kInputHeight = 30;
 static const CGFloat kNavBarHeight = 64;
@@ -115,6 +116,24 @@ static const CGFloat kMaxImageSize = 1024;
 //    }];
     
     // setting up text field response
+    
+    //NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:self.eventID]}};
+    NSDictionary *params = @{@"event": @{@"id": @1}};
+    NSLog(@"id num: %@", params);
+    [self.httpManager GET:kEventMessages parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+
+        for (id key in responseObject) {
+            [self.chat addObject:responseObject[key]];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+    [self.tableView reloadData];
+    NSLog(@"UPDATING TABLEEEEEE");
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+
+    
     [self.chatInputTextField addTarget:self action:@selector(chatInputActive:) forControlEvents:UIControlEventEditingDidBegin];
     
     self.name = [[NSUserDefaults standardUserDefaults] objectForKey:@"userName"];
@@ -129,9 +148,29 @@ static const CGFloat kMaxImageSize = 1024;
 
     [self createViews];
     [self setupViews];
- 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTableViewData) name:@"ReloadAppDelegateTable" object:nil];
+    
     //[self setDummyMapPins];
 }
+
+- (void)reloadTableViewData{
+    NSLog(@"GOT TO CHAT VIEW!");
+    
+   // NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:self.eventID]}};
+    NSDictionary *params = @{@"event": @{@"id": @1}};
+    [self.httpManager GET:kEventMessages parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        for (id key in responseObject) {
+            [self.chat addObject:responseObject[key]];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    [self.tableView reloadData];
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+}
+
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -269,7 +308,7 @@ static const CGFloat kMaxImageSize = 1024;
 #pragma mark - Set map pins from mapPinData
 -(void) setMapPins
 {
-    NSLog(@"setting map pins");
+    //NSLog(@"setting map pins");
     for (NSDictionary *dict in self.mapPinData) {
         [self addOnePin:dict];
     }
@@ -344,24 +383,25 @@ static const CGFloat kMaxImageSize = 1024;
     }
     
     NSDictionary* chatMessage = [self.chat objectAtIndex:indexPath.row];
+    NSLog(@"Chat messages: %@", chatMessage);
     if (chatMessage) {
         if ([chatMessage objectForKey:@"image"]){
             NSData *picData = [[NSData alloc] initWithBase64EncodedString:chatMessage[@"image"] options:0];
             UIImage *picture = [UIImage imageWithData:picData];
             
-            [cell.usernameLabel setText: chatMessage[@"name"]];
+            [cell.usernameLabel setText: chatMessage[@"user_name"]];
             [cell.message setText: @""];
             
             [cell.locationImageView setBackgroundImage:picture forState:UIControlStateNormal];
             [cell.locationImageView addTarget:self action:@selector(expandPhoto:) forControlEvents:UIControlEventTouchUpInside];
 
 
-            [cell.timestampLabel setText:chatMessage[@"timestamp"]];
+            [cell.timestampLabel setText:chatMessage[@"date_time"]];
         } else {
             [cell.message setText: chatMessage[@"text"]];
-            [cell.usernameLabel setText: chatMessage[@"name"]];
+            [cell.usernameLabel setText: chatMessage[@"user_name"]];
             [cell.locationImageView setBackgroundImage:nil forState:UIControlStateNormal];
-            [cell.timestampLabel setText:chatMessage[@"timestamp"]];
+            [cell.timestampLabel setText:chatMessage[@"date_time"]];
         }
     }
     
@@ -608,7 +648,6 @@ static const CGFloat kMaxImageSize = 1024;
     // scale picture size
     CGRect rect = CGRectMake(0,0,50,50);
     CGFloat scale = [[UIScreen mainScreen]scale];
-    NSLog(@"5");
     UIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
     [[UIBezierPath bezierPathWithRoundedRect:rect
                                 cornerRadius:25.0] addClip];
@@ -616,11 +655,9 @@ static const CGFloat kMaxImageSize = 1024;
     [self.picture drawInRect:CGRectMake(0,0,rect.size.width,rect.size.height)];
     UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    NSLog(@"6");
     annotationView.image = newImage;
 
     annotationView.annotation = annotation;
-    NSLog(@"done");
     //[self.mapView addAnnotation:annotation];
     return annotationView;
 }
