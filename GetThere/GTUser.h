@@ -15,5 +15,6 @@
 @property (strong, nonatomic) NSString* status;
 @property (assign, nonatomic) CLLocationDegrees currentLatitude;
 @property (assign, nonatomic) CLLocationDegrees* currentLongitude;
+@property (strong, nonatomic) UIImage *photo;
 
 @end
