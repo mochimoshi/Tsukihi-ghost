@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		427746C21910CB700043BBFA /* GTMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 427746C11910CB700043BBFA /* GTMapAnnotation.m */; };
+		42A7D1A7192C2CF800DFAE55 /* GTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A7D1A6192C2CF800DFAE55 /* GTUser.m */; };
 		74774C9319108A3400CE4DE3 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74774C9219108A3400CE4DE3 /* libicucore.dylib */; };
 		74774C9519108A4200CE4DE3 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74774C9419108A4200CE4DE3 /* libc++.dylib */; };
 		74774C9719108AFB00CE4DE3 /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74774C9619108AFB00CE4DE3 /* Firebase.framework */; };
@@ -66,6 +67,8 @@
 /* Begin PBXFileReference section */
 		427746C01910CB700043BBFA /* GTMapAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMapAnnotation.h; sourceTree = "<group>"; };
 		427746C11910CB700043BBFA /* GTMapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMapAnnotation.m; sourceTree = "<group>"; };
+		42A7D1A5192C2CF800DFAE55 /* GTUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTUser.h; sourceTree = "<group>"; };
+		42A7D1A6192C2CF800DFAE55 /* GTUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTUser.m; sourceTree = "<group>"; };
 		74774C8F190FD91C00CE4DE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		74774C9219108A3400CE4DE3 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		74774C9419108A4200CE4DE3 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
@@ -188,6 +191,8 @@
 		74F3D0BB19176F6C0051C5D0 /* PersonInfo */ = {
 			isa = PBXGroup;
 			children = (
+				42A7D1A5192C2CF800DFAE55 /* GTUser.h */,
+				42A7D1A6192C2CF800DFAE55 /* GTUser.m */,
 				74F3D0BC19176F9B0051C5D0 /* GTPersonViewController.h */,
 				74F3D0BD19176F9B0051C5D0 /* GTPersonViewController.m */,
 				74F3D0C41917708C0051C5D0 /* GTPersonTableViewCell.h */,
@@ -527,6 +532,7 @@
 				74F3D0BF19176F9B0051C5D0 /* GTPersonViewController.m in Sources */,
 				FAC283FF1910B877006249C3 /* GTLoginViewController.m in Sources */,
 				8614D84F190DD06C007DF163 /* GTAppDelegate.m in Sources */,
+				42A7D1A7192C2CF800DFAE55 /* GTUser.m in Sources */,
 				FAC5819719171DCB002E3AE9 /* GTNewEventTableViewController.m in Sources */,
 				FACA2B2819256E17002120E7 /* UIImage+BTWImage.m in Sources */,
 				74774C9F1910918F00CE4DE3 /* GTChatViewController.m in Sources */,

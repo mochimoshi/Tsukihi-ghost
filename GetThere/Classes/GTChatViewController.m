@@ -45,6 +45,9 @@
 @property (assign, nonatomic) CLLocationDegrees currentLongitude;
 @property (strong, nonatomic) NSMutableArray *mapPins;
 
+/* status array */
+@property (strong, nonatomic) NSMutableArray *statuses;
+
 @property (strong, nonatomic) UIImage *picture;
 @property (strong, nonatomic) NSMutableArray *photoPins;
 
@@ -85,35 +88,7 @@ static const CGFloat kMaxImageSize = 1024;
     }
     
     self.chat = [[NSMutableArray alloc] init];
-    // take this out later 
-    /*NSDictionary *params = @{@"user": @{@"user_name": @"jessica", @"password": @"password"}};
-    [self.httpManager GET:@"http://tsukihi.org/backtier/users/login" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
-        [[NSUserDefaults standardUserDefaults] setValue:[[responseObject objectForKey:@"user"] objectForKey: @"user_name"] forKey:@"userName"];
-        [[NSUserDefaults standardUserDefaults] setValue:[[responseObject objectForKey:@"user"] objectForKey:@"id"] forKey:@"userID"];
-        //[self setUserInfo];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error!"
-                                                        message:@"Please enter a name."
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Okay!"
-                                              otherButtonTitles:nil];
-        [alert show];
-    }];*/
-    
-    
-    // Initialize the root of our Firebase namespace.
-//    self.firebase = [[Firebase alloc] initWithUrl:kFirechatNS];
-//    
-//    [self.firebase observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
-//        // Add the chat message to the array.
-//        [self.chat addObject:snapshot.value];
-//        // Reload the table view so the new message will show up.
-//        [self.tableView reloadData];
-//        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0]
-//                              atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-//    }];
+    self.statuses = [[NSMutableArray alloc] init];
     
     // setting up text field response
     
@@ -125,14 +100,14 @@ static const CGFloat kMaxImageSize = 1024;
         for (id key in responseObject) {
             [self.chat addObject:responseObject[key]];
         }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            
+        });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    
-    [self.tableView reloadData];
-    NSLog(@"UPDATING TABLEEEEEE");
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-
     
     [self.chatInputTextField addTarget:self action:@selector(chatInputActive:) forControlEvents:UIControlEventEditingDidBegin];
     
@@ -163,11 +138,14 @@ static const CGFloat kMaxImageSize = 1024;
         for (id key in responseObject) {
             [self.chat addObject:responseObject[key]];
         }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+
+        });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    [self.tableView reloadData];
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 
@@ -385,8 +363,8 @@ static const CGFloat kMaxImageSize = 1024;
     NSDictionary* chatMessage = [self.chat objectAtIndex:indexPath.row];
     NSLog(@"Chat messages: %@", chatMessage);
     if (chatMessage) {
-        if ([chatMessage objectForKey:@"image"]){
-            NSData *picData = [[NSData alloc] initWithBase64EncodedString:chatMessage[@"image"] options:0];
+        if ([chatMessage objectForKey:@"photo_url"]){
+            NSData *picData = [[NSData alloc] initWithBase64EncodedString:chatMessage[@"photo_url"] options:0];
             UIImage *picture = [UIImage imageWithData:picData];
             
             [cell.usernameLabel setText: chatMessage[@"user_name"]];
@@ -591,7 +569,7 @@ static const CGFloat kMaxImageSize = 1024;
               location.coordinate.longitude);
         self.currentLatitude = location.coordinate.latitude;
         self.currentLongitude = location.coordinate.longitude;
-
+        
         [self saveLocationUpdateWithLatitude:self.currentLatitude longitude:self.currentLongitude];
         //[self setMapCoords];
         //[self setDummyMapPins];
