@@ -64,7 +64,7 @@
 #define kAttendeeLocations @"http://tsukihi.org/backtier/events/get_event_attendee_locations"
 #define kUpdateLocation @"http://tsukihi.org/backtier/users/update_location"
 #define kMessageLocation @"http://tsukihi.org/backtier/messages/create"
-#define kPhotoLocation @"http://tsukihi.org/backtier/messages/upload_photo"
+#define kPhotoLocation @"http://tsukihi.org/backtier/messages/create"
 #define kEventMessages @"http://tsukihi.org/backtier/events/get_event_messages"
 
 static const CGFloat kInputHeight = 30;
@@ -99,6 +99,7 @@ static const CGFloat kMaxImageSize = 1024;
 
         for (id key in responseObject) {
             [self.chat addObject:responseObject[key]];
+            NSLog(@"AWAKEN: %@", responseObject[key]);
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
@@ -273,7 +274,7 @@ static const CGFloat kMaxImageSize = 1024;
 
     NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:self.eventID]}};
     [self.httpManager GET:kAttendeeLocations parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
+        //NSLog(@"JSON: %@", responseObject);
         self.mapPinData = [(NSDictionary *)responseObject objectForKey:@"list"];
         [self setMapPins];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -363,7 +364,9 @@ static const CGFloat kMaxImageSize = 1024;
     NSDictionary* chatMessage = [self.chat objectAtIndex:indexPath.row];
     NSLog(@"Chat messages: %@", chatMessage);
     if (chatMessage) {
+        NSLog(@"Yes it got here 1 %@", [chatMessage objectForKey:@"photo_url"]);
         if ([chatMessage objectForKey:@"photo_url"]){
+            NSLog(@"Got here 2");
             NSData *picData = [[NSData alloc] initWithBase64EncodedString:chatMessage[@"photo_url"] options:0];
             UIImage *picture = [UIImage imageWithData:picData];
             
@@ -376,6 +379,7 @@ static const CGFloat kMaxImageSize = 1024;
 
             [cell.timestampLabel setText:chatMessage[@"date_time"]];
         } else {
+            NSLog(@"This one chat %@", chatMessage);
             [cell.message setText: chatMessage[@"text"]];
             [cell.usernameLabel setText: chatMessage[@"user_name"]];
             [cell.locationImageView setBackgroundImage:nil forState:UIControlStateNormal];
@@ -426,11 +430,11 @@ static const CGFloat kMaxImageSize = 1024;
         NSDictionary *params = @{@"user_id": userID,
                                  @"event_id": [NSNumber numberWithInteger:self.eventID],
                                  @"latitude": [NSNumber numberWithDouble:self.currentLatitude],
-                                 @"longitude": [NSNumber numberWithDouble:self.currentLongitude]};
+            @"longitude": [NSNumber numberWithDouble:self.currentLongitude]};
         [self.httpManager POST:kPhotoLocation parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             [formData appendPartWithFileData:imageData name:@"filename" fileName:@"photo_" mimeType:@"image/jpeg"];
         } success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            NSLog(@"JSON: %@", responseObject);
+           // NSLog(@"JSON: %@", responseObject);
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"Error: %@", error);
         }];
@@ -484,9 +488,9 @@ static const CGFloat kMaxImageSize = 1024;
     [aTextField resignFirstResponder];
     
     NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
-    NSDictionary *params = @{@"message": @{@"user_id": userID,
+    NSDictionary *params = @{@"user_id": userID,
                                            @"text": aTextField.text,
-                                           @"event_id": [NSNumber numberWithInteger:self.eventID]}};
+                                           @"event_id": [NSNumber numberWithInteger:self.eventID]};
     [self.httpManager GET:kMessageLocation parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [self.tableView reloadData];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
