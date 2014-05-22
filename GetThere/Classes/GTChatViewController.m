@@ -30,7 +30,6 @@
 
 @property (strong, nonatomic) UIActionSheet *settingsSheet;
 
-@property (strong, nonatomic) UIImagePickerController *imagePicker;
 @property (strong, nonatomic) BTWTweetComposeView *composeView;
 @property (assign, nonatomic) BOOL hasPopupOpen;
 
@@ -180,8 +179,6 @@ static const CGFloat kNavBarHeight = 64;
 
 - (void)createViews
 {
-    self.imagePicker = [[UIImagePickerController alloc] init];
-    [self.imagePicker setDelegate:self];
     
     self.mapView = [[MKMapView alloc] init];
     [self.mapView setDelegate:self];
@@ -424,29 +421,6 @@ static const CGFloat kNavBarHeight = 64;
 - (CLLocationCoordinate2D)getCurrentLocation
 {
     return self.currentCoordinate;
-}
-
-#pragma mark - PhotoPicker Delegate
-
-- (IBAction)getCamera:(id)sender
-{
-    self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-    [self presentViewController:self.imagePicker animated:YES completion:nil];
-}
-
-
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
-{
-    [self.imagePicker dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    UIImage *img = [info objectForKey:UIImagePickerControllerOriginalImage];
-    UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil);
-    [self pushPhotoToBackend:img];
-    [self addPhotoToMap:img];
-    [self.imagePicker dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Buttons
