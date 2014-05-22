@@ -11,7 +11,6 @@
 		42A7D1A7192C2CF800DFAE55 /* GTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A7D1A6192C2CF800DFAE55 /* GTUser.m */; };
 		74774C9319108A3400CE4DE3 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74774C9219108A3400CE4DE3 /* libicucore.dylib */; };
 		74774C9519108A4200CE4DE3 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74774C9419108A4200CE4DE3 /* libc++.dylib */; };
-		74774C9719108AFB00CE4DE3 /* Firebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74774C9619108AFB00CE4DE3 /* Firebase.framework */; };
 		74774C9919108F6200CE4DE3 /* GTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74774C9819108F6200CE4DE3 /* GTViewController.m */; };
 		74774C9F1910918F00CE4DE3 /* GTChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74774C9E1910918F00CE4DE3 /* GTChatViewController.m */; };
 		74E4B086190FBAC0005E8DA1 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74E4B085190FBAC0005E8DA1 /* CFNetwork.framework */; };
@@ -33,7 +32,9 @@
 		8614D868190DD06C007DF163 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8614D866190DD06C007DF163 /* InfoPlist.strings */; };
 		8614D86A190DD06C007DF163 /* GetThereTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8614D869190DD06C007DF163 /* GetThereTests.m */; };
 		C7B8D34289A54AE889742B9B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EC5E4120249846D09A1694E3 /* libPods.a */; };
-		FA29A5911910F87400D37741 /* GTChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA29A5901910F87400D37741 /* GTChatTableViewCell.m */; };
+		FA21E1F2192DDBC0001D2D4F /* BTWTweetComposeView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA21E1F1192DDBC0001D2D4F /* BTWTweetComposeView.m */; };
+		FA21E1F5192DDBF2001D2D4F /* BTWImageViewerView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA21E1F4192DDBF2001D2D4F /* BTWImageViewerView.m */; };
+		FA21E1F8192DDCC0001D2D4F /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = FA21E1F7192DDCC0001D2D4F /* UIImage+ImageEffects.m */; };
 		FA29A59D1910F8D000D37741 /* UIColor+BTWColor.m in Sources */ = {isa = PBXBuildFile; fileRef = FA29A59A1910F8D000D37741 /* UIColor+BTWColor.m */; };
 		FA29A59E1910F8D000D37741 /* UIFont+BTWFont.m in Sources */ = {isa = PBXBuildFile; fileRef = FA29A59C1910F8D000D37741 /* UIFont+BTWFont.m */; };
 		FA67C017190F3B3200C22804 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA67C016190F3B3200C22804 /* MapKit.framework */; };
@@ -72,7 +73,6 @@
 		74774C8F190FD91C00CE4DE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		74774C9219108A3400CE4DE3 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		74774C9419108A4200CE4DE3 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
-		74774C9619108AFB00CE4DE3 /* Firebase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Firebase.framework; path = GetThere/Firebase.framework; sourceTree = "<group>"; };
 		74774C9819108F6200CE4DE3 /* GTViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTViewController.m; path = Classes/GTViewController.m; sourceTree = "<group>"; };
 		74774C9D1910918F00CE4DE3 /* GTChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTChatViewController.h; path = Classes/GTChatViewController.h; sourceTree = "<group>"; };
 		74774C9E1910918F00CE4DE3 /* GTChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTChatViewController.m; path = Classes/GTChatViewController.m; sourceTree = "<group>"; };
@@ -103,8 +103,12 @@
 		8614D869190DD06C007DF163 /* GetThereTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GetThereTests.m; sourceTree = "<group>"; };
 		8F3885E821CD4B1C831AE9A7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		EC5E4120249846D09A1694E3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		FA29A58F1910F87400D37741 /* GTChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTChatTableViewCell.h; path = Classes/Subviews/GTChatTableViewCell.h; sourceTree = "<group>"; };
-		FA29A5901910F87400D37741 /* GTChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTChatTableViewCell.m; path = Classes/Subviews/GTChatTableViewCell.m; sourceTree = "<group>"; };
+		FA21E1F0192DDBC0001D2D4F /* BTWTweetComposeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTWTweetComposeView.h; sourceTree = "<group>"; };
+		FA21E1F1192DDBC0001D2D4F /* BTWTweetComposeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTWTweetComposeView.m; sourceTree = "<group>"; };
+		FA21E1F3192DDBF2001D2D4F /* BTWImageViewerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTWImageViewerView.h; sourceTree = "<group>"; };
+		FA21E1F4192DDBF2001D2D4F /* BTWImageViewerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTWImageViewerView.m; sourceTree = "<group>"; };
+		FA21E1F6192DDCC0001D2D4F /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
+		FA21E1F7192DDCC0001D2D4F /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		FA29A5991910F8D000D37741 /* UIColor+BTWColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+BTWColor.h"; path = "Classes/Categories/UIColor+BTWColor.h"; sourceTree = "<group>"; };
 		FA29A59A1910F8D000D37741 /* UIColor+BTWColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+BTWColor.m"; path = "Classes/Categories/UIColor+BTWColor.m"; sourceTree = "<group>"; };
 		FA29A59B1910F8D000D37741 /* UIFont+BTWFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIFont+BTWFont.h"; path = "Classes/Categories/UIFont+BTWFont.h"; sourceTree = "<group>"; };
@@ -157,7 +161,6 @@
 				8614D841190DD06C007DF163 /* CoreGraphics.framework in Frameworks */,
 				8614D843190DD06C007DF163 /* UIKit.framework in Frameworks */,
 				8614D83F190DD06C007DF163 /* Foundation.framework in Frameworks */,
-				74774C9719108AFB00CE4DE3 /* Firebase.framework in Frameworks */,
 				C7B8D34289A54AE889742B9B /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -180,8 +183,10 @@
 			children = (
 				74774C9D1910918F00CE4DE3 /* GTChatViewController.h */,
 				74774C9E1910918F00CE4DE3 /* GTChatViewController.m */,
-				FA29A58F1910F87400D37741 /* GTChatTableViewCell.h */,
-				FA29A5901910F87400D37741 /* GTChatTableViewCell.m */,
+				FA21E1F0192DDBC0001D2D4F /* BTWTweetComposeView.h */,
+				FA21E1F1192DDBC0001D2D4F /* BTWTweetComposeView.m */,
+				FA21E1F3192DDBF2001D2D4F /* BTWImageViewerView.h */,
+				FA21E1F4192DDBF2001D2D4F /* BTWImageViewerView.m */,
 				427746C01910CB700043BBFA /* GTMapAnnotation.h */,
 				427746C11910CB700043BBFA /* GTMapAnnotation.m */,
 			);
@@ -191,8 +196,6 @@
 		74F3D0BB19176F6C0051C5D0 /* PersonInfo */ = {
 			isa = PBXGroup;
 			children = (
-				42A7D1A5192C2CF800DFAE55 /* GTUser.h */,
-				42A7D1A6192C2CF800DFAE55 /* GTUser.m */,
 				74F3D0BC19176F9B0051C5D0 /* GTPersonViewController.h */,
 				74F3D0BD19176F9B0051C5D0 /* GTPersonViewController.m */,
 				74F3D0C41917708C0051C5D0 /* GTPersonTableViewCell.h */,
@@ -237,7 +240,6 @@
 				74F3D0C7191B8B400051C5D0 /* CoreLocation.framework */,
 				FAC58198191735E4002E3AE9 /* AddressBook.framework */,
 				FAC58199191735E4002E3AE9 /* AddressBookUI.framework */,
-				74774C9619108AFB00CE4DE3 /* Firebase.framework */,
 				74774C9419108A4200CE4DE3 /* libc++.dylib */,
 				74774C9219108A3400CE4DE3 /* libicucore.dylib */,
 				74E4B085190FBAC0005E8DA1 /* CFNetwork.framework */,
@@ -260,6 +262,7 @@
 				FA29A5981910F89A00D37741 /* Categories */,
 				74F3D0C9192333050051C5D0 /* Service */,
 				FA67C018190F3B7400C22804 /* UI */,
+				FA21E1EF192DD38D001D2D4F /* Model */,
 				8614D856190DD06C007DF163 /* Images.xcassets */,
 				8614D845190DD06C007DF163 /* Supporting Files */,
 				FAC283FA1910B781006249C3 /* GTConstants.h */,
@@ -300,6 +303,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		FA21E1EF192DD38D001D2D4F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				42A7D1A5192C2CF800DFAE55 /* GTUser.h */,
+				42A7D1A6192C2CF800DFAE55 /* GTUser.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		FA29A5981910F89A00D37741 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
@@ -309,6 +321,8 @@
 				FA29A59C1910F8D000D37741 /* UIFont+BTWFont.m */,
 				FAC827951911F03B007181DF /* UILabel+GTLabel.h */,
 				FAC827961911F03B007181DF /* UILabel+GTLabel.m */,
+				FA21E1F6192DDCC0001D2D4F /* UIImage+ImageEffects.h */,
+				FA21E1F7192DDCC0001D2D4F /* UIImage+ImageEffects.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -523,13 +537,15 @@
 				74F3D0CC192333330051C5D0 /* GTChatService.m in Sources */,
 				427746C21910CB700043BBFA /* GTMapAnnotation.m in Sources */,
 				74774C9919108F6200CE4DE3 /* GTViewController.m in Sources */,
-				FA29A5911910F87400D37741 /* GTChatTableViewCell.m in Sources */,
 				74F3D0C61917708C0051C5D0 /* GTPersonTableViewCell.m in Sources */,
 				FA29A59E1910F8D000D37741 /* UIFont+BTWFont.m in Sources */,
 				FAC8279A1911F79F007181DF /* GTUtilities.m in Sources */,
 				FACA2B251924D742002120E7 /* GTRegistrationTableViewController.m in Sources */,
+				FA21E1F2192DDBC0001D2D4F /* BTWTweetComposeView.m in Sources */,
+				FA21E1F5192DDBF2001D2D4F /* BTWImageViewerView.m in Sources */,
 				FAC827971911F03B007181DF /* UILabel+GTLabel.m in Sources */,
 				74F3D0BF19176F9B0051C5D0 /* GTPersonViewController.m in Sources */,
+				FA21E1F8192DDCC0001D2D4F /* UIImage+ImageEffects.m in Sources */,
 				FAC283FF1910B877006249C3 /* GTLoginViewController.m in Sources */,
 				8614D84F190DD06C007DF163 /* GTAppDelegate.m in Sources */,
 				42A7D1A7192C2CF800DFAE55 /* GTUser.m in Sources */,

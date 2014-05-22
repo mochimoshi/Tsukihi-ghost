@@ -23,15 +23,20 @@ PODS:
     - REFormattedNumberField (~> 1.1.2)
     - REValidation (~> 0.1.4)
   - REValidation (0.1.4)
+  - SDWebImage (3.5.4):
+    - SDWebImage/Core
+  - SDWebImage/Core (3.5.4)
 
 DEPENDENCIES:
   - AFNetworking
   - RETableViewManager (~> 1.5.10)
+  - SDWebImage (~> 3.5.0)
 
 SPEC CHECKSUMS:
-  AFNetworking: ae513199cca79e9d7af2708ccabe2ed075550c42
-  REFormattedNumberField: 57016d59e96dbf5b6281fec4d08b401cb0a3c792
-  RETableViewManager: 1f566591ac24776030545c9542a9236dc1c69ddd
-  REValidation: 02160035110a63af1bf6ad1b8791837b3fa13584
+  AFNetworking: 47947303319594706f48a55185ea95a95159ab94
+  REFormattedNumberField: 321bf62160e6dc480844ac99ab6821ef4dd20802
+  RETableViewManager: 534104717ea10a71b203e80ee0dd3c4c79648be3
+  REValidation: a0033a582415848854e875dfcbe69c107de19f81
+  SDWebImage: 571295c8acbb699505a0f68e54506147c3de9ea7
 
-COCOAPODS: 0.32.1
+COCOAPODS: 0.33.1

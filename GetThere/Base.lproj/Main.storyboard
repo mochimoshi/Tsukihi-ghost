@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Uh8-Yj-gF5">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Uh8-Yj-gF5">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
-        <!--View Controller - Events-->
+        <!--View Controller - Queued Invitations-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
                 <viewController id="vXZ-lx-hvc" customClass="GTViewController" sceneMemberID="viewController">
@@ -54,28 +54,16 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Events" id="jJc-nB-vfA">
-                        <barButtonItem key="leftBarButtonItem" title="Logout" id="pgY-b3-zey">
-                            <connections>
-                                <action selector="logout:" destination="vXZ-lx-hvc" id="e3X-PQ-4fN"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Create" id="e5e-C0-WId">
-                            <connections>
-                                <segue destination="PX3-5c-Nvh" kind="push" id="CSx-ZI-VWz"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Queued Invitations" id="jJc-nB-vfA"/>
                     <connections>
                         <outlet property="tableView" destination="cqc-Oz-MNc" id="yuU-he-Kbo"/>
-                        <segue destination="uiW-xh-cz2" kind="push" identifier="pushToChat" id="9dF-YY-3bH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="672" y="-2"/>
+            <point key="canvasLocation" x="1639" y="630"/>
         </scene>
-        <!--Chat View Controller - Event Details-->
+        <!--Chat View Controller - Meetup-->
         <scene sceneID="sJP-Dt-uAH">
             <objects>
                 <viewController id="uiW-xh-cz2" customClass="GTChatViewController" sceneMemberID="viewController">
@@ -88,11 +76,22 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Event Details" id="kxY-e3-bl6">
-                        <barButtonItem key="rightBarButtonItem" title="Invite" id="1hE-Cd-HuE"/>
+                    <navigationItem key="navigationItem" title="Meetup" id="kxY-e3-bl6">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="ZNJ-A8-kgT">
+                            <connections>
+                                <action selector="logout:" destination="uiW-xh-cz2" id="Nbo-1Q-MpO"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Actions" id="1hE-Cd-HuE">
+                            <connections>
+                                <action selector="showOptions:" destination="uiW-xh-cz2" id="4Zo-QJ-O0x"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <segue destination="Mg7-vm-JaO" kind="push" identifier="pushToPerson" id="YMC-QD-l8C"/>
+                        <segue destination="vXZ-lx-hvc" kind="push" identifier="pushToInvites" id="7Ty-TW-L68"/>
+                        <segue destination="PX3-5c-Nvh" kind="push" identifier="pushToNewEvent" id="5Ze-Rd-kD7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eum-bG-Dc4" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -172,7 +171,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K4X-DK-yvT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1159" y="-663"/>
+            <point key="canvasLocation" x="1639" y="-633"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="LoG-q2-srO">
@@ -246,7 +245,7 @@
                                 </state>
                                 <connections>
                                     <action selector="didTapLogin:" destination="Uh8-Yj-gF5" eventType="touchUpInside" id="HIe-RW-5Eh"/>
-                                    <segue destination="8at-gl-q8G" kind="modal" id="4br-H5-wYb"/>
+                                    <segue destination="8at-gl-q8G" kind="modal" identifier="registrationSegue" id="4br-H5-wYb"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -304,7 +303,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="vXZ-lx-hvc" kind="relationship" relationship="rootViewController" id="XSZ-Q0-smi"/>
+                        <segue destination="uiW-xh-cz2" kind="relationship" relationship="rootViewController" id="BT2-Sp-yf3"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zYQ-Mp-b5h" userLabel="First Responder" sceneMemberID="firstResponder"/>
