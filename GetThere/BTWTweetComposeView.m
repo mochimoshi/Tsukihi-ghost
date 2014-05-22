@@ -13,6 +13,7 @@
 #import "GTConstants.h"
 #import "BTWImageViewerView.h"
 #import "GTChatService.h"
+#import "GTChatViewController.h"
 
 #import "UIFont+BTWFont.h"
 #import "UIImage+ImageEffects.h"
@@ -323,13 +324,9 @@ static const CGFloat kSelectionY = 600;
         CGRect composeFrame = [self.composeBackground frame];
         composeFrame.origin.y = -200;
         [self.composeBackground setFrame:composeFrame];
-        self.replyID = @"";
         [self.charactersLeft setText:[NSString stringWithFormat:@"%ld", (long)kTweetLimit]];
         [self changeCharactersLeftColor:kTweetLimit];
         [self.removeButton setAlpha:0.0];
-        CGRect draftsFrame = [self.draftsButton frame];
-        draftsFrame.origin.x = CGRectGetMaxX(self.photosButton.frame) + kPadding;
-        [self.draftsButton setFrame:draftsFrame];
         
         if(self.isSelectionShowing) {
             self.isSelectionShowing = NO;
@@ -379,12 +376,6 @@ static const CGFloat kSelectionY = 600;
 
 #pragma mark - Actions
 
-//- (void)goHomeWarton{
-//    [self.tweetArea setText:@"Nyanpasu~"];
-//    [self.charactersLeft setText:[NSString stringWithFormat:@"%ld", (long)(kTweetLimit - [[self.tweetArea text] length])]];
-//    [self changeCharactersLeftColor:(kTweetLimit - [[self.tweetArea text] length])];
-//}
-
 - (void)didTapImagePreview:(id)sender
 {
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(CGRectGetWidth(self.frame), CGRectGetHeight(self.frame)), NO, 0);
@@ -423,9 +414,6 @@ static const CGFloat kSelectionY = 600;
         [self.cameraSourceSelection setFrame:selectionFrame];
         
         [self.photosButton setAlpha:0.0];
-        CGRect draftsFrame = [self.draftsButton frame];
-        draftsFrame.origin.x = kTweetMargin;
-        [self.draftsButton setFrame:draftsFrame];
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.3 animations:^{
             CGRect selectionFrame = [self.cameraSourceSelection frame];
@@ -463,9 +451,6 @@ static const CGFloat kSelectionY = 600;
             cameraButtonFrame.origin.x = kTweetMargin;
         }
         [self.photosButton setFrame:cameraButtonFrame];
-        CGRect draftsFrame = [self.draftsButton frame];
-        draftsFrame.origin.x = CGRectGetMaxX(self.photosButton.frame) + kPadding;
-        [self.draftsButton setFrame:draftsFrame];
     } completion:^(BOOL finished) {
         [self.tweetArea setSelectedRange:NSMakeRange([[self.tweetArea text] length], 0)];
     }];
@@ -515,19 +500,21 @@ static const CGFloat kSelectionY = 600;
     };
     
     GTChatService *service = [GTChatService sharedChatService];
+    GTChatViewController *chatViewController = (GTChatViewController *)self.delegate;
     
     if(self.attachedImage == nil) {
-        [service postTweet:self.tweetArea.text
-                 inReplyTo:([self.replyID length] > 0) ? self.replyID : @""
-                   success:finishBlock
-                   failure:failBlock];
+        [service pushStatus:self.tweetArea.text
+                      event:self.eventID
+                    success:finishBlock
+                    failure:failBlock];
     }
     else {
-        [service postTweet:self.tweetArea.text
-                     image:self.attachedImage
-                 inReplyTo:([self.replyID length] > 0) ? self.replyID : @""
-                   success:finishBlock
-                   failure:failBlock];
+        [service pushStatus:self.tweetArea.text
+                      image:self.attachedImage
+                      event:self.eventID
+                   location:[chatViewController getCurrentLocation]
+                    success:finishBlock
+                    failure:failBlock];
     }
 }
 
@@ -566,9 +553,6 @@ static const CGFloat kSelectionY = 600;
         CGRect removeFrame = [self.removeButton frame];
         removeFrame.origin.x = kTweetMargin * 3;
         [self.removeButton setFrame:removeFrame];
-        CGRect draftsFrame = [self.draftsButton frame];
-        draftsFrame.origin.x = kTweetMargin;
-        [self.draftsButton setFrame:draftsFrame];
     } completion:^(BOOL finished) {
         [self.preview setImage:nil forState:UIControlStateNormal];
         [self textViewDidChange:self.tweetArea];
@@ -610,9 +594,7 @@ static const CGFloat kSelectionY = 600;
         removeFrame.origin.x = kTweetMargin;
         [self.removeButton setFrame:removeFrame];
     } completion:^(BOOL finished){
-        CGRect draftsFrame = [self.draftsButton frame];
-        draftsFrame.origin.x = CGRectGetMaxX(self.preview.frame) + kPadding;
-        [self.draftsButton setFrame:draftsFrame];
+
     }];
     [self showCameraSelection];
 }
@@ -633,36 +615,6 @@ static const CGFloat kSelectionY = 600;
     [self.charactersLeft setText: [NSString stringWithFormat:@"%ld", (long)(charactersLeft)]];
 }
 
-#pragma mark - Action sheet delegate
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    switch (buttonIndex) {
-        case 0:
-            {
-                [self.tweetArea setText:@""];
-                [self animateOut];
-                [self.preview setImage:nil forState:UIControlStateNormal];
-                self.attachedImage = nil;
-            }
-            break;
-        case 1:
-            {
-                [TestFlight passCheckpoint:[NSString stringWithFormat:@"%@ Saved draft: %@", [[BTWTwitterService sharedTwitterService] getUserScreenname], self.tweetArea.text]];
-                
-                NSMutableArray *userDrafts = [[[NSUserDefaults standardUserDefaults] arrayForKey:kUserDrafts] mutableCopy];
-                [userDrafts addObject:self.tweetArea.text];
-                [[NSUserDefaults standardUserDefaults] setObject:userDrafts forKey:kUserDrafts];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-                [self.tweetArea setText:@""];
-                [self animateOut];
-                [self.preview setImage:nil forState:UIControlStateNormal];
-                self.attachedImage = nil;
-            }
-        default:
-            break;
-    }
-}
 
 #pragma mark - Notifications
 
@@ -697,7 +649,6 @@ static const CGFloat kSelectionY = 600;
     for(NSTextCheckingResult *result in matches) {
         NSString *substring = [text substringWithRange:[result range]];
         charLeft += [substring length];
-        charLeft -= kLinkLength;
     }
     return charLeft;
 }

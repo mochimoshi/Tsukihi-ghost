@@ -19,9 +19,7 @@
 @property (copy, nonatomic) GTCompletionBlock earlyCompletionBlock;
 @property (assign, nonatomic) id<BTWTweetComposeViewDelegate> delegate;
 
-@property (strong, nonatomic) UIButton *draftsButton;
-
-@property (strong, nonatomic) NSString *replyID;
+@property (assign, nonatomic) NSInteger eventID;
 
 - (void) setInitialText:(NSString *)initialText;
 - (void) setSelectedRange:(NSRange)range;

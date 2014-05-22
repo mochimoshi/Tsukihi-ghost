@@ -7,7 +7,6 @@
 //
 
 #import "GTPersonViewController.h"
-#import "GTChatTableViewCell.h"
 #import <CoreLocation/CoreLocation.h>
 
 @interface GTPersonViewController ()

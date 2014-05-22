@@ -17,7 +17,6 @@
 #import "GTConstants.h"
 #import "GTUtilities.h"
 
-#import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
 
 @interface GTChatViewController ()<MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,CLLocationManagerDelegate, UIActionSheetDelegate>
@@ -163,14 +162,6 @@ static const CGFloat kNavBarHeight = 64;
     [camera setAltitude:3000.0];
     
     [self.mapView setCamera:camera animated:YES];
-    
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self selector:@selector(keyboardWillShow:)
-     name:UIKeyboardWillShowNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self selector:@selector(keyboardWillHide:)
-     name:UIKeyboardWillHideNotification object:nil];
 }
 
 // Unsubscribe from keyboard show/hide notifications.
@@ -433,6 +424,11 @@ static const CGFloat kNavBarHeight = 64;
     return annotationView;
 }
 
+- (CLLocationCoordinate2D)getCurrentLocation
+{
+    return self.currentCoordinate;
+}
+
 #pragma mark - PhotoPicker Delegate
 
 - (IBAction)getCamera:(id)sender
@@ -455,7 +451,6 @@ static const CGFloat kNavBarHeight = 64;
     [self addPhotoToMap:img];
     [self.imagePicker dismissViewControllerAnimated:YES completion:nil];
 }
-
 
 #pragma mark - Buttons
 - (IBAction)logout:(id)sender

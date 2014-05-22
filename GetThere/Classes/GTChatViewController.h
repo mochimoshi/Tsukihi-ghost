@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
 
 @interface GTChatViewController : UIViewController
 
 @property (assign, nonatomic) NSInteger eventID;
+
+- (CLLocationCoordinate2D) getCurrentLocation;
 
 @end
