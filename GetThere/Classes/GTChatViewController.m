@@ -37,8 +37,7 @@
 
 /* location manager */
 @property (strong, nonatomic) CLLocationManager *locationManager;
-@property (assign, nonatomic) CLLocationDegrees currentLatitude;
-@property (assign, nonatomic) CLLocationDegrees currentLongitude;
+@property (assign, nonatomic) CLLocationCoordinate2D currentCoordinate;
 @property (strong, nonatomic) NSMutableArray *mapPins;
 
 /* status array */
@@ -205,12 +204,8 @@ static const CGFloat kNavBarHeight = 64;
 
 - (void) setMapCoords
 {
-    CLLocationCoordinate2D coordinate;
-    coordinate.latitude = self.currentLatitude;
-    coordinate.longitude = self.currentLongitude;
-    
     MKMapCamera *camera = [[MKMapCamera alloc] init];
-    [camera setCenterCoordinate:coordinate];
+    [camera setCenterCoordinate:self.currentCoordinate];
     [camera setAltitude:3000.0];
     
     [self.mapView setCamera:camera animated:YES];
@@ -328,75 +323,15 @@ static const CGFloat kNavBarHeight = 64;
 -(void) addOnePhotoPin:(NSDictionary *)pinData :(UIImage *)picture
 {
     // create new custom photo pin
-    CLLocationCoordinate2D coords;
-    coords.latitude = self.currentLatitude;
-    coords.longitude = self.currentLongitude;
     NSLog(@"about to add photo pin");
     GTMapAnnotation *photoPin = [[GTMapAnnotation alloc]init];
-    [photoPin setCoordinate:coords];
+    [photoPin setCoordinate:self.currentCoordinate];
     photoPin.displayType = @"photo";
     NSLog(@"Added photo pin");
     self.picture = picture; // change to param?
     [self mapView:self.mapView viewForAnnotation:photoPin];
     NSLog(@"Almost there...");
     [self.mapView addAnnotation:photoPin];
-}
-
-
-#pragma mark - TextField delegate
-
-- (BOOL)textFieldShouldReturn:(UITextField*)aTextField
-{
-    if ([aTextField.text length] == 0) {
-        return NO;
-    }
-    [aTextField resignFirstResponder];
-    
-    
-
-    
-    [aTextField setText:@""];
-    return NO;
-}
-
-
-// Setup keyboard handlers to slide the view containing the table view and
-// text field upwards when the keyboard shows, and downwards when it hides.
-- (void)keyboardWillShow:(NSNotification*)notification
-{
-    [self moveView:[notification userInfo] up:YES];
-}
-
-- (void)keyboardWillHide:(NSNotification*)notification
-{
-    [self moveView:[notification userInfo] up:NO];
-}
-
-- (void)moveView:(NSDictionary*)userInfo up:(BOOL)up
-{
-    CGRect keyboardEndFrame;
-    [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey]
-     getValue:&keyboardEndFrame];
-    
-    UIViewAnimationCurve animationCurve;
-    [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey]
-     getValue:&animationCurve];
-    
-    NSTimeInterval animationDuration;
-    [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey]
-     getValue:&animationDuration];
-    
-    // Get the correct keyboard size to we slide the right amount.
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationBeginsFromCurrentState:YES];
-    [UIView setAnimationDuration:animationDuration];
-    [UIView setAnimationCurve:animationCurve];
-    
-    CGRect keyboardFrame = [self.view convertRect:keyboardEndFrame toView:nil];
-    int y = keyboardFrame.size.height * (up ? -1 : 1);
-    self.view.frame = CGRectOffset(self.view.frame, 0, y);
-    
-    [UIView commitAnimations];
 }
 
 #pragma mark - MapView Delegate
@@ -426,21 +361,20 @@ static const CGFloat kNavBarHeight = 64;
         NSLog(@"latitude %+.6f, longitude %+.6f\n",
               location.coordinate.latitude,
               location.coordinate.longitude);
-        self.currentLatitude = location.coordinate.latitude;
-        self.currentLongitude = location.coordinate.longitude;
+        self.currentCoordinate = location.coordinate;
         
-        [self saveLocationUpdateWithLatitude:self.currentLatitude longitude:self.currentLongitude];
+        [self saveLocationUpdateWithCoordinate:self.currentCoordinate];
         //[self setMapCoords];
         //[self setDummyMapPins];
     }
 }
 
-- (void)saveLocationUpdateWithLatitude:(CLLocationDegrees)lat longitude:(CLLocationDegrees)lon
+- (void)saveLocationUpdateWithCoordinate:(CLLocationCoordinate2D)coordinate
 {
     NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
     NSDictionary *params = @{@"user": @{@"id": userID,
-                                        @"user_last_lat": [NSNumber numberWithDouble:lat],
-                                        @"user_last_long": [NSNumber numberWithDouble:lon]}};
+                                        @"user_last_lat": [NSNumber numberWithDouble:coordinate.latitude],
+                                        @"user_last_long": [NSNumber numberWithDouble:coordinate.longitude]}};
     [self.httpManager GET:kUpdateLocation parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         [self setMapCoords];
