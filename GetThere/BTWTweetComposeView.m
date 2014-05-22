@@ -536,7 +536,7 @@ static const CGFloat kSelectionY = 600;
         self.attachedImage = nil;
         [self animateOut];
         
-        [chatViewController addPhotoToMap:self.attachedImage];
+        //[chatViewController addPhotoToMap:self.attachedImage];
     }
 }
 
