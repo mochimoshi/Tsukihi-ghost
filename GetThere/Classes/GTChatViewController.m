@@ -37,6 +37,11 @@
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSMutableArray *mapPinData;
 
+@property (strong, nonatomic) UILabel *currentLocationLabel;
+@property (strong, nonatomic) UILabel *attendeesLabel;
+@property (strong, nonatomic) UIView *attendeesView;
+@property (strong, nonatomic) UIButton *attendeesButton;
+
 /* location manager */
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (assign, nonatomic) CLLocationCoordinate2D currentCoordinate;
@@ -156,12 +161,14 @@ static const CGFloat kNavBarHeight = 64;
 {
     [super viewWillAppear:animated];
     
-    CLLocationCoordinate2D coordinate;
-    coordinate.latitude = 37.4240943;
-    coordinate.longitude = -122.1701957;
-    
+    if(!CLLocationCoordinate2DIsValid(self.currentCoordinate)) {
+        CLLocationCoordinate2D coordinate;
+        coordinate.latitude = 37.4240943;
+        coordinate.longitude = -122.1701957;
+        self.currentCoordinate = coordinate;
+    }
     MKMapCamera *camera = [[MKMapCamera alloc] init];
-    [camera setCenterCoordinate:coordinate];
+    [camera setCenterCoordinate:self.currentCoordinate];
     [camera setAltitude:3000.0];
     
     [self.mapView setCamera:camera animated:YES];
@@ -185,6 +192,25 @@ static const CGFloat kNavBarHeight = 64;
     [self.mapView setShowsUserLocation:YES];
     [self.view addSubview: self.mapView];
     
+    self.attendeesView = [[UIView alloc] init];
+    [self.attendeesView setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.6]];
+    [self.view addSubview:self.attendeesView];
+    
+    self.currentLocationLabel = [[UILabel alloc] init];
+    [self.currentLocationLabel setFont:[UIFont mediumHelveticaWithSize:11]];
+    [self.currentLocationLabel setTextAlignment:NSTextAlignmentCenter];
+    [self.attendeesView addSubview:self.currentLocationLabel];
+    
+    self.attendeesLabel = [[UILabel alloc] init];
+    [self.attendeesLabel setFont:[UIFont lightHelveticaWithSize:11]];
+    [self.attendeesLabel setNumberOfLines:0];
+    [self.attendeesLabel setLineBreakMode:NSLineBreakByWordWrapping];
+    [self.attendeesLabel setTextAlignment:NSTextAlignmentCenter];
+    [self.attendeesView addSubview:self.attendeesLabel];
+    
+    self.attendeesButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.attendeesView addSubview:self.attendeesButton];
+    
     self.composeView = [[BTWTweetComposeView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [self.composeView setHidden:YES];
     [self.composeView setScrollToTop:NO];
@@ -194,9 +220,30 @@ static const CGFloat kNavBarHeight = 64;
 - (void)setupViews
 {
     [self.mapView setFrame:CGRectMake(0,
-                                      kNavBarHeight,
+                                      0,
                                       CGRectGetWidth(self.view.frame),
-                                      CGRectGetHeight(self.view.frame) - kNavBarHeight)];
+                                      CGRectGetHeight(self.view.frame))];
+    
+    [self.attendeesView setFrame:CGRectMake(0,
+                                           kNavBarHeight,
+                                           CGRectGetWidth(self.view.frame),
+                                           kNavBarHeight)];
+    [self.currentLocationLabel setFrame:CGRectMake(kHorizontalMargin,
+                                                   kPadding,
+                                                   CGRectGetWidth(self.attendeesView.frame) - 2 * kHorizontalMargin,
+                                                   kLineHeight)];
+    [self.attendeesLabel setFrame:CGRectMake(kHorizontalMargin,
+                                             kPadding + kLineHeight + kPadding,
+                                             CGRectGetWidth(self.attendeesView.frame) - 2 * kHorizontalMargin,
+                                             CGRectGetHeight(self.attendeesView.frame) - 2 * kPadding - kLineHeight - kPadding)];
+    [self.attendeesButton setFrame:CGRectMake(0,
+                                              0,
+                                              CGRectGetWidth(self.attendeesView.frame),
+                                              CGRectGetHeight(self.attendeesView.frame))];
+    
+    if(self.eventID == 0) {
+        [self.attendeesLabel setText:NSLocalizedString(@"Roaming nowhere in particular.\nInvite people to meetup!", nil)];
+    }
 }
 
 - (void) setMapCoords
@@ -335,8 +382,7 @@ static const CGFloat kNavBarHeight = 64;
 //}
 
 
-- (void)locationManager:(CLLocationManager *)manager
-     didUpdateLocations:(NSArray *)locations {
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     // If it's a relatively recent event, turn off updates to save power.
     CLLocation* location = [locations lastObject];
     NSDate* eventDate = location.timestamp;
@@ -349,6 +395,15 @@ static const CGFloat kNavBarHeight = 64;
         self.currentCoordinate = location.coordinate;
         
         [self saveLocationUpdateWithCoordinate:self.currentCoordinate];
+        
+        CLGeocoder *geocode = [[CLGeocoder alloc] init];
+        [geocode reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+            CLPlacemark *placemark = [placemarks objectAtIndex:0];
+            if(self.eventID == 0)
+                [self.currentLocationLabel setText:[NSString stringWithFormat:@"Currently at: %@", placemark.name]];
+            else
+                [self.currentLocationLabel setText:[NSString stringWithFormat:@"%@ ~ %.02f km from destination", placemark.name, 1.0]];
+        }];
         //[self setMapCoords];
         //[self setDummyMapPins];
     }
