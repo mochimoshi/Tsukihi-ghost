@@ -266,6 +266,9 @@ static const CGFloat kNavBarHeight = 64;
     for (NSDictionary *dict in self.mapPinData) {
         [self addOnePin:dict];
         NSString *name = [dict objectForKey:@"user_name"];
+        CLLocationCoordinate2D coords;
+        coords.longitude = [[dict objectForKey:@"user_last_long"] doubleValue];
+        coords.latitude = [[dict objectForKey:@"user_last_lat"] doubleValue];
         NSString *photo_url = [[self.chat objectForKey:name] objectForKey:@"photo_url"];
         NSLog(@"PHOTO URL IS: %@", photo_url);
         if (photo_url) {
@@ -279,7 +282,7 @@ static const CGFloat kNavBarHeight = 64;
             NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
             UIImage *image = [UIImage imageWithData: imageData];
             
-            [self addPhotoToMap:image];
+            [self addPhotoToMap:image :coords];
         }
     }
     
@@ -329,7 +332,7 @@ static const CGFloat kNavBarHeight = 64;
 
 #pragma mark - photo processing
 
-- (void)addPhotoToMap:(UIImage *)picture
+- (void)addPhotoToMap:(UIImage *)picture :(CLLocationCoordinate2D) coords
 {
     /* clear all existing photo pins */
     if (self.photoPins == nil) {
@@ -343,17 +346,17 @@ static const CGFloat kNavBarHeight = 64;
     //self.photoPins = [[NSMutableArray alloc] init];
     //[self.photoPins addObject:picture];
     //for (UIImage * in self.photoPins) {
-        [self addOnePhotoPin:picture];
+    [self addOnePhotoPin:picture :coords];
     //}
 }
     
 
--(void) addOnePhotoPin :(UIImage *)picture
+-(void) addOnePhotoPin :(UIImage *)picture :(CLLocationCoordinate2D) coords
 {
     // create new custom photo pin
     NSLog(@"about to add photo pin");
     GTMapAnnotation *photoPin = [[GTMapAnnotation alloc]init];
-    [photoPin setCoordinate:self.currentCoordinate];
+    [photoPin setCoordinate:coords];
     NSLog(@"COORDS: %f, %f", self.currentCoordinate.longitude, self.currentCoordinate.latitude);
     photoPin.displayType = @"photo";
     NSLog(@"Added photo pin");
