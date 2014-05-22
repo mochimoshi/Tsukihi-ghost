@@ -584,6 +584,8 @@ static const CGFloat kNavBarHeight = 64;
 
 - (void)showRoute:(MKDirectionsResponse *)response
 {
+    [self.mapView removeOverlays:self.mapView.overlays];
+    
     for (MKRoute *route in response.routes) {
         [self.mapView addOverlay:route.polyline level:MKOverlayLevelAboveRoads];
         for (MKRouteStep *step in route.steps) {
