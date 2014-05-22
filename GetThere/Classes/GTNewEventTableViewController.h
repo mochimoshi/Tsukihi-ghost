@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol GTNewEventDelegate <NSObject>
+
+@end
+
 @interface GTNewEventTableViewController : UITableViewController
+
+@property (assign, nonatomic) id<GTNewEventDelegate> delegate;
 
 @end

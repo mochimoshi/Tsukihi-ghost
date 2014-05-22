@@ -10,6 +10,7 @@
 #import "GTPersonViewController.h"
 #import "BTWTweetComposeView.h"
 #import "GTMapAnnotation.h"
+#import "GTNewEventTableViewController.h"
 
 #import "UILabel+GTLabel.h"
 #import "UIFont+BTWFont.h"
@@ -21,7 +22,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface GTChatViewController ()<MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,CLLocationManagerDelegate, UIActionSheetDelegate, BTWTweetComposeViewDelegate>
+@interface GTChatViewController ()<MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,CLLocationManagerDelegate, UIActionSheetDelegate, BTWTweetComposeViewDelegate, GTNewEventDelegate>
 
 /* user info */
 
@@ -326,11 +327,6 @@ static const CGFloat kNavBarHeight = 64;
     // Dispose of any resources that can be recreated.
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-
-}
-
 #pragma mark - photo processing
 
 - (void)addPhotoToMap:(UIImage *)picture
@@ -567,15 +563,17 @@ static const CGFloat kNavBarHeight = 64;
     [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if([segue.identifier isEqualToString:@"pushToNewEvent"]) {
+        GTNewEventTableViewController *eventViewController = segue.destinationViewController;
+        eventViewController.delegate = self;
+    }
 }
-*/
+
 
 @end

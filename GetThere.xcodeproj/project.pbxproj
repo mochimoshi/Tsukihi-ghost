@@ -38,7 +38,6 @@
 		FA29A59D1910F8D000D37741 /* UIColor+BTWColor.m in Sources */ = {isa = PBXBuildFile; fileRef = FA29A59A1910F8D000D37741 /* UIColor+BTWColor.m */; };
 		FA29A59E1910F8D000D37741 /* UIFont+BTWFont.m in Sources */ = {isa = PBXBuildFile; fileRef = FA29A59C1910F8D000D37741 /* UIFont+BTWFont.m */; };
 		FA67C017190F3B3200C22804 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA67C016190F3B3200C22804 /* MapKit.framework */; };
-		FA67C021190F3C3400C22804 /* GTEventMenuTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA67C01E190F3C3400C22804 /* GTEventMenuTableViewCell.m */; };
 		FAC283FC1910B781006249C3 /* GTConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC283FB1910B781006249C3 /* GTConstants.m */; };
 		FAC283FF1910B877006249C3 /* GTLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC283FE1910B877006249C3 /* GTLoginViewController.m */; };
 		FAC5819719171DCB002E3AE9 /* GTNewEventTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC5819619171DCB002E3AE9 /* GTNewEventTableViewController.m */; };
@@ -114,8 +113,6 @@
 		FA29A59B1910F8D000D37741 /* UIFont+BTWFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIFont+BTWFont.h"; path = "Classes/Categories/UIFont+BTWFont.h"; sourceTree = "<group>"; };
 		FA29A59C1910F8D000D37741 /* UIFont+BTWFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIFont+BTWFont.m"; path = "Classes/Categories/UIFont+BTWFont.m"; sourceTree = "<group>"; };
 		FA67C016190F3B3200C22804 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		FA67C01D190F3C3400C22804 /* GTEventMenuTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTEventMenuTableViewCell.h; path = Classes/GTEventMenuTableViewCell.h; sourceTree = "<group>"; };
-		FA67C01E190F3C3400C22804 /* GTEventMenuTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTEventMenuTableViewCell.m; path = Classes/GTEventMenuTableViewCell.m; sourceTree = "<group>"; };
 		FA67C01F190F3C3400C22804 /* GTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTViewController.h; path = Classes/GTViewController.h; sourceTree = "<group>"; };
 		FAC283FA1910B781006249C3 /* GTConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTConstants.h; path = Classes/Utils/GTConstants.h; sourceTree = "<group>"; };
 		FAC283FB1910B781006249C3 /* GTConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTConstants.m; path = Classes/Utils/GTConstants.m; sourceTree = "<group>"; };
@@ -343,8 +340,6 @@
 			children = (
 				FA67C01F190F3C3400C22804 /* GTViewController.h */,
 				74774C9819108F6200CE4DE3 /* GTViewController.m */,
-				FA67C01D190F3C3400C22804 /* GTEventMenuTableViewCell.h */,
-				FA67C01E190F3C3400C22804 /* GTEventMenuTableViewCell.m */,
 				FAC5819519171DCB002E3AE9 /* GTNewEventTableViewController.h */,
 				FAC5819619171DCB002E3AE9 /* GTNewEventTableViewController.m */,
 				FACA2B2C1925FEC1002120E7 /* GTEventLocationViewController.h */,
@@ -532,7 +527,6 @@
 			files = (
 				FAC283FC1910B781006249C3 /* GTConstants.m in Sources */,
 				8614D84B190DD06C007DF163 /* main.m in Sources */,
-				FA67C021190F3C3400C22804 /* GTEventMenuTableViewCell.m in Sources */,
 				FA29A59D1910F8D000D37741 /* UIColor+BTWColor.m in Sources */,
 				74F3D0CC192333330051C5D0 /* GTChatService.m in Sources */,
 				427746C21910CB700043BBFA /* GTMapAnnotation.m in Sources */,

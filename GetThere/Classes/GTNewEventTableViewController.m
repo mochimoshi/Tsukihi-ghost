@@ -19,6 +19,7 @@
 
 #import "GTUtilities.h"
 #import "GTEventLocationViewController.h"
+#import "GTChatViewController.h"
 
 @interface GTNewEventTableViewController ()<RETableViewManagerDelegate, GTEventLocatorDelegate>
 
@@ -157,6 +158,8 @@
                                                       @"invitee_ids": @[@1, @2, @3]}};
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         [manager GET:kNewEventURL parameters:eventDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            GTChatViewController *chatViewController = (GTChatViewController *)self.delegate;
+            chatViewController.eventID = [[responseObject objectForKey:@"event_id"] integerValue];
             [self dismissViewControllerAnimated:YES completion:nil];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops! Network connectivity issue."
