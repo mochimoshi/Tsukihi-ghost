@@ -349,10 +349,15 @@ static const CGFloat kNavBarHeight = 64;
         NSLog(@"PHOTO URL IS: %@", photo_url);
         if (photo_url) {
             NSLog(@"AND SO WE ARRIVE HERE!");
-            NSString *url = [NSString stringWithFormat:@"%@,%@", @"http://tsukihi.org/backtier/", photo_url];
-            NSURL *imageURL = [NSURL URLWithString:url];
+            NSString *url = @"http://tsukihi.org/backtier/";
+            url = [url stringByAppendingString:photo_url];
+            //NSLog(url);
+            /*NSURL *imageURL = [NSURL URLWithString:url];
             NSData *imageData = [NSData dataWithContentsOfURL:imageURL];
-            UIImage *image = [UIImage imageWithData:imageData];
+            UIImage *image = [UIImage imageWithData:imageData];*/
+            NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+            UIImage *image = [UIImage imageWithData: imageData];
+            
             [self addPhotoToMap:image];
         }
     }
@@ -406,7 +411,7 @@ static const CGFloat kNavBarHeight = 64;
     } else {
         //[self.photoPins removeAllObjects];
     }
-    
+    //[self.photoPins addObject:picture];
     // TODO: get photo locations from database
     // Get all photopins from database?
     //self.photoPins = [[NSMutableArray alloc] init];
@@ -423,6 +428,7 @@ static const CGFloat kNavBarHeight = 64;
     NSLog(@"about to add photo pin");
     GTMapAnnotation *photoPin = [[GTMapAnnotation alloc]init];
     [photoPin setCoordinate:self.currentCoordinate];
+    NSLog(@"COORDS: %f, %f", self.currentCoordinate.longitude, self.currentCoordinate.latitude);
     photoPin.displayType = @"photo";
     NSLog(@"Added photo pin");
     self.picture = picture; // change to param?
@@ -531,14 +537,14 @@ static const CGFloat kNavBarHeight = 64;
     UIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
     [[UIBezierPath bezierPathWithRoundedRect:rect
                                 cornerRadius:25.0] addClip];
-    
+    NSLog(@"drawing drawing");
     [self.picture drawInRect:CGRectMake(0,0,rect.size.width,rect.size.height)];
     UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     annotationView.image = newImage;
 
     annotationView.annotation = annotation;
-    [self.mapView addAnnotation:annotation];
+    //[self.mapView addAnnotation:annotation];
     return annotationView;
 }
 
