@@ -30,7 +30,7 @@
     NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
     NSDictionary *params = @{@"user_id": userID,
                              @"text": status,
-                             @"event_id": [NSNumber numberWithInteger:eventID]};
+                             @"event_id": [[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"]};
     AFHTTPRequestOperationManager *httpManager = [AFHTTPRequestOperationManager manager];
     [httpManager GET:kMessageLocation parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //        [self.tableView reloadData];
@@ -45,7 +45,7 @@
         NSData *imageData = UIImageJPEGRepresentation(image, 0.5);
         NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
         NSDictionary *params = @{@"user_id": userID,
-                                 @"event_id": [NSNumber numberWithInteger:eventID],
+                                 @"event_id": [[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"],
                                  @"latitude": [NSNumber numberWithDouble:coordinate.latitude],
                                  @"longitude": [NSNumber numberWithDouble:coordinate.longitude]};
         AFHTTPRequestOperationManager *httpManager = [AFHTTPRequestOperationManager manager];

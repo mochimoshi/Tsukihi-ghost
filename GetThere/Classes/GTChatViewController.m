@@ -67,6 +67,7 @@
 #define kAttendeeLocations @"http://tsukihi.org/backtier/events/get_event_attendee_locations"
 #define kUpdateLocation @"http://tsukihi.org/backtier/users/update_location"
 #define kEventMessages @"http://tsukihi.org/backtier/events/get_event_messages"
+#define kEventInfo @"http://tsukihi.org/backtier/events/get_event"
 
 static const CGFloat kNavBarHeight = 64;
 
@@ -93,7 +94,7 @@ static const CGFloat kNavBarHeight = 64;
     // setting up text field response
     
     //NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:self.eventID]}};
-    NSDictionary *params = @{@"event": @{@"id": @1}};
+    NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:[[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"]integerValue]]}};
     NSLog(@"id num: %@", params);
     [self.httpManager GET:kEventMessages parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
 
@@ -132,15 +133,23 @@ static const CGFloat kNavBarHeight = 64;
     [self createViews];
     [self setupViews];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTableViewData) name:@"ReloadAppDelegateTable" object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(populateLocations:) name:@"PopulateUserLocations" object:nil];
+
+
     //[self setDummyMapPins];
+}
+
+
+- (void)populateLocations:(NSNotification *)notification{
+    NSLog(@"GOT HERE!!!!");
+    [self setDummyMapPins];
 }
 
 - (void)reloadTableViewData{
     NSLog(@"GOT TO CHAT VIEW!");
     
    // NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:self.eventID]}};
-    NSDictionary *params = @{@"event": @{@"id": @1}};
+    NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:[[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"]integerValue]]}};
     [self.httpManager GET:kEventMessages parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         for (id key in responseObject) {
@@ -173,6 +182,39 @@ static const CGFloat kNavBarHeight = 64;
     [camera setAltitude:3000.0];
     
     [self.mapView setCamera:camera animated:YES];
+    
+    self.eventID = [[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"] integerValue];
+    
+    if(self.eventID == 0) {
+        [self.attendeesLabel setText:NSLocalizedString(@"Roaming nowhere in particular.\nInvite people to meetup!", nil)];
+    }
+    else {
+        [self.httpManager GET:kEventInfo
+                   parameters:@{@"event": @{@"id": [NSNumber numberWithInteger: self.eventID]}}
+                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                          if([responseObject isKindOfClass:[NSDictionary class]]) {
+                              CLLocationCoordinate2D coord;
+                              coord.latitude = [[responseObject objectForKey:@"latitude"] floatValue];
+                              coord.longitude = [[responseObject objectForKey:@"longitude"] floatValue];
+                              CLLocation *location = [[CLLocation alloc] initWithLatitude:coord.latitude longitude:coord.longitude];
+                              CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+                              [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+                                  CLPlacemark *placemark = [placemarks objectAtIndex:0];
+                                  [self.attendeesLabel setText:[NSString stringWithFormat:@"%@\nMeeting at: %@\n%d attendees", [responseObject objectForKey:@"event_name"], placemark.name, [[responseObject objectForKey:@"users"] count]]];
+                                  
+                              }];
+                              if(CLLocationCoordinate2DIsValid(self.currentCoordinate)) {
+                                  CLLocation *selfLocation = [[CLLocation alloc] initWithLatitude:self.currentCoordinate.latitude longitude:self.currentCoordinate.longitude];
+                                  [geocoder reverseGeocodeLocation:selfLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+                                      CLPlacemark *placemark = [placemarks objectAtIndex:0];
+                                      [self.currentLocationLabel setText:[NSString stringWithFormat:@"%@ ~ %.02f km from destination", placemark.name, 1.0]];
+                                  }];
+                              }
+                          }
+                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                          NSLog(@"Network error: %@", error);
+                      }];
+    }
 }
 
 // Unsubscribe from keyboard show/hide notifications.
@@ -241,10 +283,6 @@ static const CGFloat kNavBarHeight = 64;
                                               0,
                                               CGRectGetWidth(self.attendeesView.frame),
                                               CGRectGetHeight(self.attendeesView.frame))];
-    
-    if(self.eventID == 0) {
-        [self.attendeesLabel setText:NSLocalizedString(@"Roaming nowhere in particular.\nInvite people to meetup!", nil)];
-    }
 }
 
 - (void) setMapCoords
@@ -269,10 +307,13 @@ static const CGFloat kNavBarHeight = 64;
         [self.mapPins removeAllObjects];
         
     }
-
-    NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:self.eventID]}};
+    NSLog(@"WHAT IS HAPPENING?");
+    NSLog(@"ID IS: %@", [NSNumber numberWithInteger:[[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"]integerValue]]);
+    NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:[[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"]integerValue]]}};
+    NSLog(@"Well clearly it posted");
     [self.httpManager GET:kAttendeeLocations parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        //NSLog(@"JSON: %@", responseObject);
+        NSLog(@"SUCCESSSSSS");
+        NSLog(@"JSON: %@", responseObject);
         self.mapPinData = [(NSDictionary *)responseObject objectForKey:@"list"];
         [self setMapPins];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -400,6 +441,7 @@ static const CGFloat kNavBarHeight = 64;
             else
                 [self.currentLocationLabel setText:[NSString stringWithFormat:@"%@ ~ %.02f km from destination", placemark.name, 1.0]];
         }];
+        
         //[self setMapCoords];
         //[self setDummyMapPins];
     }
@@ -441,6 +483,9 @@ static const CGFloat kNavBarHeight = 64;
 - (MKAnnotationView *) mapView:(MKMapView *)map viewForAnnotation:(id <MKAnnotation>)annotation
 {
     if ([annotation isKindOfClass: [MKUserLocation class]])
+        return nil;
+    
+    if ([((GTMapAnnotation *)annotation).displayType  isEqual: @"user"])
         return nil;
         
     static NSString *AnnotationViewID = @"annotationViewID";
@@ -531,7 +576,7 @@ static const CGFloat kNavBarHeight = 64;
     UIGraphicsEndImageContext();
     
     [self.composeView setBlurredBackground:blurredSnapshotImage];
-    [self.composeView setEventID:self.eventID];
+    [self.composeView setEventID:[[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"]integerValue]];
     
     __weak GTChatViewController *weakSelf = self;
     [self.composeView setEarlyCompletionBlock:^(BOOL success){
@@ -572,6 +617,7 @@ static const CGFloat kNavBarHeight = 64;
     if([segue.identifier isEqualToString:@"pushToNewEvent"]) {
         GTNewEventTableViewController *eventViewController = segue.destinationViewController;
         eventViewController.delegate = self;
+        eventViewController.selectedCoordinates = self.currentCoordinate;
     }
 }
 

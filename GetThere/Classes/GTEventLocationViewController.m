@@ -7,11 +7,16 @@
 //
 
 #import "GTEventLocationViewController.h"
+#import "GTNewEventTableViewController.h"
 
 @interface GTEventLocationViewController ()<MKMapViewDelegate, CLLocationManagerDelegate>
 
 @property (strong, nonatomic) MKMapView *mapView;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+
+@property (strong, nonatomic) NSString *selectedLocationName;
+@property (strong, nonatomic) NSString *selectedLocationAddress;
+@property (assign, nonatomic) CLLocationCoordinate2D selectedCoordinates;
 
 @end
 
@@ -48,6 +53,16 @@
     [self.locationManager startUpdatingLocation];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    GTNewEventTableViewController *eventController = (GTNewEventTableViewController *)self.delegate;
+    eventController.selectedLocationName = self.selectedLocationName;
+    eventController.selectedLocationAddress = self.selectedLocationAddress;
+    eventController.selectedCoordinates = self.selectedCoordinates;
+}
+
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     CLLocation *currentLocation = [locations objectAtIndex:0];
@@ -67,6 +82,10 @@
              NSLog(@"placemark %@",placemark);
              NSString *locatedAt = [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
              NSLog(@"%@", locatedAt);
+             
+             self.selectedLocationName = placemark.name;
+             self.selectedLocationAddress = [placemark.addressDictionary objectForKey:@"thoroughfare"];
+             self.selectedCoordinates = self.mapView.centerCoordinate;
          }
          else
          {

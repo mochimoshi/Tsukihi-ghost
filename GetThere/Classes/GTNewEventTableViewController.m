@@ -8,7 +8,6 @@
 
 #import "GTNewEventTableViewController.h"
 
-#import <MapKit/MapKit.h>
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
 
@@ -99,7 +98,6 @@
     [section addItem:self.eventNameItem];
     [section addItem:self.eventLocationItem];
     [section addItem:self.eventStartTimeItem];
-//    [section addItem:self.eventEndTimeItem];
     
     return section;
 }
@@ -153,14 +151,21 @@
         [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
         
         NSDictionary *eventDictionary = @{@"event": @{@"user_id" : [[NSUserDefaults standardUserDefaults] valueForKey:@"userID"],
-                                                      @"event_name": self.eventNameItem.value,
+                                                      @"event_name": (self.eventNameItem.value) ? self.eventNameItem.value : [NSString stringWithFormat:@"%@ %@", NSLocalizedString(@"Meetup @ ", nil), [GTUtilities formattedDateStringFromDate:self.eventStartTimeItem.value]],
                                                       @"start_time": self.eventStartTimeItem.value,
-                                                      @"invitee_ids": @[@1, @2, @3]}};
+                                                        @"latitude": [NSNumber numberWithFloat:self.selectedCoordinates.latitude],
+                                                       @"longitude": [NSNumber numberWithFloat:self.selectedCoordinates.longitude],
+                                                     @"invitee_ids": @[@1, @2, @3]}};
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         [manager GET:kNewEventURL parameters:eventDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"RESPONSE: %@", responseObject);
+            [[NSUserDefaults standardUserDefaults] setValue:[responseObject objectForKey:@"event_id"] forKey:@"eventID"];
+
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"PopulateUserLocations" object:self userInfo:responseObject];
+            
             GTChatViewController *chatViewController = (GTChatViewController *)self.delegate;
             chatViewController.eventID = [[responseObject objectForKey:@"event_id"] integerValue];
-            [self dismissViewControllerAnimated:YES completion:nil];
+            [self.navigationController popViewControllerAnimated:YES];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops! Network connectivity issue."
                                                             message:@"The event cannot be submitted at the moment. Please try again shortly!"
@@ -169,7 +174,7 @@
                                                   otherButtonTitles: nil];
             [alert show];
             NSLog(@"Error: %@", error.localizedDescription);
-            item.title = @"Create meetup!";
+            item.title = NSLocalizedString(@"Update meetup!", nil);
             [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
         }];
     }];
@@ -183,5 +188,10 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc
+{
+    self.delegate = nil;
 }
 @end
