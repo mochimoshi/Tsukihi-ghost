@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		427746C21910CB700043BBFA /* GTMapAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 427746C11910CB700043BBFA /* GTMapAnnotation.m */; };
 		42A7D1A7192C2CF800DFAE55 /* GTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A7D1A6192C2CF800DFAE55 /* GTUser.m */; };
+		42A7D1AA192DF17200DFAE55 /* GTUserIconAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A7D1A9192DF17200DFAE55 /* GTUserIconAnnotationView.m */; };
 		74774C9319108A3400CE4DE3 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74774C9219108A3400CE4DE3 /* libicucore.dylib */; };
 		74774C9519108A4200CE4DE3 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74774C9419108A4200CE4DE3 /* libc++.dylib */; };
 		74774C9919108F6200CE4DE3 /* GTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74774C9819108F6200CE4DE3 /* GTViewController.m */; };
@@ -70,6 +71,8 @@
 		427746C11910CB700043BBFA /* GTMapAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMapAnnotation.m; sourceTree = "<group>"; };
 		42A7D1A5192C2CF800DFAE55 /* GTUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTUser.h; sourceTree = "<group>"; };
 		42A7D1A6192C2CF800DFAE55 /* GTUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTUser.m; sourceTree = "<group>"; };
+		42A7D1A8192DF17200DFAE55 /* GTUserIconAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTUserIconAnnotationView.h; sourceTree = "<group>"; };
+		42A7D1A9192DF17200DFAE55 /* GTUserIconAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTUserIconAnnotationView.m; sourceTree = "<group>"; };
 		74774C8F190FD91C00CE4DE3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		74774C9219108A3400CE4DE3 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		74774C9419108A4200CE4DE3 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
@@ -189,6 +192,8 @@
 				FA21E1F4192DDBF2001D2D4F /* BTWImageViewerView.m */,
 				427746C01910CB700043BBFA /* GTMapAnnotation.h */,
 				427746C11910CB700043BBFA /* GTMapAnnotation.m */,
+				42A7D1A8192DF17200DFAE55 /* GTUserIconAnnotationView.h */,
+				42A7D1A9192DF17200DFAE55 /* GTUserIconAnnotationView.m */,
 			);
 			name = Chat;
 			sourceTree = "<group>";
@@ -536,6 +541,7 @@
 				FA29A59D1910F8D000D37741 /* UIColor+BTWColor.m in Sources */,
 				74F3D0CC192333330051C5D0 /* GTChatService.m in Sources */,
 				427746C21910CB700043BBFA /* GTMapAnnotation.m in Sources */,
+				42A7D1AA192DF17200DFAE55 /* GTUserIconAnnotationView.m in Sources */,
 				74774C9919108F6200CE4DE3 /* GTViewController.m in Sources */,
 				74F3D0C61917708C0051C5D0 /* GTPersonTableViewCell.m in Sources */,
 				FA29A59E1910F8D000D37741 /* UIFont+BTWFont.m in Sources */,

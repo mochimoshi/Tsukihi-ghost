@@ -87,7 +87,7 @@ static const CGFloat kNavBarHeight = 64;
     // setting up text field response
     
     //NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:self.eventID]}};
-    NSDictionary *params = @{@"event": @{@"id": @1}};
+    NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:[[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"]integerValue]]}};
     NSLog(@"id num: %@", params);
     [self.httpManager GET:kEventMessages parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
 
@@ -126,15 +126,23 @@ static const CGFloat kNavBarHeight = 64;
     [self createViews];
     [self setupViews];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTableViewData) name:@"ReloadAppDelegateTable" object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(populateLocations:) name:@"PopulateUserLocations" object:nil];
+
+
     //[self setDummyMapPins];
+}
+
+
+- (void)populateLocations:(NSNotification *)notification{
+    NSLog(@"GOT HERE!!!!");
+    [self setDummyMapPins];
 }
 
 - (void)reloadTableViewData{
     NSLog(@"GOT TO CHAT VIEW!");
     
    // NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:self.eventID]}};
-    NSDictionary *params = @{@"event": @{@"id": @1}};
+    NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:[[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"]integerValue]]}};
     [self.httpManager GET:kEventMessages parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         for (id key in responseObject) {
@@ -221,10 +229,13 @@ static const CGFloat kNavBarHeight = 64;
         [self.mapPins removeAllObjects];
         
     }
-
-    NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:self.eventID]}};
+    NSLog(@"WHAT IS HAPPENING?");
+    NSLog(@"ID IS: %@", [NSNumber numberWithInteger:[[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"]integerValue]]);
+    NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:[[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"]integerValue]]}};
+    NSLog(@"Well clearly it posted");
     [self.httpManager GET:kAttendeeLocations parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        //NSLog(@"JSON: %@", responseObject);
+        NSLog(@"SUCCESSSSSS");
+        NSLog(@"JSON: %@", responseObject);
         self.mapPinData = [(NSDictionary *)responseObject objectForKey:@"list"];
         [self setMapPins];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -391,6 +402,9 @@ static const CGFloat kNavBarHeight = 64;
 {
     if ([annotation isKindOfClass: [MKUserLocation class]])
         return nil;
+    
+    if ([((GTMapAnnotation *)annotation).displayType  isEqual: @"user"])
+        return nil;
         
     static NSString *AnnotationViewID = @"annotationViewID";
     
@@ -480,7 +494,7 @@ static const CGFloat kNavBarHeight = 64;
     UIGraphicsEndImageContext();
     
     [self.composeView setBlurredBackground:blurredSnapshotImage];
-    [self.composeView setEventID:self.eventID];
+    [self.composeView setEventID:[[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"]integerValue]];
     
     __weak GTChatViewController *weakSelf = self;
     [self.composeView setEarlyCompletionBlock:^(BOOL success){

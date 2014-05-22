@@ -148,6 +148,7 @@
     
     RETableViewItem *buttonItem = [RETableViewItem itemWithTitle:@"Create meetup!" accessoryType:UITableViewCellAccessoryNone selectionHandler:^(RETableViewItem *item) {
         item.title = @"Submitting...";
+        NSLog(@"WHAT THE FUCK????");
         [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
         
         NSDictionary *eventDictionary = @{@"event": @{@"user_id" : [[NSUserDefaults standardUserDefaults] valueForKey:@"userID"],
@@ -156,6 +157,10 @@
                                                       @"invitee_ids": @[@1, @2, @3]}};
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         [manager GET:kNewEventURL parameters:eventDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"RESPONSE: %@", responseObject);
+            [[NSUserDefaults standardUserDefaults] setValue:[responseObject objectForKey:@"event_id"] forKey:@"eventID"];
+
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"PopulateUserLocations" object:self userInfo:responseObject];
             [self.navigationController popViewControllerAnimated:YES];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops! Network connectivity issue."
