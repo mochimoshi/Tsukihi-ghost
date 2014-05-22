@@ -36,6 +36,7 @@
 		FA21E1F2192DDBC0001D2D4F /* BTWTweetComposeView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA21E1F1192DDBC0001D2D4F /* BTWTweetComposeView.m */; };
 		FA21E1F5192DDBF2001D2D4F /* BTWImageViewerView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA21E1F4192DDBF2001D2D4F /* BTWImageViewerView.m */; };
 		FA21E1F8192DDCC0001D2D4F /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = FA21E1F7192DDCC0001D2D4F /* UIImage+ImageEffects.m */; };
+		FA21E1FB192E60E0001D2D4F /* GTOnboardingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA21E1FA192E60E0001D2D4F /* GTOnboardingViewController.m */; };
 		FA29A59D1910F8D000D37741 /* UIColor+BTWColor.m in Sources */ = {isa = PBXBuildFile; fileRef = FA29A59A1910F8D000D37741 /* UIColor+BTWColor.m */; };
 		FA29A59E1910F8D000D37741 /* UIFont+BTWFont.m in Sources */ = {isa = PBXBuildFile; fileRef = FA29A59C1910F8D000D37741 /* UIFont+BTWFont.m */; };
 		FA67C017190F3B3200C22804 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA67C016190F3B3200C22804 /* MapKit.framework */; };
@@ -112,6 +113,8 @@
 		FA21E1F4192DDBF2001D2D4F /* BTWImageViewerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTWImageViewerView.m; sourceTree = "<group>"; };
 		FA21E1F6192DDCC0001D2D4F /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		FA21E1F7192DDCC0001D2D4F /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
+		FA21E1F9192E60E0001D2D4F /* GTOnboardingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTOnboardingViewController.h; path = Classes/GTOnboardingViewController.h; sourceTree = "<group>"; };
+		FA21E1FA192E60E0001D2D4F /* GTOnboardingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTOnboardingViewController.m; path = Classes/GTOnboardingViewController.m; sourceTree = "<group>"; };
 		FA29A5991910F8D000D37741 /* UIColor+BTWColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+BTWColor.h"; path = "Classes/Categories/UIColor+BTWColor.h"; sourceTree = "<group>"; };
 		FA29A59A1910F8D000D37741 /* UIColor+BTWColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+BTWColor.m"; path = "Classes/Categories/UIColor+BTWColor.m"; sourceTree = "<group>"; };
 		FA29A59B1910F8D000D37741 /* UIFont+BTWFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIFont+BTWFont.h"; path = "Classes/Categories/UIFont+BTWFont.h"; sourceTree = "<group>"; };
@@ -339,6 +342,8 @@
 				FAC284001910B87F006249C3 /* Login */,
 				FA67C019190F3B8500C22804 /* EventsMenu */,
 				74774CA01910919300CE4DE3 /* Chat */,
+				FA21E1F9192E60E0001D2D4F /* GTOnboardingViewController.h */,
+				FA21E1FA192E60E0001D2D4F /* GTOnboardingViewController.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -559,6 +564,7 @@
 				FACA2B2819256E17002120E7 /* UIImage+BTWImage.m in Sources */,
 				74774C9F1910918F00CE4DE3 /* GTChatViewController.m in Sources */,
 				FACA2B2E1925FEC1002120E7 /* GTEventLocationViewController.m in Sources */,
+				FA21E1FB192E60E0001D2D4F /* GTOnboardingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
