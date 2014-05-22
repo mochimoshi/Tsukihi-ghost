@@ -470,6 +470,7 @@ static const CGFloat kNavBarHeight = 64;
 {
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"userName"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"userID"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

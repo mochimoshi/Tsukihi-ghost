@@ -68,6 +68,7 @@
 {
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"userName"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"userID"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 #pragma mark - Table view data source
