@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MapKit/MapKit.h>
 
 @interface GTChatService : NSObject
 
@@ -15,8 +16,7 @@ typedef void (^GTFailureBlock)(NSError *error);
 
 + (GTChatService *)sharedChatService;
 
-- (void) getChatSinceID:(NSString *)chatID event:(NSString *)event success:(GTSuccessBlock)success failure:(GTFailureBlock)failure;
-- (void) getChatMaxID:(NSString *)chatID event:(NSString *)event success:(GTSuccessBlock)success failure:(GTFailureBlock)failure;
-- (void) getChatSinceID:(NSString *)chatID maxID: (NSString *)maxID event:(NSString *)event success:(GTSuccessBlock)success failure:(GTFailureBlock)failure;
+- (void) pushStatus:(NSString *)status event:(NSInteger)eventID success:(GTSuccessBlock)success failure:(GTFailureBlock)failure;
+- (void) pushStatus:(NSString *)status image:(UIImage *)image event:(NSInteger)eventID location:(CLLocationCoordinate2D)coordinate success:(GTSuccessBlock)success failure:(GTFailureBlock)failure;
 
 @end

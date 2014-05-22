@@ -61,9 +61,7 @@
     [self.manager addSection:section];
     
     self.userNameItem = [RETextItem itemWithTitle:@"Name" value:nil placeholder:@"John Doe"];
-    self.userScreenName = [RETextItem itemWithTitle:@"Screenname" value:nil placeholder:@"jdoe"];
     self.userPhoneItem = [RETextItem itemWithTitle:@"Phone" value:nil placeholder:@"15105551234"];
-    self.userEmailItem = [RETextItem itemWithTitle:@"E-mail" value:nil placeholder:@"jdoe@example.cc"];
     self.userPasswordItem = [RETextItem itemWithTitle:@"Password" value:nil placeholder:@"password"];
     [self.userPasswordItem setSecureTextEntry:YES];
     
@@ -87,7 +85,6 @@
         
         NSDictionary *params = @{@"user": @{@"user_real_name": self.userNameItem.value,
                                             @"phone_number": self.userPhoneItem.value,
-                                            @"user_name": self.userScreenName.value,
                                             @"password": self.userPasswordItem.value,
                                             @"password_confirmation": self.userPasswordItem.value}};
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];

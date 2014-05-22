@@ -10,7 +10,6 @@
 #import "GTPersonViewController.h"
 #import "GTLoginViewController.h"
 #import "GTMapAnnotation.h"
-#import "GTChatTableViewCell.h"
 
 #import "UILabel+GTLabel.h"
 #import "UIFont+BTWFont.h"
@@ -19,23 +18,20 @@
 #import "GTUtilities.h"
 
 #import <MapKit/MapKit.h>
-#import <Firebase/Firebase.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface GTChatViewController ()<UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,CLLocationManagerDelegate>
+@interface GTChatViewController ()<MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,CLLocationManagerDelegate, UIActionSheetDelegate>
 
 /* user info */
 
 @property (strong, nonatomic) MKMapView *mapView;
-@property (strong, nonatomic) UITableView *tableView;
-@property (strong, nonatomic) UITextField *chatInputTextField;
-@property (strong, nonatomic) UIButton *chatImagingButton;
 @property (strong, nonatomic) UIImageView *previewImage;
+
+@property (strong, nonatomic) UIActionSheet *settingsSheet;
 
 @property (strong, nonatomic) UIImagePickerController *imagePicker;
 
 @property (strong, nonatomic) NSMutableArray *chat;
-@property (strong, nonatomic) Firebase *firebase;
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSMutableArray *mapPinData;
 
@@ -63,13 +59,10 @@
 
 #define kAttendeeLocations @"http://tsukihi.org/backtier/events/get_event_attendee_locations"
 #define kUpdateLocation @"http://tsukihi.org/backtier/users/update_location"
-#define kMessageLocation @"http://tsukihi.org/backtier/messages/create"
-#define kPhotoLocation @"http://tsukihi.org/backtier/messages/create"
 #define kEventMessages @"http://tsukihi.org/backtier/events/get_event_messages"
 
 static const CGFloat kInputHeight = 30;
 static const CGFloat kNavBarHeight = 64;
-static const CGFloat kMaxImageSize = 1024;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -102,19 +95,26 @@ static const CGFloat kMaxImageSize = 1024;
             NSLog(@"AWAKEN: %@", responseObject[key]);
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-            
+            // Update map pins
         });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
     
-    [self.chatInputTextField addTarget:self action:@selector(chatInputActive:) forControlEvents:UIControlEventEditingDidBegin];
     
     self.name = [[NSUserDefaults standardUserDefaults] objectForKey:@"userName"];
     
-
+    self.settingsSheet = [[UIActionSheet alloc] init];
+    [self.settingsSheet setDelegate:self];
+    [self.settingsSheet setTitle:NSLocalizedString(@"Actions", nil)];
+    [self.settingsSheet addButtonWithTitle:NSLocalizedString(@"Post message", nil)];
+    [self.settingsSheet addButtonWithTitle:NSLocalizedString(@"Add friends to meetup", nil)];
+    [self.settingsSheet addButtonWithTitle:NSLocalizedString(@"Set meetup details", nil)];
+    [self.settingsSheet addButtonWithTitle:NSLocalizedString(@"Cancel current meetup", nil)];
+    [self.settingsSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
+    [self.settingsSheet setCancelButtonIndex:4];
+    [self.settingsSheet setDestructiveButtonIndex:3];
+    
     [self startStandardUpdates];
 }
 
@@ -140,8 +140,8 @@ static const CGFloat kMaxImageSize = 1024;
             [self.chat addObject:responseObject[key]];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+//            [self.tableView reloadData];
+//            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 
         });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -193,32 +193,6 @@ static const CGFloat kMaxImageSize = 1024;
     [self.mapView setDelegate:self];
     [self.mapView setShowsUserLocation:YES];
     [self.view addSubview: self.mapView];
-    
-    self.chatImagingButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.chatImagingButton setTitle:NSLocalizedString(@"Camera", nil) forState:UIControlStateNormal];
-    [self.chatImagingButton addTarget:self action:@selector(getCamera:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.chatImagingButton];
-    
-    self.chatInputTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
-    [self.chatInputTextField setDelegate:self];
-    [self.view addSubview:self.chatInputTextField];
-    
-    self.tableView = [[UITableView alloc] init];
-    [self.tableView setDelegate:self];
-    [self.tableView setDataSource:self];
-    [self.view addSubview:self.tableView];
-    
-    // creating the preview image as transparent
-    self.previewImage = [[UIImageView alloc] init];
-    [self.previewImage setContentMode:UIViewContentModeScaleAspectFill];
-    [self.previewImage setClipsToBounds:YES];
-    [self.previewImage setAlpha:0];
-    [self.view addSubview:self.previewImage];
-    
-    self.previewImage.userInteractionEnabled = YES;
-    UITapGestureRecognizer *photoMinimize = [[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(photoTapGesture:)];
-    photoMinimize.numberOfTapsRequired = 1;
-    [self.previewImage addGestureRecognizer:photoMinimize];
 }
 
 - (void)setupViews
@@ -226,23 +200,7 @@ static const CGFloat kMaxImageSize = 1024;
     [self.mapView setFrame:CGRectMake(0,
                                       kNavBarHeight,
                                       CGRectGetWidth(self.view.frame),
-                                      CGRectGetHeight(self.view.frame) / 2.0 - kNavBarHeight)];
-    
-    CGRect buttonFrame = [self.chatImagingButton frame];
-    buttonFrame.origin.x = kHorizontalMargin;
-    buttonFrame.origin.y = CGRectGetHeight(self.view.frame) - kVerticalMargin - kInputHeight;
-    [self.chatImagingButton setFrame:buttonFrame];
-    [self.chatImagingButton sizeToFit];
-    
-    [self.chatInputTextField setFrame:CGRectMake(CGRectGetMaxX(self.chatImagingButton.frame) + kPadding,
-                                                CGRectGetMinY(self.chatImagingButton.frame),
-                                                CGRectGetWidth(self.view.frame) - CGRectGetMaxX(self.chatImagingButton.frame) - kPadding - 2 * kHorizontalMargin,
-                                                 kInputHeight)];
-    [self.tableView setFrame:CGRectMake(0,
-                                        CGRectGetHeight(self.mapView.frame) + kNavBarHeight,
-                                        CGRectGetWidth(self.view.frame),
-                                        CGRectGetHeight(self.view.frame) - CGRectGetHeight(self.mapView.frame) - kNavBarHeight - kInputHeight - kVerticalMargin)];
-    [self.previewImage setFrame:self.tableView.frame];
+                                      CGRectGetHeight(self.view.frame) - kNavBarHeight)];
 }
 
 - (void) setMapCoords
@@ -329,93 +287,16 @@ static const CGFloat kMaxImageSize = 1024;
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - TableView delegate
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *chatMessage = [self.chat objectAtIndex:indexPath.row];
-    if ([chatMessage objectForKey:@"image"]) {
-        return kCellMargin * 2 + kChatImageDimension + kPadding * 3 + kLineHeight * 2;
-    }
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame) - 2 * kHorizontalMargin, kHorizontalMargin)];
-    [label setFont:[UIFont lightHelveticaWithSize:12.0]];
-    [label setText:chatMessage[@"text"]];
-    [label setLineBreakMode:NSLineBreakByWordWrapping];
-    [label setNumberOfLines:0];
-    [label sizeToFitWithExpectedWidth:CGRectGetWidth(self.view.frame) - 2 * kCellMargin];
-    
-    return kCellMargin * 2 + kPadding * 3 + kLineHeight * 2 + CGRectGetHeight(label.frame);
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [self.chat count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"chatCell";
-    GTChatTableViewCell *cell = (GTChatTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
-    if (cell == nil) {
-        cell = [[GTChatTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-    }
-    
-    NSDictionary* chatMessage = [self.chat objectAtIndex:indexPath.row];
-    NSLog(@"Chat messages: %@", chatMessage);
-    if (chatMessage) {
-        NSLog(@"Yes it got here 1 %@", [chatMessage objectForKey:@"photo_url"]);
-        if ([chatMessage objectForKey:@"photo_url"]){
-            NSLog(@"Got here 2");
-            NSData *picData = [[NSData alloc] initWithBase64EncodedString:chatMessage[@"photo_url"] options:0];
-            UIImage *picture = [UIImage imageWithData:picData];
-            
-            [cell.usernameLabel setText: chatMessage[@"user_name"]];
-            [cell.message setText: @""];
-            
-            [cell.locationImageView setBackgroundImage:picture forState:UIControlStateNormal];
-            [cell.locationImageView addTarget:self action:@selector(expandPhoto:) forControlEvents:UIControlEventTouchUpInside];
-
-
-            [cell.timestampLabel setText:chatMessage[@"date_time"]];
-        } else {
-            NSLog(@"This one chat %@", chatMessage);
-            [cell.message setText: chatMessage[@"text"]];
-            [cell.usernameLabel setText: chatMessage[@"user_name"]];
-            [cell.locationImageView setBackgroundImage:nil forState:UIControlStateNormal];
-            [cell.timestampLabel setText:chatMessage[@"date_time"]];
-        }
-    }
-    
-    [cell repositionCellItems];
-    
-    return cell;
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"pushToPerson"]) {
         GTPersonViewController *controller = (GTPersonViewController *)segue.destinationViewController;
-        GTChatTableViewCell *cell = (GTChatTableViewCell *)[self.tableView cellForRowAtIndexPath:self.tableView.indexPathForSelectedRow];
-        CLLocationCoordinate2D coordinate;
-        coordinate.latitude = self.currentLatitude;
-        coordinate.longitude = self.currentLongitude;
-        controller.centerCoordinate = coordinate;
-        controller.userName = cell.usernameLabel.text;
-    }
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
-    [self performSegueWithIdentifier:@"pushToPerson" sender:cell];
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    if([self.chatInputTextField isFirstResponder]) {
-        [self.chatInputTextField resignFirstResponder];
+//        GTChatTableViewCell *cell = (GTChatTableViewCell *)[self.tableView cellForRowAtIndexPath:self.tableView.indexPathForSelectedRow];
+//        CLLocationCoordinate2D coordinate;
+//        coordinate.latitude = self.currentLatitude;
+//        coordinate.longitude = self.currentLongitude;
+//        controller.centerCoordinate = coordinate;
+//        controller.userName = cell.usernameLabel.text;
     }
 }
 
@@ -423,23 +304,7 @@ static const CGFloat kMaxImageSize = 1024;
 
 - (void)pushPhotoToBackend:(UIImage *)picture
 {
-    if(picture) {
-        picture = [picture resizedImageToFitInSize:CGSizeMake(kMaxImageSize, kMaxImageSize) scaleIfSmaller:NO];
-        NSData *imageData = UIImageJPEGRepresentation(picture, 0.5);
-        NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
-        NSDictionary *params = @{@"user_id": userID,
-                                 @"event_id": [NSNumber numberWithInteger:self.eventID],
-                                 @"latitude": [NSNumber numberWithDouble:self.currentLatitude],
-            @"longitude": [NSNumber numberWithDouble:self.currentLongitude]};
-        [self.httpManager POST:kPhotoLocation parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-            [formData appendPartWithFileData:imageData name:@"filename" fileName:@"photo_" mimeType:@"image/jpeg"];
-        } success:^(AFHTTPRequestOperation *operation, id responseObject) {
-           // NSLog(@"JSON: %@", responseObject);
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"Error: %@", error);
-        }];
-//        [[self.firebase childByAutoId] setValue:@{@"name" : self.name, @"timestamp": [GTUtilities formattedDateStringFromDate:[NSDate date]], @"text": @"", @"image":[imageData base64EncodedStringWithOptions:0]}];
-    }
+    
 }
 
 - (void)addPhotoToMap:(UIImage *)picture
@@ -487,18 +352,8 @@ static const CGFloat kMaxImageSize = 1024;
     }
     [aTextField resignFirstResponder];
     
-    NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
-    NSDictionary *params = @{@"user_id": userID,
-                                           @"text": aTextField.text,
-                                           @"event_id": [NSNumber numberWithInteger:self.eventID]};
-    [self.httpManager GET:kMessageLocation parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [self.tableView reloadData];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
-    // This will also add the message to our local array self.chat because
-    // the FEventTypeChildAdded event will be immediately fired.
-//    [[self.firebase childByAutoId] setValue:@{@"name" : self.name,  @"timestamp": [GTUtilities formattedDateStringFromDate:[NSDate date]], @"text": aTextField.text}];
+    
+
     
     [aTextField setText:@""];
     return NO;
@@ -667,34 +522,17 @@ static const CGFloat kMaxImageSize = 1024;
     [self.imagePicker dismissViewControllerAnimated:YES completion:nil];
 }
 
-// expand photo to bottom half of screen when clicked on
-- (void)expandPhoto:(id)sender
+
+#pragma mark - Buttons
+- (IBAction)logout:(id)sender
 {
-    NSLog(@"button was clicked");
-    UIButton *img = (UIButton *) sender;
-    [self.previewImage setImage:img.currentBackgroundImage];
-    [self.previewImage setAlpha:1.0];
-    [self.chatInputTextField resignFirstResponder];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"userName"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"userID"];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)chatInputActive:(id)sender
-{
-    NSLog(@"text input active");
-    if (self.previewImage.alpha == 1.0) {
-        [UIView animateWithDuration:0.3 animations:^{
-            [self.previewImage setAlpha: 0.0];
-        }];
-    }
-}
-
-- (void)photoTapGesture: (id)sender
-{
-    NSLog(@"photo tapped");
-    if (self.previewImage.alpha == 1.0) {
-        [UIView animateWithDuration:0.3 animations:^{
-            [self.previewImage setAlpha: 0.0];
-        }];
-    }
+- (IBAction)showOptions:(id)sender {
+    [self.settingsSheet showInView:self.view];
 }
 
 /*

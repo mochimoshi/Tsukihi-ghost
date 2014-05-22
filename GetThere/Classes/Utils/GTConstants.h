@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+typedef void (^GTCompletionBlock)(BOOL success);
+
 @interface GTConstants : NSObject
 
 extern CGFloat kCellMargin;
@@ -19,5 +21,6 @@ extern CGFloat kLineHeight;
 extern CGFloat kPadding;
 
 extern CGFloat kChatImageDimension;
+extern CGFloat kMaxImageSize;
 
 @end

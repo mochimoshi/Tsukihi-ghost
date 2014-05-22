@@ -19,5 +19,6 @@ CGFloat kPadding = 3;
 CGFloat kLineHeight = 18;
 
 CGFloat kChatImageDimension = 80;
+CGFloat kMaxImageSize = 1024;
 
 @end
