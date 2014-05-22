@@ -30,7 +30,6 @@
 @property (strong, nonatomic) RETextItem *eventNameItem;
 @property (strong, nonatomic) RETableViewItem *eventLocationItem;
 @property (strong, nonatomic) REDateTimeItem *eventStartTimeItem;
-@property (strong, nonatomic) RELongTextItem *eventNoteItem;
 @property (strong, nonatomic) REMultipleChoiceItem *eventInviteesItem;
 
 @property (assign, nonatomic) CLLocationCoordinate2D center;
@@ -95,15 +94,11 @@
         self.eventStartTimeItem.inlineDatePicker = YES;
     }
     
-    self.eventNoteItem = [RELongTextItem itemWithValue:nil placeholder:@"Put event notes here! e.g. Aim to finish milestone 4"];
-    self.eventNoteItem.cellHeight = 88;
-    
     
     [section addItem:self.eventNameItem];
     [section addItem:self.eventLocationItem];
     [section addItem:self.eventStartTimeItem];
 //    [section addItem:self.eventEndTimeItem];
-    [section addItem:self.eventNoteItem];
     
     return section;
 }
@@ -159,8 +154,7 @@
         NSDictionary *eventDictionary = @{@"event": @{@"user_id" : [[NSUserDefaults standardUserDefaults] valueForKey:@"userID"],
                                                       @"event_name": self.eventNameItem.value,
                                                       @"start_time": self.eventStartTimeItem.value,
-                                                      @"invitee_ids": @[@1, @2, @3],
-                                                      @"notes": self.eventNoteItem.value}};
+                                                      @"invitee_ids": @[@1, @2, @3]}};
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         [manager GET:kNewEventURL parameters:eventDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
             [self dismissViewControllerAnimated:YES completion:nil];
