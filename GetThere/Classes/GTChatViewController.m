@@ -349,6 +349,7 @@ static const CGFloat kNavBarHeight = 64;
     NSLog(@"about to add photo pin");
     GTMapAnnotation *photoPin = [[GTMapAnnotation alloc]init];
     [photoPin setCoordinate:self.currentCoordinate];
+    NSLog(@"COORDS: %f, %f", self.currentCoordinate.longitude, self.currentCoordinate.latitude);
     photoPin.displayType = @"photo";
     NSLog(@"Added photo pin");
     self.picture = picture; // change to param?
