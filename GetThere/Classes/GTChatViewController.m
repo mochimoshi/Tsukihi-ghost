@@ -63,7 +63,6 @@
 #define kUpdateLocation @"http://tsukihi.org/backtier/users/update_location"
 #define kEventMessages @"http://tsukihi.org/backtier/events/get_event_messages"
 
-static const CGFloat kInputHeight = 30;
 static const CGFloat kNavBarHeight = 64;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -111,8 +110,8 @@ static const CGFloat kNavBarHeight = 64;
     [self.settingsSheet setDelegate:self];
     [self.settingsSheet setTitle:NSLocalizedString(@"Actions", nil)];
     [self.settingsSheet addButtonWithTitle:NSLocalizedString(@"Post message", nil)];
-    [self.settingsSheet addButtonWithTitle:NSLocalizedString(@"Add friends to meetup", nil)];
-    [self.settingsSheet addButtonWithTitle:NSLocalizedString(@"Set meetup details", nil)];
+    [self.settingsSheet addButtonWithTitle:NSLocalizedString(@"Set details / invite friends", nil)];
+    [self.settingsSheet addButtonWithTitle:NSLocalizedString(@"View pending meetups", nil)];
     [self.settingsSheet addButtonWithTitle:NSLocalizedString(@"Cancel current meetup", nil)];
     [self.settingsSheet addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
     [self.settingsSheet setCancelButtonIndex:4];
@@ -484,11 +483,11 @@ static const CGFloat kNavBarHeight = 64;
             [self freezeFrameForPopup];
             break;
         case 1:
-            NSLog(@"Invite friends");
+            NSLog(@"Set meetup details / Invite friends");
+            [self performSegueWithIdentifier:@"pushToNewEvent" sender:self];
             break;
         case 2:
-            NSLog(@"Set meetup details");
-            [self performSegueWithIdentifier:@"pushToNewEvent" sender:self];
+            NSLog(@"View meetup invitations");
             break;
         case 3:
             NSLog(@"Cancel meetup");

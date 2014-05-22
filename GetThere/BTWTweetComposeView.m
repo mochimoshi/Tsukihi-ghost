@@ -528,7 +528,7 @@ static const CGFloat kSelectionY = 600;
     }
     else {
         [self.charactersLeft setTextColor:[UIColor darkTextColor]];
-        if(textLength >= 140) {
+        if(textLength >= kTweetLimit) {
             [self.postButton setEnabled:NO];
         }
         else {
@@ -604,7 +604,7 @@ static const CGFloat kSelectionY = 600;
 - (void)textViewDidChange:(UITextView *)textView
 {
     NSInteger textLength = [[textView text] length];
-    if(textLength > 0 && textLength <= 140)
+    if(textLength > 0 && textLength <= kTweetLimit)
         [self.postButton setEnabled:YES];
     else
         [self.postButton setEnabled:NO];
