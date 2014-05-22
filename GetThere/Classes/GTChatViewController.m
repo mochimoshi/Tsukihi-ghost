@@ -14,6 +14,7 @@
 
 #import "UILabel+GTLabel.h"
 #import "UIFont+BTWFont.h"
+#import "UIImage+BTWImage.h"
 #import "GTConstants.h"
 #import "GTUtilities.h"
 
@@ -31,9 +32,7 @@
 @property (strong, nonatomic) UIButton *chatImagingButton;
 @property (strong, nonatomic) UIImageView *previewImage;
 
-
 @property (strong, nonatomic) UIImagePickerController *imagePicker;
-
 
 @property (strong, nonatomic) NSMutableArray *chat;
 @property (strong, nonatomic) Firebase *firebase;
@@ -41,10 +40,13 @@
 @property (strong, nonatomic) NSMutableArray *mapPinData;
 
 /* location manager */
-@property (strong, nonatomic, retain) CLLocationManager *locationManager;
-@property (nonatomic, assign) CLLocationDegrees currentLatitude;
-@property (nonatomic, assign) CLLocationDegrees currentLongitude;
+@property (strong, nonatomic) CLLocationManager *locationManager;
+@property (assign, nonatomic) CLLocationDegrees currentLatitude;
+@property (assign, nonatomic) CLLocationDegrees currentLongitude;
 @property (strong, nonatomic) NSMutableArray *mapPins;
+
+/* status array */
+@property (strong, nonatomic) NSMutableArray *statuses;
 
 @property (strong, nonatomic) UIImage *picture;
 @property (strong, nonatomic) NSMutableArray *photoPins;
@@ -61,10 +63,13 @@
 
 #define kAttendeeLocations @"http://tsukihi.org/backtier/events/get_event_attendee_locations"
 #define kUpdateLocation @"http://tsukihi.org/backtier/users/update_location"
-#define kMessageLocation @"https://tsukihi.org/backtier/messages/create"
+#define kMessageLocation @"http://tsukihi.org/backtier/messages/create"
+#define kPhotoLocation @"http://tsukihi.org/backtier/messages/create"
+#define kEventMessages @"http://tsukihi.org/backtier/events/get_event_messages"
 
 static const CGFloat kInputHeight = 30;
 static const CGFloat kNavBarHeight = 64;
+static const CGFloat kMaxImageSize = 1024;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -83,37 +88,28 @@ static const CGFloat kNavBarHeight = 64;
     }
     
     self.chat = [[NSMutableArray alloc] init];
-    // take this out later 
-    /*NSDictionary *params = @{@"user": @{@"user_name": @"jessica", @"password": @"password"}};
-    [self.httpManager GET:@"http://tsukihi.org/backtier/users/login" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
-        [[NSUserDefaults standardUserDefaults] setValue:[[responseObject objectForKey:@"user"] objectForKey: @"user_name"] forKey:@"userName"];
-        [[NSUserDefaults standardUserDefaults] setValue:[[responseObject objectForKey:@"user"] objectForKey:@"id"] forKey:@"userID"];
-        //[self setUserInfo];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error!"
-                                                        message:@"Please enter a name."
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Okay!"
-                                              otherButtonTitles:nil];
-        [alert show];
-    }];*/
-    
-    
-    // Initialize the root of our Firebase namespace.
-//    self.firebase = [[Firebase alloc] initWithUrl:kFirechatNS];
-//    
-//    [self.firebase observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
-//        // Add the chat message to the array.
-//        [self.chat addObject:snapshot.value];
-//        // Reload the table view so the new message will show up.
-//        [self.tableView reloadData];
-//        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0]
-//                              atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-//    }];
+    self.statuses = [[NSMutableArray alloc] init];
     
     // setting up text field response
+    
+    //NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:self.eventID]}};
+    NSDictionary *params = @{@"event": @{@"id": @1}};
+    NSLog(@"id num: %@", params);
+    [self.httpManager GET:kEventMessages parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+
+        for (id key in responseObject) {
+            [self.chat addObject:responseObject[key]];
+            NSLog(@"AWAKEN: %@", responseObject[key]);
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            
+        });
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
     [self.chatInputTextField addTarget:self action:@selector(chatInputActive:) forControlEvents:UIControlEventEditingDidBegin];
     
     self.name = [[NSUserDefaults standardUserDefaults] objectForKey:@"userName"];
@@ -128,9 +124,32 @@ static const CGFloat kNavBarHeight = 64;
 
     [self createViews];
     [self setupViews];
- 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadTableViewData) name:@"ReloadAppDelegateTable" object:nil];
+    
     //[self setDummyMapPins];
 }
+
+- (void)reloadTableViewData{
+    NSLog(@"GOT TO CHAT VIEW!");
+    
+   // NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:self.eventID]}};
+    NSDictionary *params = @{@"event": @{@"id": @1}};
+    [self.httpManager GET:kEventMessages parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        for (id key in responseObject) {
+            [self.chat addObject:responseObject[key]];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+
+        });
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -253,9 +272,9 @@ static const CGFloat kNavBarHeight = 64;
         
     }
 
-    NSDictionary *params = @{@"event": @{@"id": @"1"}};
+    NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:self.eventID]}};
     [self.httpManager GET:kAttendeeLocations parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
+        //NSLog(@"JSON: %@", responseObject);
         self.mapPinData = [(NSDictionary *)responseObject objectForKey:@"list"];
         [self setMapPins];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -268,7 +287,7 @@ static const CGFloat kNavBarHeight = 64;
 #pragma mark - Set map pins from mapPinData
 -(void) setMapPins
 {
-    NSLog(@"setting map pins");
+    //NSLog(@"setting map pins");
     for (NSDictionary *dict in self.mapPinData) {
         [self addOnePin:dict];
     }
@@ -343,24 +362,28 @@ static const CGFloat kNavBarHeight = 64;
     }
     
     NSDictionary* chatMessage = [self.chat objectAtIndex:indexPath.row];
+    NSLog(@"Chat messages: %@", chatMessage);
     if (chatMessage) {
-        if ([chatMessage objectForKey:@"image"]){
-            NSData *picData = [[NSData alloc] initWithBase64EncodedString:chatMessage[@"image"] options:0];
+        NSLog(@"Yes it got here 1 %@", [chatMessage objectForKey:@"photo_url"]);
+        if ([chatMessage objectForKey:@"photo_url"]){
+            NSLog(@"Got here 2");
+            NSData *picData = [[NSData alloc] initWithBase64EncodedString:chatMessage[@"photo_url"] options:0];
             UIImage *picture = [UIImage imageWithData:picData];
             
-            [cell.usernameLabel setText: chatMessage[@"name"]];
+            [cell.usernameLabel setText: chatMessage[@"user_name"]];
             [cell.message setText: @""];
             
             [cell.locationImageView setBackgroundImage:picture forState:UIControlStateNormal];
             [cell.locationImageView addTarget:self action:@selector(expandPhoto:) forControlEvents:UIControlEventTouchUpInside];
 
 
-            [cell.timestampLabel setText:chatMessage[@"timestamp"]];
+            [cell.timestampLabel setText:chatMessage[@"date_time"]];
         } else {
+            NSLog(@"This one chat %@", chatMessage);
             [cell.message setText: chatMessage[@"text"]];
-            [cell.usernameLabel setText: chatMessage[@"name"]];
+            [cell.usernameLabel setText: chatMessage[@"user_name"]];
             [cell.locationImageView setBackgroundImage:nil forState:UIControlStateNormal];
-            [cell.timestampLabel setText:chatMessage[@"timestamp"]];
+            [cell.timestampLabel setText:chatMessage[@"date_time"]];
         }
     }
     
@@ -401,11 +424,17 @@ static const CGFloat kNavBarHeight = 64;
 - (void)pushPhotoToBackend:(UIImage *)picture
 {
     if(picture) {
-        NSData *imageData = UIImageJPEGRepresentation(picture, 0.8);
+        picture = [picture resizedImageToFitInSize:CGSizeMake(kMaxImageSize, kMaxImageSize) scaleIfSmaller:NO];
+        NSData *imageData = UIImageJPEGRepresentation(picture, 0.5);
         NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
-        NSDictionary *params = @{@"message": @{@"user_id": userID}};
-        [self.httpManager GET:kMessageLocation parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            NSLog(@"JSON: %@", responseObject);
+        NSDictionary *params = @{@"user_id": userID,
+                                 @"event_id": [NSNumber numberWithInteger:self.eventID],
+                                 @"latitude": [NSNumber numberWithDouble:self.currentLatitude],
+            @"longitude": [NSNumber numberWithDouble:self.currentLongitude]};
+        [self.httpManager POST:kPhotoLocation parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+            [formData appendPartWithFileData:imageData name:@"filename" fileName:@"photo_" mimeType:@"image/jpeg"];
+        } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+           // NSLog(@"JSON: %@", responseObject);
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"Error: %@", error);
         }];
@@ -424,7 +453,7 @@ static const CGFloat kNavBarHeight = 64;
     }
     
     // Get all photopins from database?
-    self.photoPins = [[NSMutableArray alloc] initWithArray:@[@{@"user_name":@"Alex Wang", @"subtitle":@"On the move: 0.1 mi away" , @"lon":[NSNumber numberWithDouble:self.currentLongitude], @"lat":[NSNumber numberWithDouble:self.currentLatitude]}]];
+    self.photoPins = [[NSMutableArray alloc] init];
     for (NSDictionary *dict in self.photoPins) {
         [self addOnePhotoPin:dict :picture];
     }
@@ -459,7 +488,9 @@ static const CGFloat kNavBarHeight = 64;
     [aTextField resignFirstResponder];
     
     NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
-    NSDictionary *params = @{@"message": @{@"user_id": userID, @"text": aTextField.text}};
+    NSDictionary *params = @{@"user_id": userID,
+                                           @"text": aTextField.text,
+                                           @"event_id": [NSNumber numberWithInteger:self.eventID]};
     [self.httpManager GET:kMessageLocation parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [self.tableView reloadData];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -542,7 +573,7 @@ static const CGFloat kNavBarHeight = 64;
               location.coordinate.longitude);
         self.currentLatitude = location.coordinate.latitude;
         self.currentLongitude = location.coordinate.longitude;
-
+        
         [self saveLocationUpdateWithLatitude:self.currentLatitude longitude:self.currentLongitude];
         //[self setMapCoords];
         //[self setDummyMapPins];
@@ -599,7 +630,6 @@ static const CGFloat kNavBarHeight = 64;
     // scale picture size
     CGRect rect = CGRectMake(0,0,50,50);
     CGFloat scale = [[UIScreen mainScreen]scale];
-    NSLog(@"5");
     UIGraphicsBeginImageContextWithOptions(rect.size, NO, scale);
     [[UIBezierPath bezierPathWithRoundedRect:rect
                                 cornerRadius:25.0] addClip];
@@ -607,11 +637,9 @@ static const CGFloat kNavBarHeight = 64;
     [self.picture drawInRect:CGRectMake(0,0,rect.size.width,rect.size.height)];
     UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    NSLog(@"6");
     annotationView.image = newImage;
 
     annotationView.annotation = annotation;
-    NSLog(@"done");
     //[self.mapView addAnnotation:annotation];
     return annotationView;
 }
