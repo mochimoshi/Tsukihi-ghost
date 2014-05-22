@@ -54,7 +54,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    self.selectedLocationName = nil;
     self.locationViewController = [[GTEventLocationViewController alloc] init];
     
     self.manager = [[RETableViewManager alloc] initWithTableView:self.tableView delegate:self];
@@ -78,6 +78,8 @@
         self.locationViewController.delegate = self;
         self.locationViewController.completionBlock = ^{
             weakself.center = weakself.locationViewController.center;
+            item.detailLabelText = weakself.selectedLocationName;
+            [item reloadRowWithAnimation:UITableViewRowAnimationNone];
         };
         
         [self.navigationController pushViewController:self.locationViewController animated:YES];
