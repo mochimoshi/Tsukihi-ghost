@@ -72,12 +72,12 @@
     }
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     
-//    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"])
-//    {
-//        // app already launched
-//    }
-//    else
-//    {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"])
+    {
+        // app already launched
+    }
+    else
+    {
     
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
         [[NSUserDefaults standardUserDefaults] synchronize];
@@ -85,7 +85,7 @@
         GTOnboardingViewController *onboard = [[GTOnboardingViewController alloc] init];
         [self presentViewController:onboard animated:YES completion:nil];
         // This is the first launch ever
-//    }
+    }
 }
 
 - (IBAction)didTapLogin:(id)sender
