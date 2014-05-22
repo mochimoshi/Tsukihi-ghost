@@ -18,4 +18,12 @@
     [self sizeToFit];
 }
 
+- (void)sizeToFitReexpandToWidth:(CGFloat)width
+{
+    [self sizeToFit];
+    CGRect labelFrame = [self frame];
+    labelFrame.size.width = width;
+    [self setFrame:labelFrame];
+}
+
 @end

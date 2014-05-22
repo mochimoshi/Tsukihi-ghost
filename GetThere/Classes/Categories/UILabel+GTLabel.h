@@ -11,5 +11,6 @@
 @interface UILabel (GTLabel)
 
 - (void)sizeToFitWithExpectedWidth:(CGFloat)width;
+- (void)sizeToFitReexpandToWidth:(CGFloat)width;
 
 @end

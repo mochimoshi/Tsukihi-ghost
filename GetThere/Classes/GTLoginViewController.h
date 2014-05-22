@@ -12,7 +12,4 @@
 
 @interface GTLoginViewController : UIViewController
 
-/*@property (strong, nonatomic) NSDictionary* userInfo;
-@property (strong, nonatomic) NSMutableString *userId;*/
-
 @end
