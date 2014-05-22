@@ -265,7 +265,19 @@ static const CGFloat kNavBarHeight = 64;
     //NSLog(@"setting map pins");
     for (NSDictionary *dict in self.mapPinData) {
         [self addOnePin:dict];
+        NSString *name = [dict objectForKey:@"user_name"];
+        NSString *photo_url = [[self.chat objectForKey:name] objectForKey:@"photo_url"];
+        NSLog(@"PHOTO URL IS: %@", photo_url);
+        if (photo_url) {
+            NSLog(@"AND SO WE ARRIVE HERE!");
+            NSString *url = [NSString stringWithFormat:@"%@,%@", @"http://tsukihi.org/backtier/", photo_url];
+            NSURL *imageURL = [NSURL URLWithString:url];
+            NSData *imageData = [NSData dataWithContentsOfURL:imageURL];
+            UIImage *image = [UIImage imageWithData:imageData];
+            [self addPhotoToMap:image];
+        }
     }
+    
 }
 
 #pragma mark - Adds a single map pin
@@ -318,20 +330,20 @@ static const CGFloat kNavBarHeight = 64;
     if (self.photoPins == nil) {
         self.photoPins = [[NSMutableArray alloc]init];
     } else {
-        //[self.mapView removeAnnotations:self.photoPins];
-        [self.photoPins removeAllObjects];
+        //[self.photoPins removeAllObjects];
     }
     
     // TODO: get photo locations from database
     // Get all photopins from database?
-    self.photoPins = [[NSMutableArray alloc] init];
-    for (NSDictionary *dict in self.photoPins) {
-        [self addOnePhotoPin:dict :picture];
-    }
+    //self.photoPins = [[NSMutableArray alloc] init];
+    //[self.photoPins addObject:picture];
+    //for (UIImage * in self.photoPins) {
+        [self addOnePhotoPin:picture];
+    //}
 }
     
 
--(void) addOnePhotoPin:(NSDictionary *)pinData :(UIImage *)picture
+-(void) addOnePhotoPin :(UIImage *)picture
 {
     // create new custom photo pin
     NSLog(@"about to add photo pin");
@@ -443,7 +455,7 @@ static const CGFloat kNavBarHeight = 64;
     annotationView.image = newImage;
 
     annotationView.annotation = annotation;
-    //[self.mapView addAnnotation:annotation];
+    [self.mapView addAnnotation:annotation];
     return annotationView;
 }
 
