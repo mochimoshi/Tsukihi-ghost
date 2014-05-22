@@ -403,6 +403,7 @@ static const CGFloat kNavBarHeight = 64;
 
 - (void)saveLocationUpdateWithCoordinate:(CLLocationCoordinate2D)coordinate
 {
+    NSLog(@"lattttietttuddee %f\n", coordinate.latitude);
     NSNumber *userID = [[NSUserDefaults standardUserDefaults] objectForKey:@"userID"];
     NSDictionary *params = @{@"user": @{@"id": userID,
                                         @"user_last_lat": [NSNumber numberWithDouble:coordinate.latitude],
