@@ -487,6 +487,8 @@ static const CGFloat kSelectionY = 600;
 - (void)post
 {
     [self.postButton setEnabled:NO];
+    GTChatViewController *chatViewController = (GTChatViewController *)self.delegate;
+    
     GTSuccessBlock finishBlock = ^(id responseObject) {
         [self.tweetArea setText:@""];
         self.didPost = YES;
@@ -500,7 +502,6 @@ static const CGFloat kSelectionY = 600;
     };
     
     GTChatService *service = [GTChatService sharedChatService];
-    GTChatViewController *chatViewController = (GTChatViewController *)self.delegate;
     
     if(self.attachedImage == nil) {
         [service pushStatus:self.tweetArea.text
@@ -515,6 +516,7 @@ static const CGFloat kSelectionY = 600;
                    location:[chatViewController getCurrentLocation]
                     success:finishBlock
                     failure:failBlock];
+        [chatViewController addPhotoToMap:self.attachedImage];
     }
 }
 

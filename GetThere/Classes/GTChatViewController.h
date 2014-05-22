@@ -14,5 +14,6 @@
 @property (assign, nonatomic) NSInteger eventID;
 
 - (CLLocationCoordinate2D) getCurrentLocation;
+- (void)addPhotoToMap:(UIImage *)picture;
 
 @end

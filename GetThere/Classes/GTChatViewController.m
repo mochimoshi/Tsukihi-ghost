@@ -284,23 +284,10 @@ static const CGFloat kNavBarHeight = 64;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"pushToPerson"]) {
-        GTPersonViewController *controller = (GTPersonViewController *)segue.destinationViewController;
-//        GTChatTableViewCell *cell = (GTChatTableViewCell *)[self.tableView cellForRowAtIndexPath:self.tableView.indexPathForSelectedRow];
-//        CLLocationCoordinate2D coordinate;
-//        coordinate.latitude = self.currentLatitude;
-//        coordinate.longitude = self.currentLongitude;
-//        controller.centerCoordinate = coordinate;
-//        controller.userName = cell.usernameLabel.text;
-    }
+
 }
 
-#pragma mark - photo upload
-
-- (void)pushPhotoToBackend:(UIImage *)picture
-{
-    
-}
+#pragma mark - photo processing
 
 - (void)addPhotoToMap:(UIImage *)picture
 {
@@ -312,6 +299,7 @@ static const CGFloat kNavBarHeight = 64;
         [self.photoPins removeAllObjects];
     }
     
+    // TODO: get photo locations from database
     // Get all photopins from database?
     self.photoPins = [[NSMutableArray alloc] init];
     for (NSDictionary *dict in self.photoPins) {
