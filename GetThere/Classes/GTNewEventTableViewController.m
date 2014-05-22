@@ -30,7 +30,6 @@
 @property (strong, nonatomic) RETextItem *eventNameItem;
 @property (strong, nonatomic) RETableViewItem *eventLocationItem;
 @property (strong, nonatomic) REDateTimeItem *eventStartTimeItem;
-@property (strong, nonatomic) RELongTextItem *eventNoteItem;
 @property (strong, nonatomic) REMultipleChoiceItem *eventInviteesItem;
 
 @property (assign, nonatomic) CLLocationCoordinate2D center;
@@ -95,15 +94,10 @@
         self.eventStartTimeItem.inlineDatePicker = YES;
     }
     
-    self.eventNoteItem = [RELongTextItem itemWithValue:nil placeholder:@"Put event notes here! e.g. Aim to finish milestone 4"];
-    self.eventNoteItem.cellHeight = 88;
-    
     
     [section addItem:self.eventNameItem];
     [section addItem:self.eventLocationItem];
     [section addItem:self.eventStartTimeItem];
-//    [section addItem:self.eventEndTimeItem];
-    [section addItem:self.eventNoteItem];
     
     return section;
 }
@@ -157,13 +151,12 @@
         [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
         
         NSDictionary *eventDictionary = @{@"event": @{@"user_id" : [[NSUserDefaults standardUserDefaults] valueForKey:@"userID"],
-                                                      @"event_name": self.eventNameItem.value,
+                                                      @"event_name": (self.eventNameItem.value) ? self.eventNameItem.value : [NSString stringWithFormat:@"%@ %@", NSLocalizedString(@"Meetup @ ", nil), [GTUtilities formattedDateStringFromDate:self.eventStartTimeItem.value]],
                                                       @"start_time": self.eventStartTimeItem.value,
-                                                      @"invitee_ids": @[@1, @2, @3],
-                                                      @"notes": self.eventNoteItem.value}};
+                                                      @"invitee_ids": @[@1, @2, @3]}};
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         [manager GET:kNewEventURL parameters:eventDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
-            [self dismissViewControllerAnimated:YES completion:nil];
+            [self.navigationController popViewControllerAnimated:YES];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops! Network connectivity issue."
                                                             message:@"The event cannot be submitted at the moment. Please try again shortly!"
@@ -172,7 +165,7 @@
                                                   otherButtonTitles: nil];
             [alert show];
             NSLog(@"Error: %@", error.localizedDescription);
-            item.title = @"Create meetup!";
+            item.title = NSLocalizedString(@"Update meetup!", nil);
             [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
         }];
     }];
