@@ -518,6 +518,7 @@ static const CGFloat kNavBarHeight = 64;
     UIGraphicsEndImageContext();
     
     [self.composeView setBlurredBackground:blurredSnapshotImage];
+    [self.composeView setEventID:self.eventID];
     
     __weak GTChatViewController *weakSelf = self;
     [self.composeView setEarlyCompletionBlock:^(BOOL success){
