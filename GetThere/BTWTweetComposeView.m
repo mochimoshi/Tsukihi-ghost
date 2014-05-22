@@ -486,11 +486,14 @@ static const CGFloat kSelectionY = 600;
 
 - (void)post
 {
+    NSLog(@"IS IT GETTING HERE at all?");
+
     [self.postButton setEnabled:NO];
     GTChatViewController *chatViewController = (GTChatViewController *)self.delegate;
     
     GTSuccessBlock finishBlock = ^(id responseObject) {
         [self.tweetArea setText:@""];
+        NSLog(@"IS IT GETTING HERE TO ANIMATE OUT?");
         self.didPost = YES;
         [self.preview setImage:nil forState:UIControlStateNormal];
         self.attachedImage = nil;
@@ -504,18 +507,35 @@ static const CGFloat kSelectionY = 600;
     GTChatService *service = [GTChatService sharedChatService];
     
     if(self.attachedImage == nil) {
+        NSLog(@"Wwe are not gonna finish");
         [service pushStatus:self.tweetArea.text
                       event:self.eventID
                     success:finishBlock
                     failure:failBlock];
+        
+        [self.tweetArea setText:@""];
+        NSLog(@"IS IT GETTING HERE TO ANIMATE OUT?");
+        self.didPost = YES;
+        [self.preview setImage:nil forState:UIControlStateNormal];
+        self.attachedImage = nil;
+        [self animateOut];
     }
     else {
+        NSLog(@"AGGHGHGHGHGGHGH");
         [service pushStatus:self.tweetArea.text
                       image:self.attachedImage
                       event:self.eventID
                    location:[chatViewController getCurrentLocation]
                     success:finishBlock
                     failure:failBlock];
+        
+        [self.tweetArea setText:@""];
+        NSLog(@"IS IT GETTING HERE TO ANIMATE OUT?");
+        self.didPost = YES;
+        [self.preview setImage:nil forState:UIControlStateNormal];
+        self.attachedImage = nil;
+        [self animateOut];
+        
         [chatViewController addPhotoToMap:self.attachedImage];
     }
 }
