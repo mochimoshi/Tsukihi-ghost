@@ -8,18 +8,20 @@
 
 #import "GTChatViewController.h"
 #import "GTPersonViewController.h"
-#import "GTLoginViewController.h"
+#import "BTWTweetComposeView.h"
 #import "GTMapAnnotation.h"
 
 #import "UILabel+GTLabel.h"
 #import "UIFont+BTWFont.h"
 #import "UIImage+BTWImage.h"
+#import "UIImage+ImageEffects.h"
 #import "GTConstants.h"
 #import "GTUtilities.h"
 
+#import <AFNetworking/AFNetworking.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface GTChatViewController ()<MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,CLLocationManagerDelegate, UIActionSheetDelegate>
+@interface GTChatViewController ()<MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,CLLocationManagerDelegate, UIActionSheetDelegate, BTWTweetComposeViewDelegate>
 
 /* user info */
 
@@ -29,6 +31,8 @@
 @property (strong, nonatomic) UIActionSheet *settingsSheet;
 
 @property (strong, nonatomic) UIImagePickerController *imagePicker;
+@property (strong, nonatomic) BTWTweetComposeView *composeView;
+@property (assign, nonatomic) BOOL hasPopupOpen;
 
 @property (strong, nonatomic) NSMutableArray *chat;
 @property (strong, nonatomic) NSString *name;
@@ -80,6 +84,7 @@ static const CGFloat kNavBarHeight = 64;
     
     self.chat = [[NSMutableArray alloc] init];
     self.statuses = [[NSMutableArray alloc] init];
+    self.hasPopupOpen = NO;
     
     // setting up text field response
     
@@ -183,6 +188,11 @@ static const CGFloat kNavBarHeight = 64;
     [self.mapView setDelegate:self];
     [self.mapView setShowsUserLocation:YES];
     [self.view addSubview: self.mapView];
+    
+    self.composeView = [[BTWTweetComposeView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [self.composeView setHidden:YES];
+    [self.composeView setScrollToTop:NO];
+    [self.view addSubview:self.composeView];
 }
 
 - (void)setupViews
@@ -462,6 +472,82 @@ static const CGFloat kNavBarHeight = 64;
 
 - (IBAction)showOptions:(id)sender {
     [self.settingsSheet showInView:self.view];
+}
+
+#pragma mark - Actionsheet delegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 0:
+            NSLog(@"Post message");
+            [self freezeFrameForPopup];
+            break;
+        case 1:
+            NSLog(@"Invite friends");
+            break;
+        case 2:
+            NSLog(@"Set meetup details");
+            [self performSegueWithIdentifier:@"pushToNewEvent" sender:self];
+            break;
+        case 3:
+            NSLog(@"Cancel meetup");
+            break;
+        default:
+            break;
+    }
+}
+
+#pragma mark - Freeze/unfreeze popups
+
+- (void)freezeFrameForPopup
+{
+    self.hasPopupOpen = YES;
+    
+    [self.mapView setScrollEnabled:NO];
+    [self.mapView setUserInteractionEnabled:NO];
+    
+    [self.navigationController.navigationItem.rightBarButtonItem setEnabled:NO];
+    [self.navigationController.navigationItem.leftBarButtonItem setEnabled:NO];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame)), NO, 0);
+    
+    [self.view drawViewHierarchyInRect:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame)) afterScreenUpdates:NO];
+    UIImage *snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage *blurredSnapshotImage = [snapshotImage applyLightEffect];
+    UIGraphicsEndImageContext();
+    
+    [self.composeView setBlurredBackground:blurredSnapshotImage];
+    
+    __weak GTChatViewController *weakSelf = self;
+    [self.composeView setEarlyCompletionBlock:^(BOOL success){
+        [UIView animateWithDuration:0.3 animations:^{
+            [weakSelf.tabBarController.tabBar setAlpha:1.0];
+        }];
+    }];
+    GTCompletionBlock dismissBlock = ^(BOOL success){
+        [weakSelf unfreezeFrameForSuccess:success];
+    };
+    
+    self.composeView.completionBlock = dismissBlock;
+    self.composeView.delegate = self;
+    
+    [self.composeView setHidden:NO];
+    [self.composeView animateIn];
+}
+
+- (void)unfreezeFrameForSuccess:(BOOL)success
+{
+    self.hasPopupOpen = NO;
+
+    [self.composeView setHidden:YES];
+    
+    [self.mapView setScrollEnabled:YES];
+    [self.navigationController.navigationItem.rightBarButtonItem setEnabled:YES];
+    [self.navigationController.navigationItem.leftBarButtonItem setEnabled:YES];
+    [self.mapView setUserInteractionEnabled:YES];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 /*

@@ -116,7 +116,7 @@ static const CGFloat kSelectionY = 600;
                                                                           kPadding,
                                                                           kComposeHeight,
                                                                           CGRectGetHeight(self.cancelButton.frame))];
-        [composeTitle setText:NSLocalizedString(@"Compose tweet", nil)];
+        [composeTitle setText:NSLocalizedString(@"Compose message", nil)];
         [composeTitle setFont:[UIFont mediumHelveticaWithSize:16]];
         [composeTitle sizeToFit];
         [composeTitle setFrame:CGRectMake((CGRectGetWidth(self.composeBackground.frame) - CGRectGetWidth(composeTitle.frame)) / 2.0,
