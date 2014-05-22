@@ -90,60 +90,43 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
-                        <segue destination="Mg7-vm-JaO" kind="push" identifier="pushToPerson" id="YMC-QD-l8C"/>
                         <segue destination="vXZ-lx-hvc" kind="push" identifier="pushToInvites" id="7Ty-TW-L68"/>
                         <segue destination="PX3-5c-Nvh" kind="push" identifier="pushToNewEvent" id="5Ze-Rd-kD7"/>
+                        <segue destination="tEc-il-M4Y" kind="push" identifier="pushToSummary" id="TjW-Xx-ofQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eum-bG-Dc4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1639" y="-2"/>
         </scene>
-        <!--Person View Controller - Friend Details-->
-        <scene sceneID="mTY-hn-BNT">
+        <!--User Summary Table View Controller-->
+        <scene sceneID="yCU-0o-Ch8">
             <objects>
-                <viewController id="Mg7-vm-JaO" customClass="GTPersonViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="IPB-vx-04Q"/>
-                        <viewControllerLayoutGuide type="bottom" id="p4G-Zc-9jB"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Yz3-3c-frX">
+                <tableViewController id="tEc-il-M4Y" customClass="GTUserSummaryTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="fgd-2i-raa">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UnM-FY-KId">
-                                <rect key="frame" x="0.0" y="157" width="320" height="323"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <connections>
-                                    <outlet property="delegate" destination="Mg7-vm-JaO" id="hW5-2q-fVN"/>
-                                </connections>
-                            </mapView>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CU3-UN-J5f">
-                                <rect key="frame" x="110" y="78" width="100" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="PersonInfo" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QxH-y9-yEA">
-                                <rect key="frame" x="119" y="107" width="83" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Friend Details" id="9sK-Cg-LA2"/>
-                    <connections>
-                        <outlet property="mapView" destination="UnM-FY-KId" id="hc5-Ow-OEa"/>
-                        <outlet property="personInfo" destination="QxH-y9-yEA" id="4Fa-wq-tXb"/>
-                        <outlet property="personName" destination="CU3-UN-J5f" id="szd-If-yvn"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="fIY-Hz-PJj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="3Pn-bC-Naf">
+                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3Pn-bC-Naf" id="dA0-5p-grK">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="tEc-il-M4Y" id="2os-TZ-fnc"/>
+                            <outlet property="delegate" destination="tEc-il-M4Y" id="WoN-39-GKZ"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="JLh-3d-dwn"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="V4p-dZ-HVV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2691" y="-2"/>
+            <point key="canvasLocation" x="2139" y="-2"/>
         </scene>
         <!--New Event Table View Controller - New Event-->
         <scene sceneID="Bas-Uw-ZiP">
