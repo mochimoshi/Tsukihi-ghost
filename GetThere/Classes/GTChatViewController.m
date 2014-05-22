@@ -43,6 +43,8 @@
 @property (strong, nonatomic) UIView *attendeesView;
 @property (strong, nonatomic) UIButton *attendeesButton;
 
+@property (strong, nonatomic) CLLocation *destinationLocation;
+
 /* location manager */
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (assign, nonatomic) CLLocationCoordinate2D currentCoordinate;
@@ -196,9 +198,9 @@ static const CGFloat kNavBarHeight = 64;
                               CLLocationCoordinate2D coord;
                               coord.latitude = [[responseObject objectForKey:@"latitude"] floatValue];
                               coord.longitude = [[responseObject objectForKey:@"longitude"] floatValue];
-                              CLLocation *location = [[CLLocation alloc] initWithLatitude:coord.latitude longitude:coord.longitude];
+                              self.destinationLocation = [[CLLocation alloc] initWithLatitude:coord.latitude longitude:coord.longitude];
                               CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-                              [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+                              [geocoder reverseGeocodeLocation:self.destinationLocation completionHandler:^(NSArray *placemarks, NSError *error) {
                                   CLPlacemark *placemark = [placemarks objectAtIndex:0];
                                   [self.attendeesLabel setText:[NSString stringWithFormat:@"%@\nMeeting at: %@\n%d attendees", [responseObject objectForKey:@"event_name"], placemark.name, [[responseObject objectForKey:@"users"] count]]];
                                   
@@ -207,7 +209,7 @@ static const CGFloat kNavBarHeight = 64;
                                   CLLocation *selfLocation = [[CLLocation alloc] initWithLatitude:self.currentCoordinate.latitude longitude:self.currentCoordinate.longitude];
                                   [geocoder reverseGeocodeLocation:selfLocation completionHandler:^(NSArray *placemarks, NSError *error) {
                                       CLPlacemark *placemark = [placemarks objectAtIndex:0];
-                                      [self.currentLocationLabel setText:[NSString stringWithFormat:@"%@ ~ %.02f km from destination", placemark.name, 1.0]];
+                                      [self.currentLocationLabel setText:[NSString stringWithFormat:@"%@ ~ %.02f km from destination", placemark.name, [self.destinationLocation distanceFromLocation:selfLocation] / 1000.0]];
                                   }];
                               }
                           }
@@ -436,10 +438,10 @@ static const CGFloat kNavBarHeight = 64;
         CLGeocoder *geocode = [[CLGeocoder alloc] init];
         [geocode reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
             CLPlacemark *placemark = [placemarks objectAtIndex:0];
-            if(self.eventID == 0)
+            if(self.eventID == 0 || !self.destinationLocation)
                 [self.currentLocationLabel setText:[NSString stringWithFormat:@"Currently at: %@", placemark.name]];
             else
-                [self.currentLocationLabel setText:[NSString stringWithFormat:@"%@ ~ %.02f km from destination", placemark.name, 1.0]];
+                [self.currentLocationLabel setText:[NSString stringWithFormat:@"%@ ~ %.02f km from destination", placemark.name, [self.destinationLocation distanceFromLocation:location] / 1000.0]];
         }];
         
         //[self setMapCoords];
