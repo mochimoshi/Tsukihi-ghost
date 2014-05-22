@@ -8,7 +8,6 @@
 
 #import "GTNewEventTableViewController.h"
 
-#import <MapKit/MapKit.h>
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
 
@@ -19,6 +18,7 @@
 
 #import "GTUtilities.h"
 #import "GTEventLocationViewController.h"
+#import "GTChatViewController.h"
 
 @interface GTNewEventTableViewController ()<RETableViewManagerDelegate, GTEventLocatorDelegate>
 
@@ -54,7 +54,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    self.selectedLocationName = nil;
     self.locationViewController = [[GTEventLocationViewController alloc] init];
     
     self.manager = [[RETableViewManager alloc] initWithTableView:self.tableView delegate:self];
@@ -68,7 +68,7 @@
     RETableViewSection *section = [RETableViewSection sectionWithHeaderTitle:@"Event information"];
     [self.manager addSection:section];
     
-    self.eventNameItem = [RETextItem itemWithTitle:@"Name" value:nil placeholder:@"CS247 Project Meeting"];
+    self.eventNameItem = [RETextItem itemWithTitle:@"Name" value:nil placeholder:[NSString stringWithFormat:@"Meetup @ %@", [GTUtilities formattedDateStringFromDate:[NSDate date]]]];
     
     GTNewEventTableViewController *weakself = self;
     
@@ -78,6 +78,8 @@
         self.locationViewController.delegate = self;
         self.locationViewController.completionBlock = ^{
             weakself.center = weakself.locationViewController.center;
+            item.detailLabelText = weakself.selectedLocationName;
+            [item reloadRowWithAnimation:UITableViewRowAnimationNone];
         };
         
         [self.navigationController pushViewController:self.locationViewController animated:YES];
@@ -148,19 +150,23 @@
     
     RETableViewItem *buttonItem = [RETableViewItem itemWithTitle:@"Create meetup!" accessoryType:UITableViewCellAccessoryNone selectionHandler:^(RETableViewItem *item) {
         item.title = @"Submitting...";
-        NSLog(@"WHAT THE FUCK????");
         [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
         
         NSDictionary *eventDictionary = @{@"event": @{@"user_id" : [[NSUserDefaults standardUserDefaults] valueForKey:@"userID"],
                                                       @"event_name": (self.eventNameItem.value) ? self.eventNameItem.value : [NSString stringWithFormat:@"%@ %@", NSLocalizedString(@"Meetup @ ", nil), [GTUtilities formattedDateStringFromDate:self.eventStartTimeItem.value]],
                                                       @"start_time": self.eventStartTimeItem.value,
-                                                      @"invitee_ids": @[@1, @2, @3]}};
+                                                        @"latitude": [NSNumber numberWithFloat:self.selectedCoordinates.latitude],
+                                                       @"longitude": [NSNumber numberWithFloat:self.selectedCoordinates.longitude],
+                                                     @"invitee_ids": @[@1, @2, @3]}};
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         [manager GET:kNewEventURL parameters:eventDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"RESPONSE: %@", responseObject);
             //[[NSUserDefaults standardUserDefaults] setValue:[responseObject objectForKey:@"event_id"] forKey:@"eventID"];
             [[NSUserDefaults standardUserDefaults] setValue:@1 forKey:@"eventID"];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"PopulateUserLocations" object:self userInfo:responseObject];
+            
+            GTChatViewController *chatViewController = (GTChatViewController *)self.delegate;
+            chatViewController.eventID = [[responseObject objectForKey:@"event_id"] integerValue];
             [self.navigationController popViewControllerAnimated:YES];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops! Network connectivity issue."
@@ -184,5 +190,10 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc
+{
+    self.delegate = nil;
 }
 @end

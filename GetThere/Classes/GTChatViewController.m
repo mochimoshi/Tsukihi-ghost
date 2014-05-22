@@ -10,6 +10,7 @@
 #import "GTPersonViewController.h"
 #import "BTWTweetComposeView.h"
 #import "GTMapAnnotation.h"
+#import "GTNewEventTableViewController.h"
 
 #import "UILabel+GTLabel.h"
 #import "UIFont+BTWFont.h"
@@ -21,7 +22,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface GTChatViewController ()<MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,CLLocationManagerDelegate, UIActionSheetDelegate, BTWTweetComposeViewDelegate>
+@interface GTChatViewController ()<MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,CLLocationManagerDelegate, UIActionSheetDelegate, BTWTweetComposeViewDelegate, GTNewEventDelegate>
 
 /* user info */
 
@@ -36,6 +37,13 @@
 @property (strong, nonatomic) NSDictionary *chat;
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSMutableArray *mapPinData;
+
+@property (strong, nonatomic) UILabel *currentLocationLabel;
+@property (strong, nonatomic) UILabel *attendeesLabel;
+@property (strong, nonatomic) UIView *attendeesView;
+@property (strong, nonatomic) UIButton *attendeesButton;
+
+@property (strong, nonatomic) CLLocation *destinationLocation;
 
 /* location manager */
 @property (strong, nonatomic) CLLocationManager *locationManager;
@@ -61,6 +69,7 @@
 #define kAttendeeLocations @"http://tsukihi.org/backtier/events/get_event_attendee_locations"
 #define kUpdateLocation @"http://tsukihi.org/backtier/users/update_location"
 #define kEventMessages @"http://tsukihi.org/backtier/events/get_event_messages"
+#define kEventInfo @"http://tsukihi.org/backtier/events/get_event"
 
 static const CGFloat kNavBarHeight = 64;
 
@@ -138,7 +147,6 @@ static const CGFloat kNavBarHeight = 64;
 - (void)reloadTableViewData{
     NSLog(@"GOT TO CHAT VIEW!");
     
-   // NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:self.eventID]}};
     NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:[[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"]integerValue]]}};
     [self.httpManager GET:kEventMessages parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
@@ -158,15 +166,50 @@ static const CGFloat kNavBarHeight = 64;
 {
     [super viewWillAppear:animated];
     
-    CLLocationCoordinate2D coordinate;
-    coordinate.latitude = 37.4240943;
-    coordinate.longitude = -122.1701957;
-    
+    if(!CLLocationCoordinate2DIsValid(self.currentCoordinate)) {
+        CLLocationCoordinate2D coordinate;
+        coordinate.latitude = 37.4240943;
+        coordinate.longitude = -122.1701957;
+        self.currentCoordinate = coordinate;
+    }
     MKMapCamera *camera = [[MKMapCamera alloc] init];
-    [camera setCenterCoordinate:coordinate];
+    [camera setCenterCoordinate:self.currentCoordinate];
     [camera setAltitude:3000.0];
     
     [self.mapView setCamera:camera animated:YES];
+    
+    self.eventID = [[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"] integerValue];
+    
+    if(self.eventID == 0) {
+        [self.attendeesLabel setText:NSLocalizedString(@"Roaming nowhere in particular.\nInvite people to meetup!", nil)];
+    }
+    else {
+        [self.httpManager GET:kEventInfo
+                   parameters:@{@"event": @{@"id": [NSNumber numberWithInteger: self.eventID]}}
+                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                          if([responseObject isKindOfClass:[NSDictionary class]]) {
+                              CLLocationCoordinate2D coord;
+                              coord.latitude = [[responseObject objectForKey:@"latitude"] floatValue];
+                              coord.longitude = [[responseObject objectForKey:@"longitude"] floatValue];
+                              self.destinationLocation = [[CLLocation alloc] initWithLatitude:coord.latitude longitude:coord.longitude];
+                              CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+                              [geocoder reverseGeocodeLocation:self.destinationLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+                                  CLPlacemark *placemark = [placemarks objectAtIndex:0];
+                                  [self.attendeesLabel setText:[NSString stringWithFormat:@"%@\nMeeting at: %@\n%d attendees", [responseObject objectForKey:@"event_name"], placemark.name, [[responseObject objectForKey:@"users"] count]]];
+                                  
+                              }];
+
+                              CLLocation *selfLocation = [[CLLocation alloc] initWithLatitude:self.currentCoordinate.latitude longitude:self.currentCoordinate.longitude];
+                              [geocoder reverseGeocodeLocation:selfLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+                                  CLPlacemark *placemark = [placemarks objectAtIndex:0];
+                                  [self.currentLocationLabel setText:[NSString stringWithFormat:@"%@ ~ %.02f km from destination", placemark.name, [self.destinationLocation distanceFromLocation:selfLocation] / 1000.0]];
+                              }];
+                              [self getDirections:selfLocation end:self.destinationLocation];
+                          }
+                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                          NSLog(@"Network error: %@", error);
+                      }];
+    }
 }
 
 // Unsubscribe from keyboard show/hide notifications.
@@ -187,6 +230,25 @@ static const CGFloat kNavBarHeight = 64;
     [self.mapView setShowsUserLocation:YES];
     [self.view addSubview: self.mapView];
     
+    self.attendeesView = [[UIView alloc] init];
+    [self.attendeesView setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.6]];
+    [self.view addSubview:self.attendeesView];
+    
+    self.currentLocationLabel = [[UILabel alloc] init];
+    [self.currentLocationLabel setFont:[UIFont mediumHelveticaWithSize:11]];
+    [self.currentLocationLabel setTextAlignment:NSTextAlignmentCenter];
+    [self.attendeesView addSubview:self.currentLocationLabel];
+    
+    self.attendeesLabel = [[UILabel alloc] init];
+    [self.attendeesLabel setFont:[UIFont lightHelveticaWithSize:11]];
+    [self.attendeesLabel setNumberOfLines:0];
+    [self.attendeesLabel setLineBreakMode:NSLineBreakByWordWrapping];
+    [self.attendeesLabel setTextAlignment:NSTextAlignmentCenter];
+    [self.attendeesView addSubview:self.attendeesLabel];
+    
+    self.attendeesButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.attendeesView addSubview:self.attendeesButton];
+    
     self.composeView = [[BTWTweetComposeView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [self.composeView setHidden:YES];
     [self.composeView setScrollToTop:NO];
@@ -196,9 +258,26 @@ static const CGFloat kNavBarHeight = 64;
 - (void)setupViews
 {
     [self.mapView setFrame:CGRectMake(0,
-                                      kNavBarHeight,
+                                      0,
                                       CGRectGetWidth(self.view.frame),
-                                      CGRectGetHeight(self.view.frame) - kNavBarHeight)];
+                                      CGRectGetHeight(self.view.frame))];
+    
+    [self.attendeesView setFrame:CGRectMake(0,
+                                           kNavBarHeight,
+                                           CGRectGetWidth(self.view.frame),
+                                           kNavBarHeight * 1.5)];
+    [self.currentLocationLabel setFrame:CGRectMake(kHorizontalMargin,
+                                                   kPadding,
+                                                   CGRectGetWidth(self.attendeesView.frame) - 2 * kHorizontalMargin,
+                                                   kLineHeight)];
+    [self.attendeesLabel setFrame:CGRectMake(kHorizontalMargin,
+                                             kPadding + kLineHeight,
+                                             CGRectGetWidth(self.attendeesView.frame) - 2 * kHorizontalMargin,
+                                             CGRectGetHeight(self.attendeesView.frame) - 2 * kPadding - kLineHeight)];
+    [self.attendeesButton setFrame:CGRectMake(0,
+                                              0,
+                                              CGRectGetWidth(self.attendeesView.frame),
+                                              CGRectGetHeight(self.attendeesView.frame))];
 }
 
 - (void) setMapCoords
@@ -325,11 +404,6 @@ static const CGFloat kNavBarHeight = 64;
     // Dispose of any resources that can be recreated.
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-
-}
-
 #pragma mark - photo processing
 
 - (void)addPhotoToMap:(UIImage *)picture :(CLLocationCoordinate2D) coords
@@ -382,8 +456,7 @@ static const CGFloat kNavBarHeight = 64;
 //}
 
 
-- (void)locationManager:(CLLocationManager *)manager
-     didUpdateLocations:(NSArray *)locations {
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     // If it's a relatively recent event, turn off updates to save power.
     CLLocation* location = [locations lastObject];
     NSDate* eventDate = location.timestamp;
@@ -396,6 +469,16 @@ static const CGFloat kNavBarHeight = 64;
         self.currentCoordinate = location.coordinate;
         
         [self saveLocationUpdateWithCoordinate:self.currentCoordinate];
+        
+        CLGeocoder *geocode = [[CLGeocoder alloc] init];
+        [geocode reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+            CLPlacemark *placemark = [placemarks objectAtIndex:0];
+            if(self.eventID == 0 || !self.destinationLocation)
+                [self.currentLocationLabel setText:[NSString stringWithFormat:@"Currently at: %@", placemark.name]];
+            else
+                [self.currentLocationLabel setText:[NSString stringWithFormat:@"%@ ~ %.02f km from destination", placemark.name, [self.destinationLocation distanceFromLocation:location] / 1000.0]];
+        }];
+        
         //[self setMapCoords];
         //[self setDummyMapPins];
     }
@@ -467,6 +550,53 @@ static const CGFloat kNavBarHeight = 64;
     annotationView.annotation = annotation;
     //[self.mapView addAnnotation:annotation];
     return annotationView;
+}
+
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
+{
+    if ([overlay isKindOfClass:[MKPolyline class]]) {
+        MKPolyline *route = overlay;
+        MKPolylineRenderer *routeRenderer = [[MKPolylineRenderer alloc] initWithPolyline:route];
+        routeRenderer.strokeColor = [UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:0.3];
+        return routeRenderer;
+    }
+    else return nil;
+}
+
+- (void)getDirections:(CLLocation *)start end:(CLLocation *)destination
+{
+    MKPlacemark *sourcePlacemark = [[MKPlacemark alloc] initWithCoordinate:start.coordinate addressDictionary:@{}];
+    MKPlacemark *destinationPlacemark = [[MKPlacemark alloc] initWithCoordinate:destination.coordinate addressDictionary:@{}];
+    MKMapItem *startItem = [[MKMapItem alloc] initWithPlacemark:sourcePlacemark];
+    MKMapItem *endItem = [[MKMapItem alloc] initWithPlacemark:destinationPlacemark];
+    
+    MKDirectionsRequest *request = [[MKDirectionsRequest alloc] init];
+    request.source = startItem;
+    request.destination = endItem;
+    request.requestsAlternateRoutes = NO;
+    
+    MKDirections *directions = [[MKDirections alloc] initWithRequest:request];
+    [directions calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse *response, NSError *error) {
+        if (error) {
+            NSLog(@"Error : %@", error);
+        }
+        else {
+            [self showRoute: response];
+        }
+    }];
+}
+
+- (void)showRoute:(MKDirectionsResponse *)response
+{
+    [self.mapView removeOverlays:self.mapView.overlays];
+    
+    for (MKRoute *route in response.routes) {
+        [self.mapView addOverlay:route.polyline level:MKOverlayLevelAboveRoads];
+        for (MKRouteStep *step in route.steps) {
+            NSLog(@"%@", step.instructions);
+        }
+    }
+
 }
 
 - (CLLocationCoordinate2D)getCurrentLocation
@@ -565,15 +695,18 @@ static const CGFloat kNavBarHeight = 64;
     [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if([segue.identifier isEqualToString:@"pushToNewEvent"]) {
+        GTNewEventTableViewController *eventViewController = segue.destinationViewController;
+        eventViewController.delegate = self;
+        eventViewController.selectedCoordinates = self.currentCoordinate;
+    }
 }
-*/
+
 
 @end

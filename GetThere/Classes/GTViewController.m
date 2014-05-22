@@ -7,7 +7,6 @@
 //
 
 #import "GTViewController.h"
-#import "GTEventMenuTableViewCell.h"
 
 #import "GTChatViewController.h"
 
