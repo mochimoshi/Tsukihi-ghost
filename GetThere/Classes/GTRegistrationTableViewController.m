@@ -46,6 +46,8 @@
     self.userInfoSection = [self buildUserInfoSection];
     self.userButton = [self buildButton];
     
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -79,7 +81,7 @@
         item.title = @"Submitting...";
         [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
         
-        NSDictionary *params = @{@"user": @{@"user_real_name": self.userNameItem.value,
+        NSDictionary *params = @{@"user": @{@"user_name": self.userNameItem.value,
                                             @"phone_number": self.userPhoneItem.value,
                                             @"password": self.userPasswordItem.value,
                                             @"password_confirmation": self.userPasswordItem.value}};
@@ -93,7 +95,7 @@
                                                   cancelButtonTitle:@"Okay"
                                                   otherButtonTitles: nil];
             [alert show];
-            NSLog(@"Error: %@", error.localizedDescription);
+            NSLog(@"Error: %@", error);
             item.title = @"Register!";
             [item reloadRowWithAnimation:UITableViewRowAnimationAutomatic];
         }];

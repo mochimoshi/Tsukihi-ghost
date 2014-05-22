@@ -163,7 +163,6 @@
         [manager GET:kNewEventURL parameters:eventDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"RESPONSE: %@", responseObject);
             //[[NSUserDefaults standardUserDefaults] setValue:[responseObject objectForKey:@"event_id"] forKey:@"eventID"];
-            [[NSUserDefaults standardUserDefaults] setValue:@1 forKey:@"eventID"];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"PopulateUserLocations" object:self userInfo:responseObject];
             
             GTChatViewController *chatViewController = (GTChatViewController *)self.delegate;
