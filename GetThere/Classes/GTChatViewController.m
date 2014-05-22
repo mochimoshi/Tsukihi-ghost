@@ -147,7 +147,6 @@ static const CGFloat kNavBarHeight = 64;
 - (void)reloadTableViewData{
     NSLog(@"GOT TO CHAT VIEW!");
     
-   // NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:self.eventID]}};
     NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:[[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"]integerValue]]}};
     [self.httpManager GET:kEventMessages parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
@@ -199,13 +198,13 @@ static const CGFloat kNavBarHeight = 64;
                                   [self.attendeesLabel setText:[NSString stringWithFormat:@"%@\nMeeting at: %@\n%d attendees", [responseObject objectForKey:@"event_name"], placemark.name, [[responseObject objectForKey:@"users"] count]]];
                                   
                               }];
-                              if(CLLocationCoordinate2DIsValid(self.currentCoordinate)) {
-                                  CLLocation *selfLocation = [[CLLocation alloc] initWithLatitude:self.currentCoordinate.latitude longitude:self.currentCoordinate.longitude];
-                                  [geocoder reverseGeocodeLocation:selfLocation completionHandler:^(NSArray *placemarks, NSError *error) {
-                                      CLPlacemark *placemark = [placemarks objectAtIndex:0];
-                                      [self.currentLocationLabel setText:[NSString stringWithFormat:@"%@ ~ %.02f km from destination", placemark.name, [self.destinationLocation distanceFromLocation:selfLocation] / 1000.0]];
-                                  }];
-                              }
+
+                              CLLocation *selfLocation = [[CLLocation alloc] initWithLatitude:self.currentCoordinate.latitude longitude:self.currentCoordinate.longitude];
+                              [geocoder reverseGeocodeLocation:selfLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+                                  CLPlacemark *placemark = [placemarks objectAtIndex:0];
+                                  [self.currentLocationLabel setText:[NSString stringWithFormat:@"%@ ~ %.02f km from destination", placemark.name, [self.destinationLocation distanceFromLocation:selfLocation] / 1000.0]];
+                              }];
+                              [self getDirections:selfLocation end:self.destinationLocation];
                           }
                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                           NSLog(@"Network error: %@", error);
@@ -266,15 +265,15 @@ static const CGFloat kNavBarHeight = 64;
     [self.attendeesView setFrame:CGRectMake(0,
                                            kNavBarHeight,
                                            CGRectGetWidth(self.view.frame),
-                                           kNavBarHeight)];
+                                           kNavBarHeight * 1.5)];
     [self.currentLocationLabel setFrame:CGRectMake(kHorizontalMargin,
                                                    kPadding,
                                                    CGRectGetWidth(self.attendeesView.frame) - 2 * kHorizontalMargin,
                                                    kLineHeight)];
     [self.attendeesLabel setFrame:CGRectMake(kHorizontalMargin,
-                                             kPadding + kLineHeight + kPadding,
+                                             kPadding + kLineHeight,
                                              CGRectGetWidth(self.attendeesView.frame) - 2 * kHorizontalMargin,
-                                             CGRectGetHeight(self.attendeesView.frame) - 2 * kPadding - kLineHeight - kPadding)];
+                                             CGRectGetHeight(self.attendeesView.frame) - 2 * kPadding - kLineHeight)];
     [self.attendeesButton setFrame:CGRectMake(0,
                                               0,
                                               CGRectGetWidth(self.attendeesView.frame),
@@ -541,6 +540,51 @@ static const CGFloat kNavBarHeight = 64;
     annotationView.annotation = annotation;
     [self.mapView addAnnotation:annotation];
     return annotationView;
+}
+
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
+{
+    if ([overlay isKindOfClass:[MKPolyline class]]) {
+        MKPolyline *route = overlay;
+        MKPolylineRenderer *routeRenderer = [[MKPolylineRenderer alloc] initWithPolyline:route];
+        routeRenderer.strokeColor = [UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:0.3];
+        return routeRenderer;
+    }
+    else return nil;
+}
+
+- (void)getDirections:(CLLocation *)start end:(CLLocation *)destination
+{
+    MKPlacemark *sourcePlacemark = [[MKPlacemark alloc] initWithCoordinate:start.coordinate addressDictionary:@{}];
+    MKPlacemark *destinationPlacemark = [[MKPlacemark alloc] initWithCoordinate:destination.coordinate addressDictionary:@{}];
+    MKMapItem *startItem = [[MKMapItem alloc] initWithPlacemark:sourcePlacemark];
+    MKMapItem *endItem = [[MKMapItem alloc] initWithPlacemark:destinationPlacemark];
+    
+    MKDirectionsRequest *request = [[MKDirectionsRequest alloc] init];
+    request.source = startItem;
+    request.destination = endItem;
+    request.requestsAlternateRoutes = NO;
+    
+    MKDirections *directions = [[MKDirections alloc] initWithRequest:request];
+    [directions calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse *response, NSError *error) {
+        if (error) {
+            NSLog(@"Error : %@", error);
+        }
+        else {
+            [self showRoute: response];
+        }
+    }];
+}
+
+- (void)showRoute:(MKDirectionsResponse *)response
+{
+    for (MKRoute *route in response.routes) {
+        [self.mapView addOverlay:route.polyline level:MKOverlayLevelAboveRoads];
+        for (MKRouteStep *step in route.steps) {
+            NSLog(@"%@", step.instructions);
+        }
+    }
+
 }
 
 - (CLLocationCoordinate2D)getCurrentLocation

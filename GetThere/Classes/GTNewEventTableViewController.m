@@ -68,7 +68,7 @@
     RETableViewSection *section = [RETableViewSection sectionWithHeaderTitle:@"Event information"];
     [self.manager addSection:section];
     
-    self.eventNameItem = [RETextItem itemWithTitle:@"Name" value:nil placeholder:@"CS247 Project Meeting"];
+    self.eventNameItem = [RETextItem itemWithTitle:@"Name" value:nil placeholder:[NSString stringWithFormat:@"Meetup @ %@", [GTUtilities formattedDateStringFromDate:[NSDate date]]]];
     
     GTNewEventTableViewController *weakself = self;
     
