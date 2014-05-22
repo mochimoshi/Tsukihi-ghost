@@ -19,10 +19,8 @@
 @property (strong, nonatomic) RETableViewSection *userInfoSection;
 @property (strong, nonatomic) RETableViewSection *userButton;
 
-@property (strong, nonatomic) RETextItem *userScreenName;
 @property (strong, nonatomic) RETextItem *userNameItem;
 @property (strong, nonatomic) RETextItem *userPhoneItem;
-@property (strong, nonatomic) RETextItem *userEmailItem;
 @property (strong, nonatomic) RETextItem *userPasswordItem;
 
 @end
@@ -66,9 +64,7 @@
     [self.userPasswordItem setSecureTextEntry:YES];
     
     [section addItem:self.userNameItem];
-    [section addItem:self.userScreenName];
     [section addItem:self.userPhoneItem];
-    [section addItem:self.userEmailItem];
     [section addItem:self.userPasswordItem];
     
     return section;

@@ -13,9 +13,10 @@
 #import "UIColor+BTWColor.h"
 #import "GTConstants.h"
 
-@interface GTOnboardingViewController ()
+@interface GTOnboardingViewController ()<UIScrollViewDelegate>
 
 @property (strong, nonatomic) UIScrollView *scrollView;
+@property (strong, nonatomic) UIPageControl *pageControl;
 
 @end
 
@@ -40,10 +41,19 @@ static const CGFloat kStatusBarHeight = 20;
     CGRect boundFrames = [[UIScreen mainScreen] bounds];
     self.scrollView = [[UIScrollView alloc] initWithFrame:boundFrames];
     [self.scrollView setBackgroundColor:[UIColor blackColor]];
+    [self.scrollView setDelegate:self];
     
     [self.scrollView setContentSize:CGSizeMake(CGRectGetWidth(boundFrames) * kNumberOfPages, CGRectGetHeight(boundFrames))];
     [self.scrollView setPagingEnabled:YES];
     [self.view addSubview:self.scrollView];
+    
+    self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0,
+                                                                       CGRectGetHeight(self.view.frame) - kVerticalMargin - kLineHeight,
+                                                                       CGRectGetWidth(self.view.frame),
+                                                                       kLineHeight)];
+    [self.pageControl setNumberOfPages:3];
+    [self.pageControl setCurrentPage:0];
+    [self.view addSubview:self.pageControl];
 }
 
 - (void)createFirstPage
@@ -159,7 +169,21 @@ static const CGFloat kStatusBarHeight = 20;
 
 - (void)dismiss
 {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)sender {
+    // Update the page number
+    CGFloat pageWidth = self.scrollView.frame.size.width;
+    self.pageControl.currentPage = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+    if(self.pageControl.currentPage == 2) {
+        [self.pageControl setHidden:YES];
+    }
+    else {
+        [self.pageControl setHidden:NO];
+    }
 }
 
 - (void)didReceiveMemoryWarning

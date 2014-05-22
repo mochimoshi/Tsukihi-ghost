@@ -7,7 +7,6 @@
 //
 
 #import "GTChatViewController.h"
-#import "GTPersonViewController.h"
 #import "BTWTweetComposeView.h"
 #import "GTMapAnnotation.h"
 #import "GTNewEventTableViewController.h"

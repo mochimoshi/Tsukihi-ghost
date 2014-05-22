@@ -78,9 +78,6 @@
     }
     else
     {
-    
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
         
         GTOnboardingViewController *onboard = [[GTOnboardingViewController alloc] init];
         [self presentViewController:onboard animated:YES completion:nil];
