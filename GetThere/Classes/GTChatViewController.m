@@ -33,7 +33,7 @@
 @property (strong, nonatomic) BTWTweetComposeView *composeView;
 @property (assign, nonatomic) BOOL hasPopupOpen;
 
-@property (strong, nonatomic) NSMutableArray *chat;
+@property (strong, nonatomic) NSDictionary *chat;
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSMutableArray *mapPinData;
 
@@ -80,7 +80,7 @@ static const CGFloat kNavBarHeight = 64;
         self.httpManager = [AFHTTPRequestOperationManager manager];
     }
     
-    self.chat = [[NSMutableArray alloc] init];
+    self.chat = [[NSDictionary alloc] init];
     self.statuses = [[NSMutableArray alloc] init];
     self.hasPopupOpen = NO;
     
@@ -90,11 +90,8 @@ static const CGFloat kNavBarHeight = 64;
     NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:[[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"]integerValue]]}};
     NSLog(@"id num: %@", params);
     [self.httpManager GET:kEventMessages parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        self.chat = responseObject;
 
-        for (id key in responseObject) {
-            [self.chat addObject:responseObject[key]];
-            NSLog(@"AWAKEN: %@", responseObject[key]);
-        }
         dispatch_async(dispatch_get_main_queue(), ^{
             // Update map pins
         });
@@ -145,14 +142,11 @@ static const CGFloat kNavBarHeight = 64;
     NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:[[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"]integerValue]]}};
     [self.httpManager GET:kEventMessages parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
-        for (id key in responseObject) {
-            [self.chat addObject:responseObject[key]];
-        }
+        self.chat = responseObject;
         dispatch_async(dispatch_get_main_queue(), ^{
-//            [self.tableView reloadData];
-//            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chat count] - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-
         });
+        NSLog(@"Set chat: %@", self.chat);
+        [self setPinStatuses ];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
@@ -229,12 +223,10 @@ static const CGFloat kNavBarHeight = 64;
         [self.mapPins removeAllObjects];
         
     }
-    NSLog(@"WHAT IS HAPPENING?");
     NSLog(@"ID IS: %@", [NSNumber numberWithInteger:[[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"]integerValue]]);
     NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:[[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"]integerValue]]}};
-    NSLog(@"Well clearly it posted");
     [self.httpManager GET:kAttendeeLocations parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"SUCCESSSSSS");
+        //NSLog(@"SUCCESSSSSS");
         NSLog(@"JSON: %@", responseObject);
         self.mapPinData = [(NSDictionary *)responseObject objectForKey:@"list"];
         [self setMapPins];
@@ -244,6 +236,28 @@ static const CGFloat kNavBarHeight = 64;
 
     
 }
+
+- (void)setPinStatuses
+{
+    if (self.mapPins == nil) {
+        self.mapPins = [[NSMutableArray alloc]init];
+    } else {
+        [self.mapView removeAnnotations:self.mapPins];
+        [self.mapPins removeAllObjects];
+        
+    }
+    NSLog(@"ID IS: %@", [NSNumber numberWithInteger:[[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"]integerValue]]);
+    NSDictionary *params = @{@"event": @{@"id": [NSNumber numberWithInteger:[[[NSUserDefaults standardUserDefaults] objectForKey:@"eventID"]integerValue]]}};
+    [self.httpManager GET:kAttendeeLocations parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        self.mapPinData = [(NSDictionary *)responseObject objectForKey:@"list"];
+        [self setMapPins];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+    
+}
+
 
 #pragma mark - Set map pins from mapPinData
 -(void) setMapPins
@@ -263,7 +277,8 @@ static const CGFloat kNavBarHeight = 64;
     coords.latitude = [pinData[@"user_last_lat"] doubleValue];
     GTMapAnnotation *mapPin = [[GTMapAnnotation alloc]init];
     [mapPin setTitle:pinData[@"user_name"]];
-    [mapPin setSubtitle:pinData[@""]];
+    NSString *name = pinData[@"user_name"];
+    [mapPin setSubtitle:[[self.chat objectForKey:name] objectForKey:@"text"]];
     [mapPin setCoordinate:coords];
     mapPin.displayType = @"user";
     [self.mapPins addObject:mapPin];
@@ -434,6 +449,7 @@ static const CGFloat kNavBarHeight = 64;
 
 - (CLLocationCoordinate2D)getCurrentLocation
 {
+    NSLog(@"current coordinates: %f", self.currentCoordinate.longitude);
     return self.currentCoordinate;
 }
 
