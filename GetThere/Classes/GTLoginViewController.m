@@ -11,7 +11,7 @@
 
 @interface GTLoginViewController ()<UITextFieldDelegate>
 
-@property (weak, nonatomic) IBOutlet UITextField *nameField;
+@property (weak, nonatomic) IBOutlet UITextField *phoneField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (strong, nonatomic) AFHTTPRequestOperationManager *httpManager;
 
@@ -36,10 +36,11 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self.nameField.layer setBorderColor:[UIColor colorWithWhite:1.0 alpha:0.4].CGColor];
-    [self.nameField.layer setBorderWidth:1.0];
-    [self.nameField.layer setCornerRadius:4.0];
-    [self.nameField setAttributedPlaceholder:[[NSAttributedString alloc] initWithString:@"Username"
+    [self.phoneField.layer setBorderColor:[UIColor colorWithWhite:1.0 alpha:0.4].CGColor];
+    [self.phoneField.layer setBorderWidth:1.0];
+    [self.phoneField.layer setCornerRadius:4.0];
+    [self.phoneField setKeyboardType:UIKeyboardTypeNamePhonePad];
+    [self.phoneField setAttributedPlaceholder:[[NSAttributedString alloc] initWithString:@"Username"
                                                                              attributes:@{NSForegroundColorAttributeName: [UIColor colorWithWhite:1.0 alpha:0.4]}]];
     
     [self.passwordField.layer setBorderColor:[UIColor colorWithWhite:1.0 alpha:0.4].CGColor];
@@ -92,7 +93,7 @@
             
 - (void)setUserInfo
 {
-    [self.nameField setText:@""];
+    [self.phoneField setText:@""];
     [self.passwordField setText:@""];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
     [self performSegueWithIdentifier:@"loginModalSegue" sender:nil];
@@ -101,8 +102,8 @@
 
 - (void)sendLoginQuery
 {
-    if ([self.nameField.text length] > 0) {
-        NSDictionary *params = @{@"user": @{@"user_name": [self.nameField.text lowercaseString], @"password": self.passwordField.text}};
+    if ([self.phoneField.text length] > 0) {
+        NSDictionary *params = @{@"user": @{@"phone_number": [self.phoneField.text lowercaseString], @"password": self.passwordField.text}};
         [self.httpManager GET:kLoginURL parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"JSON: %@", responseObject);
             [[NSUserDefaults standardUserDefaults] setValue:[[responseObject objectForKey:@"user"] objectForKey: @"user_name"] forKey:@"userName"];
@@ -124,7 +125,7 @@
 
 - (IBAction)resignResponder:(id)sender
 {
-    [self.nameField resignFirstResponder];
+    [self.phoneField resignFirstResponder];
     [self.passwordField resignFirstResponder];
 }
 
